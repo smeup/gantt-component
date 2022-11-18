@@ -1,6 +1,6 @@
 {
-  "short_name": "gantt-task-react",
-  "name": "gantt-task-react",
+  "short_name": "@sme.up/gantt-component",
+  "name": "@sme.up/gantt-component",
   "icons": [
     {
       "src": "favicon.ico",

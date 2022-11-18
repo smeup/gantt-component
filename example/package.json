@@ -1,5 +1,5 @@
 {
-  "name": "gantt-task-react-example",
+  "name": "@sme.up/gantt-component-example",
   "homepage": ".",
   "version": "0.0.0",
   "private": true,
@@ -17,7 +17,7 @@
     "@types/node": "file:../node_modules/@types/node",
     "@types/react": "file:../node_modules/@types/react",
     "@types/react-dom": "file:../node_modules/@types/react-dom",
-    "gantt-task-react": "file:..",
+    "@sme.up/gantt-component": "file:..",
     "postcss-preset-env": "file:../node_modules/postcss-preset-env",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
