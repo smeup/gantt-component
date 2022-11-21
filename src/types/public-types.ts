@@ -139,6 +139,29 @@ export interface StylingOption {
   }>;
 }
 
-export interface GanttProps extends EventOption, DisplayOption, StylingOption {
+type DateTimeFormatter = (date: Date, locale: string) => string;
+export type DateTimeFormatters = {
+  /** For top row in ViewMode.Month, bottom row in ViewMode.Year */
+  year?: DateTimeFormatter,
+  /** For top row in ViewMode.Day, bottom row in ViewMode.Month */
+  month?: DateTimeFormatter,
+  /** For top row in ViewMode.Week */
+  monthAndYear?: DateTimeFormatter,
+  /** For bottom row in ViewMode.Week */
+  week?: DateTimeFormatter,
+  /** For bottom row in ViewMode.Day */
+  day?: DateTimeFormatter,
+  /** For bottom row in ViewMode.Hour / HalfDay / QuarterDay */
+  hour?: DateTimeFormatter,
+  /** For top row in ViewMode.Hour / HalfDay / QuarterDay */
+  dayAndMonth?: DateTimeFormatter,
+};
+
+export interface CustomOptions {
+  /** Custom formatters for calendar headers */
+  dateTimeFormatters?: DateTimeFormatters
+}
+
+export interface GanttProps extends EventOption, DisplayOption, StylingOption, CustomOptions {
   tasks: Task[];
 }

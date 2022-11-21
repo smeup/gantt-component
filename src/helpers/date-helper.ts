@@ -230,3 +230,20 @@ export const getWeekNumberISO8601 = (date: Date) => {
 export const getDaysInMonth = (month: number, year: number) => {
   return new Date(year, month + 1, 0).getDate();
 };
+
+export const defaultDateTimeFormatters = {
+  year: (date: Date, _locale: string) =>
+    `${date.getFullYear()}`,
+  month: (date: Date, locale: string) =>
+    `${getLocaleMonth(date, locale)}`,
+  monthAndYear: (date: Date, locale: string) =>
+    `${getLocaleMonth(date, locale)}, ${date.getFullYear()}`,
+  week: (date: Date, _locale: string) =>
+    `W${getWeekNumberISO8601(date)}`,
+  day: (date: Date, locale: string) =>
+    `${getLocalDayOfWeek(date, locale, 'short')}, ${date.getDate().toString()}`,
+  hour: (date: Date, locale: string) =>
+    `${getCachedDateTimeFormat(locale, {hour: 'numeric'}).format(date)}`,
+  dayAndMonth: (date: Date, locale: string) =>
+    `${getLocalDayOfWeek(date, locale, 'short')}, ${date.getDate()} ${getLocaleMonth(date, locale)}`
+}

@@ -28,7 +28,7 @@ const App = () => {
         project.start.getTime() !== start.getTime() ||
         project.end.getTime() !== end.getTime()
       ) {
-        const changedProject = { ...project, start, end };
+        const changedProject = {...project, start, end};
         newTasks = newTasks.map(t =>
           t.id === task.project ? changedProject : t
         );
@@ -76,6 +76,15 @@ const App = () => {
       />
       <h3>Gantt With Unlimited Height</h3>
       <Gantt
+        locale="it"
+        dateTimeFormatters={{
+          year: (date: Date) => 'A.D. ' + date.getFullYear(),
+          month: (date: Date, locale: string) => date.toLocaleString(locale, {month: 'short'}).toUpperCase() + '.',
+          monthAndYear: (date: Date, locale: string) => date.toLocaleString(locale, {month: 'short'}) + ' \'' + date.getFullYear() % 100,
+          day: (date: Date) => `${date.getDate()}`,
+          dayAndMonth: (date: Date, locale: string) =>
+            date.toLocaleString(locale, {weekday: 'narrow', day: 'numeric', month: 'short'}).toUpperCase()
+        }}
         tasks={tasks}
         viewMode={view}
         onDateChange={handleTaskChange}
