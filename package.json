@@ -1,6 +1,6 @@
 {
   "name": "@sme.up/gantt-component",
-  "version": "0.3.9",
+  "version": "1.0.0",
   "description": "Interactive Gantt Chart for React with TypeScript.",
   "author": "MaTeMaTuK <maksym.vikarii@gmail.com>",
   "homepage": "https://github.com/smeup/gantt-component",
