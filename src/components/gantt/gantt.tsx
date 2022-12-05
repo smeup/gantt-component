@@ -65,7 +65,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onDelete,
   onSelect,
   onExpanderClick,
-  dateTimeFormatters
+  dateTimeFormatters,
+  singleLineHeader = false
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -406,7 +407,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     fontFamily,
     fontSize,
     rtl,
-    dateTimeFormatters
+    dateTimeFormatters,
+    singleLineHeader
   };
   const barProps: TaskGanttContentProps = {
     tasks: barTasks,

@@ -159,7 +159,9 @@ export type DateTimeFormatters = {
 
 export interface CustomOptions {
   /** Custom formatters for calendar headers */
-  dateTimeFormatters?: DateTimeFormatters
+  dateTimeFormatters?: DateTimeFormatters,
+  /** If true, show only one line of text in calendar headers */
+  singleLineHeader?: boolean
 }
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption, CustomOptions {
