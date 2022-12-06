@@ -107,6 +107,7 @@ const App = () => {
         <Gantt
           locale="it"
           singleLineHeader
+          hideLabel
           todayColor="red"
           dateTimeFormatters={{
             year: (date: Date) => 'A.D. ' + date.getFullYear(),

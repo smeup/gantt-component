@@ -161,7 +161,9 @@ export interface CustomOptions {
   /** Custom formatters for calendar headers */
   dateTimeFormatters?: DateTimeFormatters,
   /** If true, show only one line of text in calendar headers */
-  singleLineHeader?: boolean
+  singleLineHeader?: boolean,
+  /** If true, hide task labels in the diagram  */
+  hideLabel?: boolean
 }
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption, CustomOptions {

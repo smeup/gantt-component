@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import { BarTask } from "../../types/bar-task";
-import { GanttContentMoveAction } from "../../types/gantt-task-actions";
-import { Bar } from "./bar/bar";
-import { BarSmall } from "./bar/bar-small";
-import { Milestone } from "./milestone/milestone";
-import { Project } from "./project/project";
+import React, {useEffect, useRef, useState} from "react";
+import {BarTask} from "../../types/bar-task";
+import {GanttContentMoveAction} from "../../types/gantt-task-actions";
+import {Bar} from "./bar/bar";
+import {BarSmall} from "./bar/bar-small";
+import {Milestone} from "./milestone/milestone";
+import {Project} from "./project/project";
 import style from "./task-list.module.css";
 
 export type TaskItemProps = {
@@ -21,6 +21,7 @@ export type TaskItemProps = {
     selectedTask: BarTask,
     event?: React.MouseEvent | React.KeyboardEvent
   ) => any;
+  hideLabel?: boolean;
 };
 
 export const TaskItem: React.FC<TaskItemProps> = props => {
@@ -32,11 +33,12 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
     isSelected,
     rtl,
     onEventStart,
+    hideLabel = false,
   } = {
     ...props,
   };
   const textRef = useRef<SVGTextElement>(null);
-  const [taskItem, setTaskItem] = useState<JSX.Element>(<div />);
+  const [taskItem, setTaskItem] = useState<JSX.Element>(<div/>);
   const [isTextInside, setIsTextInside] = useState(true);
 
   useEffect(() => {
@@ -108,18 +110,20 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       }}
     >
       {taskItem}
-      <text
-        x={getX()}
-        y={task.y + taskHeight * 0.5}
-        className={
-          isTextInside
-            ? style.barLabel
-            : style.barLabel && style.barLabelOutside
-        }
-        ref={textRef}
-      >
-        {task.name}
-      </text>
+      { !hideLabel &&
+        <text
+          x={getX()}
+          y={task.y + taskHeight * 0.5}
+          className={
+            isTextInside
+              ? style.barLabel
+              : style.barLabel && style.barLabelOutside
+          }
+          ref={textRef}
+        >
+          {task.name}
+        </text>
+      }
     </g>
   );
 };
