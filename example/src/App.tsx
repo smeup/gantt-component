@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Gantt, Task, ViewMode } from 'gantt-task-react';
 import { ViewSwitcher } from './components/view-switcher';
 import { getStartEndDateForProject, initTasks } from './helper';
@@ -8,6 +8,29 @@ import 'gantt-task-react/dist/index.css';
 const App = () => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>(initTasks());
+
+  const delta = 1e7
+  const tasksWithGhosts = useMemo(() =>
+    tasks.flatMap((task: Task) => {
+      const ghost = {
+        ...task,
+        id: task.id + '-ghost',
+        start: new Date(+task.start - delta),
+        end: new Date(+task.end + delta * 1.5),
+        progress: 0,
+        styles: {
+          backgroundColor: '#ff000044',
+          backgroundSelectedColor: '#abffbc99',
+          progressColor: '#ffcabc22',
+          progressSelectedColor: '#ffcabc22',
+        },
+        name: '',
+        dependencies: [],
+        isDisabled: true
+      }
+      return [ghost, task]
+    }), tasks)
+
   const [isChecked, setIsChecked] = React.useState(true);
   let columnWidth = 55;
   if (view === ViewMode.Year) {
@@ -74,9 +97,8 @@ const App = () => {
         onViewListChange={setIsChecked}
         isChecked={isChecked}
       />
-      <div style={{background: '#f8f8f8'}}>
-        <h2>Customized</h2>
-        <h3>Gantt With Unlimited Height</h3>
+      <div style={{padding: 3, border: '1px solid violet'}}>
+        <h2>Customized Gantt</h2>
         <Gantt
           locale="it"
           singleLineHeader
@@ -88,7 +110,7 @@ const App = () => {
             dayAndMonth: (date: Date, locale: string) =>
               date.toLocaleString(locale, {weekday: 'narrow', day: 'numeric', month: 'short'}).toUpperCase()
           }}
-          tasks={tasks}
+          tasks={tasksWithGhosts}
           viewMode={view}
           onDateChange={handleTaskChange}
           onDelete={handleTaskDelete}
@@ -97,25 +119,12 @@ const App = () => {
           onClick={handleClick}
           onSelect={handleSelect}
           onExpanderClick={handleExpanderClick}
-          listCellWidth={isChecked ? '155px' : ''}
           columnWidth={columnWidth}
-        />
-        <h3>Gantt With Limited Height</h3>
-        <Gantt
-          singleLineHeader
-          tasks={tasks}
-          viewMode={view}
-          onDateChange={handleTaskChange}
-          onDelete={handleTaskDelete}
-          onProgressChange={handleProgressChange}
-          onDoubleClick={handleDblClick}
-          onClick={handleClick}
-          onSelect={handleSelect}
-          onExpanderClick={handleExpanderClick}
           listCellWidth={isChecked ? '155px' : ''}
-          ganttHeight={300}
-          columnWidth={columnWidth}
+          rowHeight={25 /* smaller rows */}
+          barFill={100 /* bar fills entire height of row */}
         />
+
       </div>
 
       <details>
