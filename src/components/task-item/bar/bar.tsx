@@ -35,6 +35,8 @@ export const Bar: React.FC<TaskItemProps> = ({
         onMouseDown={e => {
           isDateChangeable && onEventStart("move", task, e);
         }}
+        xSecondary={task.x1secondary}
+        widthSecondary={(task.x2secondary??0) - (task.x1secondary??0)}
       />
       <g className="handleGroup">
         {isDateChangeable && (

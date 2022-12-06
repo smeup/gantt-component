@@ -2,10 +2,14 @@ import { Task } from "../../dist/types/public-types";
 
 export function initTasks() {
   const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
   const tasks: Task[] = [
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 20),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 35),
+      start: new Date(year, month-1, 20),
+      end: new Date(year, month-1, 35),
+      // secondaryStart: new Date(year, month-1, 18),
+      // secondaryEnd: new Date(year, month-1, 29),
       name: "Project One",
       id: "ProjectSample1",
       progress: 25,
@@ -20,8 +24,10 @@ export function initTasks() {
       },
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 10),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 20),
+      start: new Date(year, month, 10),
+      end: new Date(year, month, 20),
+      // secondaryStart: new Date(year, month, 10),
+      // secondaryEnd: new Date(year, month, 20),
       name: "Project Two",
       id: "ProjectSample2",
       progress: 25,
@@ -36,8 +42,8 @@ export function initTasks() {
       },
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
+      start: new Date(year, month, 1),
+      end: new Date(year, month, 15),
       name: "Some Project",
       id: "ProjectSample",
       progress: 25,
@@ -52,10 +58,10 @@ export function initTasks() {
       },
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
+      start: new Date(year, month, 1),
       end: new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
+        year,
+        month,
         2,
         12,
         28
@@ -68,8 +74,8 @@ export function initTasks() {
       displayOrder: 2,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 2),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4, 0, 0),
+      start: new Date(year, month, 2),
+      end: new Date(year, month, 4, 0, 0),
       name: "Research",
       id: "Task 1",
       progress: 25,
@@ -85,8 +91,8 @@ export function initTasks() {
       },
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 0, 0),
+      start: new Date(year, month, 4),
+      end: new Date(year, month, 8, 0, 0),
       name: "Discussion with team",
       id: "Task 2",
       progress: 10,
@@ -102,8 +108,8 @@ export function initTasks() {
       },
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 9, 0, 0),
+      start: new Date(year, month, 8),
+      end: new Date(year, month, 9, 0, 0),
       name: "Developing",
       id: "Task 3",
       progress: 2,
@@ -119,8 +125,8 @@ export function initTasks() {
       },
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 10),
+      start: new Date(year, month, 8),
+      end: new Date(year, month, 10),
       name: "Review",
       id: "Task 4",
       type: "task",
@@ -130,11 +136,11 @@ export function initTasks() {
       displayOrder: 6,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
+      start: new Date(year, month, 15),
+      end: new Date(year, month, 15),
       name: "Release",
       id: "Task 6",
-      progress: currentDate.getMonth(),
+      progress: month,
       type: "milestone",
       dependencies: ["Task 4"],
       project: "ProjectSample",

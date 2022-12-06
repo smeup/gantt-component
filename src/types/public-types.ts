@@ -15,6 +15,8 @@ export interface Task {
   name: string;
   start: Date;
   end: Date;
+  secondaryStart?: Date;
+  secondaryEnd?: Date;
   /**
    * From 0 to 100
    */
@@ -162,8 +164,8 @@ export interface CustomOptions {
   dateTimeFormatters?: DateTimeFormatters,
   /** If true, show only one line of text in calendar headers */
   singleLineHeader?: boolean,
-  /** If true, hide task labels in the diagram  */
-  hideLabel?: boolean
+  /** If true, hide task labels in the diagram */
+  hideLabel?: boolean,
 }
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption, CustomOptions {

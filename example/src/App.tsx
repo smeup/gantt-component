@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Gantt, Task, ViewMode } from '@sme.up/gantt-component';
 import { ViewSwitcher } from './components/view-switcher';
 import { getStartEndDateForProject, initTasks } from './helper';
@@ -7,34 +7,6 @@ import '@sme.up/gantt-component/dist/index.css';
 const App = () => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>(initTasks());
-
-  const delta = 1e7
-  const tasksWithGhosts = useMemo(() =>
-    tasks.flatMap((task: Task) => {
-      const styles = task.styles ?? {
-        backgroundColor: '#aaaaaa',
-        backgroundSelectedColor: '#dddddd',
-        progressColor: '#aaaaaa',
-        progressSelectedColor: '#dddddd',
-      }
-      const ghost = {
-        ...task,
-        id: task.id + '-ghost',
-        start: new Date(+task.start - delta),
-        end: new Date(+task.end + delta * 1.5),
-        progress: 0,
-        styles: {
-          backgroundColor: styles.backgroundColor + '45',
-          backgroundSelectedColor: styles.backgroundSelectedColor + '45',
-          progressColor: styles.progressColor + '45',
-          progressSelectedColor: styles.progressSelectedColor + '45',
-        },
-        name: '',
-        dependencies: [],
-        isDisabled: true,
-      }
-      return [ghost, task]
-    }), tasks)
 
   const [isChecked, setIsChecked] = React.useState(true);
   let columnWidth = 20;
@@ -109,6 +81,7 @@ const App = () => {
           singleLineHeader
           hideLabel
           todayColor="red"
+          arrowColor="transparent"
           dateTimeFormatters={{
             year: (date: Date) => 'A.D. ' + date.getFullYear(),
             month: (date: Date, locale: string) => date.toLocaleString(locale, {month: 'short'}).toUpperCase() + '.',
@@ -117,7 +90,7 @@ const App = () => {
             dayAndMonth: (date: Date, locale: string) =>
               date.toLocaleString(locale, {weekday: 'narrow', day: 'numeric', month: 'short'}).toUpperCase()
           }}
-          tasks={tasksWithGhosts}
+          tasks={tasks}
           viewMode={view}
           onDateChange={handleTaskChange}
           onDelete={handleTaskDelete}
@@ -129,7 +102,8 @@ const App = () => {
           columnWidth={columnWidth}
           listCellWidth={isChecked ? '155px' : ''}
           rowHeight={25 /* smaller rows */}
-          barFill={100 /* bar fills entire height of row */}
+          barFill={99 /* bar fills entire height of row */}
+          barCornerRadius={0}
         />
 
       </div>
