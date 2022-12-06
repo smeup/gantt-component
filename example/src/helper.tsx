@@ -4,6 +4,38 @@ export function initTasks() {
   const currentDate = new Date();
   const tasks: Task[] = [
     {
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 20),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 35),
+      name: "Project One",
+      id: "ProjectSample1",
+      progress: 25,
+      type: "project",
+      displayOrder: 0.1,
+      hideChildren: false,
+      styles: {
+        backgroundColor: '#888888',
+        backgroundSelectedColor: '#bbbbbb',
+        progressColor: '#888888',
+        progressSelectedColor: '#bbbbbb',
+      },
+    },
+    {
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 10),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 20),
+      name: "Project Two",
+      id: "ProjectSample2",
+      progress: 25,
+      type: "project",
+      displayOrder: 0.2,
+      hideChildren: false,
+      styles: {
+        backgroundColor: '#888888',
+        backgroundSelectedColor: '#bbbbbb',
+        progressColor: '#888888',
+        progressSelectedColor: '#bbbbbb',
+      },
+    },
+    {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
       end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
       name: "Some Project",
@@ -12,6 +44,12 @@ export function initTasks() {
       type: "project",
       hideChildren: false,
       displayOrder: 1,
+      styles: {
+        backgroundColor: '#888888',
+        backgroundSelectedColor: '#bbbbbb',
+        progressColor: '#888888',
+        progressSelectedColor: '#bbbbbb',
+      },
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
@@ -101,15 +139,6 @@ export function initTasks() {
       dependencies: ["Task 4"],
       project: "ProjectSample",
       displayOrder: 7,
-    },
-    {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 18),
-      end: new Date(currentDate.getFullYear()+1, 0, 6),
-      name: "Party Time",
-      id: "Task 9",
-      progress: 0,
-      isDisabled: true,
-      type: "task",
     },
   ];
   return tasks;
