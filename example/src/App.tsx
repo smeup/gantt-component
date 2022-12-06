@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import { Gantt, Task, ViewMode } from 'gantt-task-react';
+import { Gantt, Task, ViewMode } from '@sme.up/gantt-component';
 import { ViewSwitcher } from './components/view-switcher';
 import { getStartEndDateForProject, initTasks } from './helper';
-import 'gantt-task-react/dist/index.css';
+import '@sme.up/gantt-component/dist/index.css';
 
 const App = () => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
