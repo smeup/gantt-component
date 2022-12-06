@@ -39,6 +39,12 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 3,
+      styles: {
+        backgroundColor: '#00aa00',
+        backgroundSelectedColor: '#02aa44',
+        progressColor: '#00aa00',
+        progressSelectedColor: '#02aa44',
+      },
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
@@ -50,6 +56,12 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 4,
+      styles: {
+        backgroundColor: '#ff0000',
+        backgroundSelectedColor: '#ff2222',
+        progressColor: '#ff0000',
+        progressSelectedColor: '#ff2222',
+      },
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
@@ -61,6 +73,12 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 5,
+      styles: {
+        backgroundColor: '#861a08',
+        backgroundSelectedColor: '#b3240b',
+        progressColor: '#861a08',
+        progressSelectedColor: '#b3240b',
+      },
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),

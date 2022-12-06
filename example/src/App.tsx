@@ -4,7 +4,6 @@ import { ViewSwitcher } from './components/view-switcher';
 import { getStartEndDateForProject, initTasks } from './helper';
 import 'gantt-task-react/dist/index.css';
 
-// Init
 const App = () => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>(initTasks());
@@ -12,6 +11,12 @@ const App = () => {
   const delta = 1e7
   const tasksWithGhosts = useMemo(() =>
     tasks.flatMap((task: Task) => {
+      const styles = task.styles ?? {
+        backgroundColor: '#aaaaaa',
+        backgroundSelectedColor: '#dddddd',
+        progressColor: '#aaaaaa',
+        progressSelectedColor: '#dddddd',
+      }
       const ghost = {
         ...task,
         id: task.id + '-ghost',
@@ -19,26 +24,26 @@ const App = () => {
         end: new Date(+task.end + delta * 1.5),
         progress: 0,
         styles: {
-          backgroundColor: '#ff000044',
-          backgroundSelectedColor: '#abffbc99',
-          progressColor: '#ffcabc22',
-          progressSelectedColor: '#ffcabc22',
+          backgroundColor: styles.backgroundColor + '45',
+          backgroundSelectedColor: styles.backgroundSelectedColor + '45',
+          progressColor: styles.progressColor + '45',
+          progressSelectedColor: styles.progressSelectedColor + '45',
         },
         name: '',
         dependencies: [],
-        isDisabled: true
+        isDisabled: true,
       }
       return [ghost, task]
     }), tasks)
 
   const [isChecked, setIsChecked] = React.useState(true);
-  let columnWidth = 55;
+  let columnWidth = 20;
   if (view === ViewMode.Year) {
-    columnWidth = 350;
-  } else if (view === ViewMode.Month) {
     columnWidth = 250;
+  } else if (view === ViewMode.Month) {
+    columnWidth = 200;
   } else if (view === ViewMode.Week) {
-    columnWidth = 150;
+    columnWidth = 100;
   }
 
   const handleTaskChange = (task: Task) => {
@@ -102,6 +107,7 @@ const App = () => {
         <Gantt
           locale="it"
           singleLineHeader
+          todayColor="red"
           dateTimeFormatters={{
             year: (date: Date) => 'A.D. ' + date.getFullYear(),
             month: (date: Date, locale: string) => date.toLocaleString(locale, {month: 'short'}).toUpperCase() + '.',
