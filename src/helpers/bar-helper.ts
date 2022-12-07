@@ -20,7 +20,8 @@ export const convertToBarTasks = (
   projectBackgroundColor: string,
   projectBackgroundSelectedColor: string,
   milestoneBackgroundColor: string,
-  milestoneBackgroundSelectedColor: string
+  milestoneBackgroundSelectedColor: string,
+  showSecondaryDates: boolean
 ) => {
   let barTasks: BarTask[] = tasks.map((t, i) => {
     return convertToBarTask(
@@ -42,7 +43,8 @@ export const convertToBarTasks = (
       projectBackgroundColor,
       projectBackgroundSelectedColor,
       milestoneBackgroundColor,
-      milestoneBackgroundSelectedColor
+      milestoneBackgroundSelectedColor,
+      showSecondaryDates
     );
   });
 
@@ -80,7 +82,8 @@ const convertToBarTask = (
   projectBackgroundColor: string,
   projectBackgroundSelectedColor: string,
   milestoneBackgroundColor: string,
-  milestoneBackgroundSelectedColor: string
+  milestoneBackgroundSelectedColor: string,
+  showSecondaryDates: boolean
 ): BarTask => {
   let barTask: BarTask;
   switch (task.type) {
@@ -112,7 +115,8 @@ const convertToBarTask = (
         projectProgressColor,
         projectProgressSelectedColor,
         projectBackgroundColor,
-        projectBackgroundSelectedColor
+        projectBackgroundSelectedColor,
+        showSecondaryDates
       );
       break;
     default:
@@ -129,7 +133,8 @@ const convertToBarTask = (
         barProgressColor,
         barProgressSelectedColor,
         barBackgroundColor,
-        barBackgroundSelectedColor
+        barBackgroundSelectedColor,
+        showSecondaryDates
       );
       break;
   }
@@ -175,11 +180,12 @@ const convertToBar = (
   barProgressColor: string,
   barProgressSelectedColor: string,
   barBackgroundColor: string,
-  barBackgroundSelectedColor: string
+  barBackgroundSelectedColor: string,
+  showSecondaryDates: boolean
 ): BarTask => {
   const {x1, x2, typeInternal} =
     computeTypeAndXs(task.start, task.end, task.type, dates, columnWidth, handleWidth, rtl);
-  const {x1: x1secondary, x2: x2secondary} = task.secondaryStart && task.secondaryEnd ?
+  const {x1: x1secondary, x2: x2secondary} = showSecondaryDates && task.secondaryStart && task.secondaryEnd ?
     computeTypeAndXs(task.secondaryStart, task.secondaryEnd, task.type, dates, columnWidth, handleWidth, rtl) :
     {x1: undefined, x2: undefined};
 

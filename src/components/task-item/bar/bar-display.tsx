@@ -20,6 +20,7 @@ type BarDisplayProps = {
   onMouseDown: (event: React.MouseEvent<SVGPolygonElement, MouseEvent>) => void;
   xSecondary?: number;
   widthSecondary?: number;
+  showSecondaryDates: boolean;
 };
 export const BarDisplay: React.FC<BarDisplayProps> = (
   {
@@ -34,7 +35,8 @@ export const BarDisplay: React.FC<BarDisplayProps> = (
     styles,
     onMouseDown,
     xSecondary,
-    widthSecondary
+    widthSecondary,
+    showSecondaryDates = false
   }
 ) => {
   const getProcessColor = () => {
@@ -45,7 +47,7 @@ export const BarDisplay: React.FC<BarDisplayProps> = (
     return isSelected ? styles.backgroundSelectedColor : styles.backgroundColor;
   };
 
-  if (typeof xSecondary !== 'undefined') {
+  if (showSecondaryDates && typeof xSecondary !== 'undefined') {
     const halfHeight = height / 2
     return (
       <g onMouseDown={onMouseDown}>

@@ -22,6 +22,7 @@ export type TaskItemProps = {
     event?: React.MouseEvent | React.KeyboardEvent
   ) => any;
   hideLabel?: boolean;
+  showSecondaryDates?: boolean;
 };
 
 export const TaskItem: React.FC<TaskItemProps> = props => {

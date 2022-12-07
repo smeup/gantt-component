@@ -23,6 +23,7 @@ export const Project: React.FC<TaskItemProps> = (
       y,
     },
     isSelected,
+    showSecondaryDates,
   }
 ) => {
   const barColor = isSelected
@@ -33,7 +34,7 @@ export const Project: React.FC<TaskItemProps> = (
     : progressColor;
   const projectWidth = x2 - x1;
 
-  if (typeof x1secondary !== 'undefined'
+  if (showSecondaryDates && typeof x1secondary !== 'undefined'
     && typeof x2secondary !== 'undefined') {
     const halfHeight = height / 2
     return (

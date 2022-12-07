@@ -72,7 +72,8 @@ export const startOfDate = (date: Date, scale: DateHelperScales) => {
 export const ganttDateRange = (
   tasks: Task[],
   viewMode: ViewMode,
-  preStepsCount: number
+  preStepsCount: number,
+  showSecondaryDates: boolean
 ) => {
   let newStartDate: Date = tasks[0].start;
   let newEndDate: Date = tasks[0].start;
@@ -83,11 +84,13 @@ export const ganttDateRange = (
     if (task.end > newEndDate) {
       newEndDate = task.end;
     }
-    if ((task.secondaryStart) && task.secondaryStart < newStartDate) {
-      newStartDate = task.secondaryStart;
-    }
-    if ((task.secondaryEnd) && task.secondaryEnd > newEndDate) {
-      newEndDate = task.secondaryEnd;
+    if (showSecondaryDates) {
+      if ((task.secondaryStart) && task.secondaryStart < newStartDate) {
+        newStartDate = task.secondaryStart;
+      }
+      if ((task.secondaryEnd) && task.secondaryEnd > newEndDate) {
+        newEndDate = task.secondaryEnd;
+      }
     }
   }
   switch (viewMode) {

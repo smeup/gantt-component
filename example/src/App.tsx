@@ -7,6 +7,7 @@ import '@sme.up/gantt-component/dist/index.css';
 const App = () => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>(initTasks());
+  const [doubleView, setDoubleView] = React.useState(true)
 
   const [isChecked, setIsChecked] = React.useState(true);
   let columnWidth = 20;
@@ -73,7 +74,13 @@ const App = () => {
         onViewModeChange={viewMode => setView(viewMode)}
         onViewListChange={setIsChecked}
         isChecked={isChecked}
-      />
+      >
+        <label htmlFor="ch2" style={{border:'1px solid #ccd', marginRight:8, padding: 3}}>
+          <input id="ch2" type="checkbox" defaultChecked={doubleView} onClick={() => setDoubleView(!doubleView)}/>
+          View 2 lines
+        </label>
+      </ViewSwitcher>
+
       <div style={{padding: 3, border: '1px solid violet'}}>
         <h2>Customized Gantt</h2>
         <Gantt
@@ -82,6 +89,7 @@ const App = () => {
           hideLabel
           todayColor="red"
           arrowColor="transparent"
+          showSecondaryDates={doubleView}
           dateTimeFormatters={{
             year: (date: Date) => 'A.D. ' + date.getFullYear(),
             month: (date: Date, locale: string) => date.toLocaleString(locale, {month: 'short'}).toUpperCase() + '.',

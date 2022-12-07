@@ -13,6 +13,7 @@ export const Bar: React.FC<TaskItemProps> = ({
   rtl,
   onEventStart,
   isSelected,
+  showSecondaryDates = false
 }) => {
   const progressPoint = getProgressPoint(
     +!rtl * task.progressWidth + task.progressX,
@@ -37,6 +38,7 @@ export const Bar: React.FC<TaskItemProps> = ({
         }}
         xSecondary={task.x1secondary}
         widthSecondary={(task.x2secondary??0) - (task.x1secondary??0)}
+        showSecondaryDates={showSecondaryDates}
       />
       <g className="handleGroup">
         {isDateChangeable && (

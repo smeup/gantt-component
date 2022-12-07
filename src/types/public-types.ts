@@ -166,6 +166,8 @@ export interface CustomOptions {
   singleLineHeader?: boolean,
   /** If true, hide task labels in the diagram */
   hideLabel?: boolean,
+  /** If true, show an additional box in the gantt for the secondary Task dates when available */
+  showSecondaryDates?: boolean,
 }
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption, CustomOptions {
