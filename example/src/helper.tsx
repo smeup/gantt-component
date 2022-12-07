@@ -8,8 +8,8 @@ export function initTasks() {
     {
       start: new Date(year, month-1, 20),
       end: new Date(year, month-1, 35),
-      // secondaryStart: new Date(year, month-1, 18),
-      // secondaryEnd: new Date(year, month-1, 29),
+      secondaryStart: new Date(year, month-1, 15),
+      secondaryEnd: new Date(year, month-1, 29),
       name: "Project One",
       id: "ProjectSample1",
       progress: 25,
@@ -26,8 +26,8 @@ export function initTasks() {
     {
       start: new Date(year, month, 10),
       end: new Date(year, month, 20),
-      // secondaryStart: new Date(year, month, 10),
-      // secondaryEnd: new Date(year, month, 20),
+      secondaryStart: new Date(year, month, 10),
+      secondaryEnd: new Date(year, month, 20),
       name: "Project Two",
       id: "ProjectSample2",
       progress: 25,
@@ -44,6 +44,8 @@ export function initTasks() {
     {
       start: new Date(year, month, 1),
       end: new Date(year, month, 15),
+      secondaryStart: new Date(year, month, 1),
+      secondaryEnd: new Date(year, month, 14),
       name: "Some Project",
       id: "ProjectSample",
       progress: 25,
@@ -59,13 +61,9 @@ export function initTasks() {
     },
     {
       start: new Date(year, month, 1),
-      end: new Date(
-        year,
-        month,
-        2,
-        12,
-        28
-      ),
+      end: new Date(year, month, 2, 12, 28),
+      secondaryStart: new Date(year, month, 2),
+      secondaryEnd: new Date(year, month, 7),
       name: "Idea",
       id: "Task 0",
       progress: 45,
@@ -75,7 +73,9 @@ export function initTasks() {
     },
     {
       start: new Date(year, month, 2),
-      end: new Date(year, month, 4, 0, 0),
+      end: new Date(year, month, 4),
+      secondaryStart: new Date(year, month, 1),
+      secondaryEnd: new Date(year, month, 3),
       name: "Research",
       id: "Task 1",
       progress: 25,
@@ -92,7 +92,9 @@ export function initTasks() {
     },
     {
       start: new Date(year, month, 4),
-      end: new Date(year, month, 8, 0, 0),
+      end: new Date(year, month, 8 ),
+      secondaryStart: new Date(year, month, 6),
+      secondaryEnd: new Date(year, month, 8),
       name: "Discussion with team",
       id: "Task 2",
       progress: 10,
@@ -109,7 +111,9 @@ export function initTasks() {
     },
     {
       start: new Date(year, month, 8),
-      end: new Date(year, month, 9, 0, 0),
+      end: new Date(year, month, 9, ),
+      secondaryStart: new Date(year, month, 5),
+      secondaryEnd: new Date(year, month, 10),
       name: "Developing",
       id: "Task 3",
       progress: 2,
@@ -127,6 +131,8 @@ export function initTasks() {
     {
       start: new Date(year, month, 8),
       end: new Date(year, month, 10),
+      secondaryStart: new Date(year, month, 5),
+      secondaryEnd: new Date(year, month, 10),
       name: "Review",
       id: "Task 4",
       type: "task",
