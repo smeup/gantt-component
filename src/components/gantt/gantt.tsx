@@ -63,7 +63,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = (
     dateTimeFormatters,
     singleLineHeader = false,
     hideLabel = false,
-    showSecondaryDates = false
+    showSecondaryDates = false,
+    hideDependencies = false
   }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -412,7 +413,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = (
     rowHeight,
     taskHeight,
     columnWidth,
-    arrowColor,
+    arrowColor: hideDependencies ? 'transparent' : arrowColor,
     timeStep,
     fontFamily,
     fontSize,

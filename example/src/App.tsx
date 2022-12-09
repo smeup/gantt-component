@@ -8,6 +8,7 @@ const App = () => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>(initTasks());
   const [doubleView, setDoubleView] = React.useState(true)
+  const [showArrows, setShowArrows] = React.useState(false)
 
   const [isChecked, setIsChecked] = React.useState(true);
   let columnWidth = 20;
@@ -75,10 +76,16 @@ const App = () => {
         onViewListChange={setIsChecked}
         isChecked={isChecked}
       >
-        <label htmlFor="ch2" style={{border:'1px solid #ccd', marginRight:8, padding: 3}}>
-          <input id="ch2" type="checkbox" defaultChecked={doubleView} onClick={() => setDoubleView(!doubleView)}/>
-          View 2 lines
-        </label>
+        <div style={{border: '1px solid #ccd', display: 'flex', gap: 12, marginRight: 12, padding: 6}}>
+          <label htmlFor="arrows">
+            <input id="arrows" type="checkbox" defaultChecked={showArrows} onClick={() => setShowArrows(!showArrows)}/>
+            Show dependencies
+          </label>
+          <label htmlFor="ch2">
+            <input id="ch2" type="checkbox" defaultChecked={doubleView} onClick={() => setDoubleView(!doubleView)}/>
+            View 2 lines
+          </label>
+        </div>
       </ViewSwitcher>
 
       <div style={{padding: 3, border: '1px solid violet'}}>
@@ -88,8 +95,8 @@ const App = () => {
           singleLineHeader
           hideLabel
           todayColor="red"
-          arrowColor="transparent"
           showSecondaryDates={doubleView}
+          hideDependencies={!showArrows}
           dateTimeFormatters={{
             year: (date: Date) => 'A.D. ' + date.getFullYear(),
             month: (date: Date, locale: string) => date.toLocaleString(locale, {month: 'short'}).toUpperCase() + '.',

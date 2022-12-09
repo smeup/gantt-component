@@ -168,6 +168,8 @@ export interface CustomOptions {
   hideLabel?: boolean,
   /** If true, show an additional box in the gantt for the secondary Task dates when available */
   showSecondaryDates?: boolean,
+  /** If true, do not show dependency arrows */
+  hideDependencies?: boolean,
 }
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption, CustomOptions {
