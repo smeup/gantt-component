@@ -270,6 +270,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         {tasks.map(task => {
           return task.barChildren.map(child => {
             return (
+              // FIXME: exclude timeline
+              task.type !== 'timeline' &&
               <Arrow
                 key={`Arrow from ${task.id} to ${tasks[child.index].id}`}
                 taskFrom={task}

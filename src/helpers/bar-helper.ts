@@ -1,4 +1,4 @@
-import { Task } from '../types/public-types';
+import { Task, Timeframe } from '../types/public-types';
 import { BarTask, TaskTypeInternal } from '../types/bar-task';
 import { BarMoveAction } from '../types/gantt-task-actions';
 
@@ -99,6 +99,18 @@ const convertToBarTask = (
         handleWidth,
         milestoneBackgroundColor,
         milestoneBackgroundSelectedColor
+      );
+      break;
+    case 'timeline':
+      barTask = convertToTimeline(
+        task,
+        index,
+        dates,
+        columnWidth,
+        rowHeight,
+        taskHeight,
+        barCornerRadius,
+        handleWidth
       );
       break;
     case 'project':
@@ -268,6 +280,84 @@ const convertToMilestone = (
     hideChildren: undefined,
     barChildren: [],
     styles,
+  };
+};
+
+const defaultStyles = (styles:any) =>
+  ({
+    backgroundColor: styles?.backgroundColor ?? '#deadbeef',
+    backgroundSelectedColor: styles?.backgroundSelectedColor ?? '#cafebabe',
+    progressColor: styles?.progressColor ?? '#deadbeef',
+    progressSelectedColor: styles?.progressSelectedColor ?? '#cafebabe',
+  });
+
+const convertToTimeline = (
+  task: Task,
+  index: number,
+  dates: Date[],
+  columnWidth: number,
+  rowHeight: number,
+  taskHeight: number,
+  barCornerRadius: number,
+  handleWidth: number
+): BarTask => {
+  const y = taskYCoordinate(index, rowHeight, taskHeight);
+
+  function convertFrameToTask(frame: Timeframe): BarTask {
+    const {x1, x2} =
+      computeTypeAndXs(frame.start, frame.end, 'task', dates, columnWidth, handleWidth, false);
+
+    const n = +frame.start;
+    const baseColor = frame.backgroundColor;
+    const selColor = frame.backgroundSelectedColor ?? baseColor;
+    return {
+      barChildren: [],
+      barCornerRadius: 0,
+      start: frame.start,
+      end: frame.end,
+      handleWidth: 0,
+      height: taskHeight,
+      id: `F${task.id}-${n}`,
+      index: n,
+      name: '',
+      progress: 0,
+      progressWidth: 0,
+      progressX: 0,
+      styles: {
+        backgroundColor: baseColor,
+        backgroundSelectedColor: selColor,
+        progressColor: baseColor,
+        progressSelectedColor: selColor
+      },
+      timeline: [],
+      type: 'task',
+      typeInternal: 'timeline',
+      x1,
+      x2,
+      y
+    }
+  }
+
+  const {x1, x2} =
+    computeTypeAndXs(task.start, task.end, task.type, dates, columnWidth, handleWidth, false);
+
+  const children = task.timeline?.map(convertFrameToTask)
+  return {
+    ...task,
+    x1,
+    x2,
+    y,
+    index,
+    progressX: 0,
+    progressWidth: 0,
+    barCornerRadius,
+    handleWidth,
+    typeInternal: task.type,
+    progress: 0,
+    height: taskHeight,
+    hideChildren: undefined,
+    barChildren: children ?? [],
+    styles: defaultStyles(task.styles)
   };
 };
 

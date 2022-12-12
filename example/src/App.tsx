@@ -103,7 +103,7 @@ const App = () => {
             monthAndYear: (date: Date, locale: string) => date.toLocaleString(locale, {month: 'short'}) + ' \'' + date.getFullYear() % 100,
             day: (date: Date) => `${date.getDate()}`,
             dayAndMonth: (date: Date, locale: string) =>
-              date.toLocaleString(locale, {weekday: 'narrow', day: 'numeric', month: 'short'}).toUpperCase()
+              date.toLocaleString(locale, {day: 'numeric'}).toUpperCase()
           }}
           tasks={tasks}
           viewMode={view}

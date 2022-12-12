@@ -251,7 +251,7 @@ export const Calendar: React.FC<CalendarProps> =
           const topValue = formatDayAndMonth(date, locale);
           topValues.push(
             <TopCal
-              key={topValue + date.getFullYear()}
+              key={date.toISOString()}
               value={topValue}
               x1Line={columnWidth * i + ticks * columnWidth}
               y1Line={0}

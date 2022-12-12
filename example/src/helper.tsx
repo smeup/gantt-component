@@ -142,15 +142,93 @@ export function initTasks() {
       displayOrder: 6,
     },
     {
-      start: new Date(year, month, 15),
-      end: new Date(year, month, 15),
-      name: "Release",
-      id: "Task 6",
+      start: new Date(year, month, 1),
+      end: new Date(year, month, 31),
+      name: "Mario Rossi",
+      id: "Mario Rossi",
       progress: month,
-      type: "milestone",
-      dependencies: ["Task 4"],
+      type: "timeline",
       project: "ProjectSample",
       displayOrder: 7,
+      styles: {
+        backgroundColor: '#D9D9D8',
+        backgroundSelectedColor: '#ffda3a',
+        progressColor: '#D9D9D8',
+        progressSelectedColor: '#ffda3a',
+      },
+      timeline: [
+        {
+          start: new Date(year, month, 1),
+          end: new Date(year, month, 5),
+          backgroundColor: "#595959",
+        },
+        {
+          start: new Date(year, month, 5),
+          end: new Date(year, month, 8),
+          backgroundColor: "#8DB3E2",
+        },
+        {
+          start: new Date(year, month, 8),
+          end: new Date(year, month, 15),
+          backgroundColor: "#595959",
+        }
+      ]
+    },
+    {
+      start: new Date(year, month, 1),
+      end: new Date(year, month, 31),
+      name: "Luigi Bianchi",
+      id: "Luigi Bianchi",
+      progress: month,
+      type: "timeline",
+      project: "ProjectSample",
+      displayOrder: 8,
+      styles: {
+        backgroundColor: '#D9D9D8',
+        backgroundSelectedColor: '#ffda3a',
+        progressColor: '#D9D9D8',
+        progressSelectedColor: '#ffda3a',
+      },
+      timeline: [
+        {
+          start: new Date(year, month, 5),
+          end: new Date(year, month, 8),
+          backgroundColor: "#8DB3E2",
+        },
+        {
+          start: new Date(year, month, 8),
+          end: new Date(year, month, 30),
+          backgroundColor: "#595959",
+        }
+      ]
+    },
+    {
+      start: new Date(year, month, 1),
+      end: new Date(year, month, 31),
+      name: "Italo Verdi",
+      id: "Italo Verdi",
+      progress: month,
+      type: "timeline",
+      project: "ProjectSample",
+      displayOrder: 9,
+      styles: {
+        backgroundColor: '#D9D9D8',
+        backgroundSelectedColor: '#ffda3a',
+        progressColor: '#D9D9D8',
+        progressSelectedColor: '#ffda3a',
+      },
+      timeline: [
+        {
+          start: new Date(year, month, 5),
+          end: new Date(year, month, 8),
+          backgroundColor: "#DDE8F6",
+        },
+        {
+          start: new Date(year, month, 12),
+          end: new Date(year, month, 31),
+          backgroundColor: "#595959",
+        }
+      ]
     },
   ];
   return tasks;

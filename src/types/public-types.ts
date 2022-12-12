@@ -8,7 +8,7 @@ export enum ViewMode {
   Month = "Month",
   Year = "Year",
 }
-export type TaskType = "task" | "milestone" | "project";
+export type TaskType = "task" | "milestone" | "project" | "timeline";
 export interface Task {
   id: string;
   type: TaskType;
@@ -17,6 +17,7 @@ export interface Task {
   end: Date;
   secondaryStart?: Date;
   secondaryEnd?: Date;
+  timeline?: Timeframe[];
   /**
    * From 0 to 100
    */
@@ -32,6 +33,13 @@ export interface Task {
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
+}
+
+export interface Timeframe {
+  start: Date;
+  end: Date;
+  backgroundColor: string;
+  backgroundSelectedColor?: string;
 }
 
 export interface EventOption {

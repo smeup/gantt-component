@@ -6,6 +6,7 @@ import {BarSmall} from "./bar/bar-small";
 import {Milestone} from "./milestone/milestone";
 import {Project} from "./project/project";
 import style from "./task-list.module.css";
+import { Timeline } from './timeline/timeline';
 
 export type TaskItemProps = {
   task: BarTask;
@@ -52,6 +53,9 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
         break;
       case "smalltask":
         setTaskItem(<BarSmall {...props} />);
+        break;
+      case "timeline":
+        setTaskItem(<Timeline {...props} />);
         break;
       default:
         setTaskItem(<Bar {...props} />);
