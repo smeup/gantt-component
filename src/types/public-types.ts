@@ -1,14 +1,16 @@
 export enum ViewMode {
-  Hour = "Hour",
-  QuarterDay = "Quarter Day",
-  HalfDay = "Half Day",
-  Day = "Day",
+  Hour = 'Hour',
+  QuarterDay = 'Quarter Day',
+  HalfDay = 'Half Day',
+  Day = 'Day',
   /** ISO-8601 week */
-  Week = "Week",
-  Month = "Month",
-  Year = "Year",
+  Week = 'Week',
+  Month = 'Month',
+  Year = 'Year',
 }
-export type TaskType = "task" | "milestone" | "project" | "timeline";
+
+export type TaskType = 'task' | 'milestone' | 'project' | 'timeline';
+
 export interface Task {
   id: string;
   type: TaskType;
@@ -104,11 +106,9 @@ export interface StylingOption {
   handleWidth?: number;
   fontFamily?: string;
   fontSize?: string;
-  /**
-   * How many of row width can be taken by task.
-   * From 0 to 100
-   */
   barFill?: number;
+  projectFill?: number;
+  timelineFill?: number;
   barProgressColor?: string;
   barProgressSelectedColor?: string;
   barBackgroundColor?: string;

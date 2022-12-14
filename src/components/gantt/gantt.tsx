@@ -30,6 +30,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = (
     preStepsCount = 1,
     locale = 'en-GB',
     barFill = 60,
+    projectFill = 80,
+    timelineFill = 40,
     barCornerRadius = 3,
     barProgressColor = '#a3a3ff',
     barProgressSelectedColor = '#8282f5',
@@ -83,10 +85,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = (
   const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
     action: '',
   });
-  const taskHeight = useMemo(
-    () => (rowHeight * barFill) / 100,
-    [rowHeight, barFill]
-  );
+  const taskHeight = useMemo(() => (rowHeight * barFill) / 100, [rowHeight, barFill]);
+  const projectHeight = useMemo(() => (rowHeight * projectFill) / 100, [rowHeight, projectFill]);
+  const timelineHeight = useMemo(() => (rowHeight * timelineFill) / 100, [rowHeight, timelineFill]);
 
   const [selectedTask, setSelectedTask] = useState<BarTask>();
   const [failedTask, setFailedTask] = useState<BarTask | null>(null);
@@ -123,6 +124,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = (
         columnWidth,
         rowHeight,
         taskHeight,
+        projectHeight,
+        timelineHeight,
         barCornerRadius,
         handleWidth,
         rtl,

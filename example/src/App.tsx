@@ -118,6 +118,8 @@ const App = () => {
           listCellWidth={isChecked ? '155px' : ''}
           rowHeight={25 /* smaller rows */}
           barFill={99 /* bar fills entire height of row */}
+          projectFill={66}
+          timelineFill={33}
           barCornerRadius={0}
         />
 
