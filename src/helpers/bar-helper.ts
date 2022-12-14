@@ -303,7 +303,7 @@ const convertToTimeline = (
 ): BarTask => {
   const y = taskYCoordinate(index, rowHeight, taskHeight);
 
-  function convertFrameToTask(frame: Timeframe): BarTask {
+  function convertFrameToTask(frame: Timeframe, j:number): BarTask {
     const {x1, x2} =
       computeTypeAndXs(frame.start, frame.end, 'task', dates, columnWidth, handleWidth, false);
 
@@ -317,7 +317,7 @@ const convertToTimeline = (
       end: frame.end,
       handleWidth: 0,
       height: taskHeight,
-      id: `F${task.id}-${n}`,
+      id: `Frame-${task.id}-${j}`,
       index: n,
       name: '',
       progress: 0,
