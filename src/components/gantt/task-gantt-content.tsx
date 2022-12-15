@@ -287,13 +287,15 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       </g>
       <g className="bar" fontFamily={fontFamily} fontSize={fontSize}>
         {tasks.map(task => {
+          const forbidResize =  task.type === 'project';
           return (
             <TaskItem
               task={task}
               arrowIndent={arrowIndent}
               taskHeight={taskHeight}
               isProgressChangeable={!!onProgressChange && !task.isDisabled}
-              isDateChangeable={!!onDateChange && !task.isDisabled}
+              isDateMovable={!!onDateChange && !task.isDisabled}
+              isDateResizable={!!onDateChange && !task.isDisabled && !forbidResize}
               isDelete={!task.isDisabled}
               onEventStart={handleBarEventStart}
               key={task.id}

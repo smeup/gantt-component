@@ -41,8 +41,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = (
     projectProgressSelectedColor = '#59a985',
     projectBackgroundColor = '#fac465',
     projectBackgroundSelectedColor = '#f7bb53',
-    milestoneBackgroundColor = '#f1c453',
-    milestoneBackgroundSelectedColor = '#f29e4c',
     rtl = false,
     handleWidth = 8,
     timeStep = 300000,
@@ -137,8 +135,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = (
         projectProgressSelectedColor,
         projectBackgroundColor,
         projectBackgroundSelectedColor,
-        milestoneBackgroundColor,
-        milestoneBackgroundSelectedColor,
         showSecondaryDates
       )
     );
@@ -159,8 +155,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = (
     projectProgressSelectedColor,
     projectBackgroundColor,
     projectBackgroundSelectedColor,
-    milestoneBackgroundColor,
-    milestoneBackgroundSelectedColor,
     rtl,
     scrollX,
     onExpanderClick,

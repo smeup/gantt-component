@@ -1,18 +1,19 @@
 import React from "react";
-import { getProgressPoint } from "../../../helpers/bar-helper";
-import { BarDisplay } from "./bar-display";
-import { BarProgressHandle } from "./bar-progress-handle";
-import { TaskItemProps } from "../task-item";
+import {getProgressPoint} from "../../../helpers/bar-helper";
+import {BarDisplay} from "./bar-display";
+import {BarProgressHandle} from "./bar-progress-handle";
+import {TaskItemProps} from "../task-item";
 import styles from "./bar.module.css";
 
-export const BarSmall: React.FC<TaskItemProps> = ({
-  task,
-  isProgressChangeable,
-  isDateChangeable,
-  onEventStart,
-  isSelected,
-  showSecondaryDates = false
-}) => {
+export const BarSmall: React.FC<TaskItemProps> = (
+  {
+    task,
+    isProgressChangeable,
+    isDateMovable,
+    onEventStart,
+    isSelected,
+    showSecondaryDates = false
+  }) => {
   const progressPoint = getProgressPoint(
     task.progressWidth + task.x1,
     task.y,
@@ -31,7 +32,7 @@ export const BarSmall: React.FC<TaskItemProps> = ({
         styles={task.styles}
         isSelected={isSelected}
         onMouseDown={e => {
-          isDateChangeable && onEventStart("move", task, e);
+          isDateMovable && onEventStart("move", task, e);
         }}
         showSecondaryDates={showSecondaryDates}
       />

@@ -3,17 +3,16 @@ import {BarTask} from "../../types/bar-task";
 import {GanttContentMoveAction} from "../../types/gantt-task-actions";
 import {Bar} from "./bar/bar";
 import {BarSmall} from "./bar/bar-small";
-import {Milestone} from "./milestone/milestone";
-import {Project} from "./project/project";
 import style from "./task-list.module.css";
-import { Timeline } from './timeline/timeline';
+import {Timeline} from './timeline/timeline';
 
 export type TaskItemProps = {
   task: BarTask;
   arrowIndent: number;
   taskHeight: number;
   isProgressChangeable: boolean;
-  isDateChangeable: boolean;
+  isDateMovable: boolean;
+  isDateResizable:boolean;
   isDelete: boolean;
   isSelected: boolean;
   rtl: boolean;
@@ -45,11 +44,8 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
 
   useEffect(() => {
     switch (task.typeInternal) {
-      case "milestone":
-        setTaskItem(<Milestone {...props} />);
-        break;
       case "project":
-        setTaskItem(<Project {...props} />);
+        setTaskItem(<Bar {...props} />);
         break;
       case "smalltask":
         setTaskItem(<BarSmall {...props} />);

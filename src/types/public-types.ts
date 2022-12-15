@@ -8,9 +8,7 @@ export enum ViewMode {
   Month = 'Month',
   Year = 'Year',
 }
-
-export type TaskType = 'task' | 'milestone' | 'project' | 'timeline';
-
+export type TaskType = "task" | "project" | "timeline";
 export interface Task {
   id: string;
   type: TaskType;
@@ -117,8 +115,6 @@ export interface StylingOption {
   projectProgressSelectedColor?: string;
   projectBackgroundColor?: string;
   projectBackgroundSelectedColor?: string;
-  milestoneBackgroundColor?: string;
-  milestoneBackgroundSelectedColor?: string;
   arrowColor?: string;
   arrowIndent?: number;
   todayColor?: string;
