@@ -26,14 +26,17 @@ export interface PlannerProps {
 
 export const Planner: React.FC<PlannerProps> = props => {
   const [timeUnit, setTimeUnit] = useState(TimeUnit.MONTH);
-  const [doubleView, setDoubleView] = useState(false);
+  const [doubleView, setDoubleView] = useState(props.showSecondaryDates ?? false);
   const commonProps = {
     hideLable: props.hideLabel,
-    showSecondaryDates: props.showSecondaryDates,
+    showSecondaryDates: doubleView,
     ganttHeight: props.ganttHeight,
     hideDependencies: props.hideDependencies,
   };
 
+  console.log(JSON.stringify(commonProps));
+
+  
   return (
     <div style={{ maxWidth: "90vw" }}>
       <Switcher onTimeUnitChange={timeUnit => setTimeUnit(timeUnit)} />
@@ -48,7 +51,7 @@ export const Planner: React.FC<PlannerProps> = props => {
           }
           TaskListHeader={
             props.taskListHeaderPhase ??
-            CustomTaskListHeaderHOC("Fasi", doubleView, setDoubleView)
+            CustomTaskListHeaderHOC("Fasi", doubleView ?? true, setDoubleView)
           }
           TaskListTable={props.taskListTablePhase}
         />
@@ -64,7 +67,7 @@ export const Planner: React.FC<PlannerProps> = props => {
           }
           TaskListHeader={
             props.taskListHeaderProject ??
-            CustomTaskListHeaderHOC("Commesse", doubleView, setDoubleView)
+            CustomTaskListHeaderHOC("Commesse", doubleView ?? true, setDoubleView)
           }
           TaskListTable={
             props.taskListTableProject ??

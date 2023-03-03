@@ -4,7 +4,7 @@ import { TaskListHeaderComponent } from "../../types/adapted-types";
 export const CustomTaskListHeaderHOC = (
   label: string,
   doubleView: boolean,
-  setDoubleView: any,
+  setDoubleView: (checked: boolean) => void,
 ): TaskListHeaderComponent => {
   // noinspection UnnecessaryLocalVariableJS
   const CustomTaskListHeader: TaskListHeaderComponent = ({
@@ -32,7 +32,9 @@ export const CustomTaskListHeaderHOC = (
             id="ch2"
             type="checkbox"
             defaultChecked={doubleView}
-            onClick={() => setDoubleView(!doubleView)}
+            onClick={() => {
+              setDoubleView(!doubleView)
+            }}
           />
           <span className={styles.slider}></span>
         </label>

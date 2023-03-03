@@ -157,7 +157,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = (
     projectBackgroundSelectedColor,
     rtl,
     scrollX,
-    onExpanderClick,
+    onExpanderClick,    
   ]);
 
   useEffect(() => {
@@ -186,7 +186,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = (
     dateSetup.viewMode,
     viewMode,
     currentViewDate,
-    setCurrentViewDate,
+    setCurrentViewDate,    
   ]);
 
   useEffect(() => {
