@@ -33,7 +33,8 @@
     "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
     "predeploy": "cd example && npm install && npm run build",
-    "deploy": "gh-pages -d example/build"
+    "deploy": "gh-pages -d example/build",
+    "clean": "rimraf dist && rimraf node_modules"
   },
   "peerDependencies": {
     "react": "18.2.0"
@@ -62,7 +63,8 @@
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
     "sass": "^1.58.3",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "rimraf": "^3.0.2"
   },
   "files": [
     "dist"
