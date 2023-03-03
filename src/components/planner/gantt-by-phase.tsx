@@ -17,8 +17,7 @@ export const GanttByPhase: FC<GanttByPhaseProps> = ({
   TaskListHeader,
   TaskListTable,
   onDateChange,
-  stylingOptions = {},
-  ...props
+  stylingOptions = {},  
 }) => {
   const [currentPhases, setCurrentPhases] = useState(phases);
   const tasks = currentPhases?.map(convertPhaseToTask) ?? [];
@@ -48,8 +47,7 @@ export const GanttByPhase: FC<GanttByPhaseProps> = ({
       TaskListHeader={TaskListHeader}
       TaskListTable={TaskListTable}
       dateTimeFormatters={ganttDateTimeFormatters}
-      {...stylingOptions}
-      {...props}
+      {...stylingOptions}      
     />
   );
 
