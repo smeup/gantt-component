@@ -2,7 +2,6 @@ import styles from "./gantt-table.module.scss";
 import { FC } from "react";
 import { Task } from "../../types/public-types";
 import React from "react";
-import { formatToLocaleSimple } from "../../helpers/time-converters";
 import { TaskListTableComponent } from "../../types/adapted-types";
 
 type RowProps = {
@@ -16,37 +15,7 @@ type RowProps = {
 };
 
 const ProjectRow: FC<RowProps> = ({
-  task: { id, name },
-  rowHeight,
-  rowWidth,
-  fontFamily,
-  fontSize,
-  setSelectedTask,
-  onclickTaskList,
-}) => (
-  <div
-    key={id}
-    className={styles.project}
-    style={{
-      height: rowHeight,
-      width: rowWidth,
-      fontFamily,
-      fontSize,
-    }}
-    onClick={() => {
-      setSelectedTask(id);
-      onclickTaskList(id);
-    }}
-  >
-    <span className={styles.main}>{name}</span>
-    {/* FIXME should read values from Task */}
-    <span>10%</span>
-    <span>3000</span>
-  </div>
-);
-
-const SubRow: FC<RowProps> = ({
-  task: { id, name, start, end, styles: taskStyles },
+  task: { id, valuesToShow },
   rowHeight,
   rowWidth,
   fontFamily,
@@ -54,16 +23,64 @@ const SubRow: FC<RowProps> = ({
   setSelectedTask,
   onclickTaskList,
 }) => {
+  let str = "";
+  for (let i = 0; i < valuesToShow.length; i++) {
+    str += "1fr ";
+  }
+  const customStyle = {
+    height: rowHeight,
+    width: rowWidth,
+    fontFamily,
+    fontSize,
+    "--grid-project-columns": str,
+  };
+  return (
+    <div
+      key={id}
+      className={styles.project}
+      style={customStyle}
+      onClick={() => {
+        setSelectedTask(id);
+        onclickTaskList(id);
+      }}
+    >
+      {valuesToShow?.map((v, index) => (
+        <span
+          className={index === 0 ? styles.main : undefined}
+          title={v.length > 10 ? v : undefined}
+        >
+          {v}
+        </span>
+      ))}
+    </div>
+  );
+};
+
+const SubRow: FC<RowProps> = ({
+  task: { id, valuesToShow, styles: taskStyles },
+  rowHeight,
+  rowWidth,
+  fontFamily,
+  fontSize,
+  setSelectedTask,
+  onclickTaskList,
+}) => {
+  let str = "";
+  for (let i = 0; i < valuesToShow.length + 1; i++) {
+    str += "1fr ";
+  }
+  const customStyle = {
+    height: rowHeight,
+    width: rowWidth,
+    fontFamily,
+    fontSize,
+    "--grid-fasi-columns": str,
+  };
   return (
     <div
       key={id}
       className={styles.subrow}
-      style={{
-        height: rowHeight,
-        width: rowWidth,
-        fontFamily,
-        fontSize,
-      }}
+      style={customStyle}
       onClick={() => {
         setSelectedTask(id);
         onclickTaskList(id);
@@ -76,9 +93,14 @@ const SubRow: FC<RowProps> = ({
           backgroundColor: taskStyles?.backgroundColor,
         }}
       />
-      <span>{name}</span>
-      <span>{formatToLocaleSimple(start)}</span>
-      <span>{formatToLocaleSimple(end)}</span>
+      {valuesToShow?.map((v, index) => (
+        <span
+          className={index === 0 ? styles.main : undefined}
+          title={v.length > 10 ? v : undefined}
+        >
+          {v}
+        </span>
+      ))}
     </div>
   );
 };
@@ -116,7 +138,7 @@ const TimelineSubRow: FC<RowProps> = ({
 };
 
 export const CustomTaskListTableHOC = (
-  onclickTaskList: (id: string) => void,
+  onclickTaskList: (id: string) => void
 ): TaskListTableComponent => {
   // noinspection UnnecessaryLocalVariableJS
   const CustomTaskListTable: TaskListTableComponent = ({

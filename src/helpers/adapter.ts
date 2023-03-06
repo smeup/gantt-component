@@ -1,12 +1,7 @@
 // Probably not used
 
 import { TimeUnit } from "../types/time-unit";
-import {
-  Employee,
-  Phase,
-  Project,
-  ScheduleItem,
-} from "../types/domain";
+import { Employee, Phase, Project, ScheduleItem } from "../types/domain";
 import { formatToIsoDate, validDates } from "./time-converters";
 import { Task, Timeframe, ViewMode } from "../types/public-types";
 
@@ -41,7 +36,7 @@ export const convertPhaseToTask = (item: Phase): Task => {
     const { start: phaseStart2, end: phaseEnd2 } = validDates(
       secondaryStartDate,
       secondaryEndDate,
-      phaseName,
+      phaseName
     );
     return {
       start,
@@ -49,6 +44,7 @@ export const convertPhaseToTask = (item: Phase): Task => {
       secondaryStart: phaseStart2,
       secondaryEnd: phaseEnd2,
       name: phaseName,
+      valuesToShow: item.valuesToShow,
       id: phaseId,
       type: "task",
       progress: 100,
@@ -79,7 +75,7 @@ export const convertEmployeeToTimeline = (item: Employee): Task => {
     return {
       start,
       end,
-      backgroundColor: color ?? '0xffffff',
+      backgroundColor: color ?? "0xffffff",
       backgroundSelectedColor: selectedColor ?? color,
     };
   };
@@ -90,6 +86,7 @@ export const convertEmployeeToTimeline = (item: Employee): Task => {
     type: "timeline",
     timeline: schedule.map(convertToFrame),
     name,
+    valuesToShow: item.valuesToShow,
     start: new Date(),
     end: new Date(),
     progress: 100,
@@ -105,6 +102,7 @@ export const convertEmployeeToTimeline = (item: Employee): Task => {
 export const convertProjectToTasks = ({
   id,
   name,
+  valuesToShow,
   startDate,
   endDate,
   phases,
@@ -116,7 +114,7 @@ export const convertProjectToTasks = ({
   const { start: start2, end: end2 } = validDates(
     secondaryStartDate,
     secondaryEndDate,
-    name,
+    name
   );
   const mainTask: Task = {
     /**
@@ -136,6 +134,7 @@ export const convertProjectToTasks = ({
     end,
     id,
     name,
+    valuesToShow,
     secondaryStart: start2,
     secondaryEnd: end2,
     type: "project",
@@ -151,15 +150,15 @@ export const convertProjectToTasks = ({
 
 export const mergeTaskIntoProjects = (
   projects: Project[],
-  { id, start, end }: Task,
+  { id, start, end }: Task
 ): Project[] =>
   projects.map(project =>
-    project.id === id ? withNewDates(project, start, end) : project,
+    project.id === id ? withNewDates(project, start, end) : project
   );
 
 export const mergeTaskIntoPhases = (
   phases: Phase[] | undefined,
-  { id, start, end }: Task,
+  { id, start, end }: Task
 ): Phase[] | undefined => {
   if (phases) {
     return phases.map(phase =>
@@ -167,13 +166,13 @@ export const mergeTaskIntoPhases = (
     );
   }
   return undefined;
-}
+};
 
 /** Return a shallow copy, with the dates updated */
-const withNewDates = <P extends Phase | Project >(
+const withNewDates = <P extends Phase | Project>(
   p: P,
   start: Date,
-  end: Date,
+  end: Date
 ): P => {
   const startDate = formatToIsoDate(start);
   const endDate = formatToIsoDate(end);

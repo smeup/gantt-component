@@ -1,14 +1,14 @@
-export type GanttRowType = "project" | "phase"  | "employee";
+export type GanttRowType = "project" | "phase" | "employee";
 
 export interface GanttRow {
   id: string;
   name: string;
   type: GanttRowType;
+  valuesToShow: string[];
 }
 
 /** Commessa */
 export interface Project extends GanttRow {
-  customerCountry: string;
   startDate: string;
   endDate: string;
   secondaryStartDate: string;
@@ -30,7 +30,7 @@ export interface Phase extends GanttRow {
 
 /** Risorsa */
 export interface Employee extends GanttRow {
-  schedule: ScheduleItem[]
+  schedule: ScheduleItem[];
 }
 
 export interface ScheduleItem {
@@ -39,5 +39,3 @@ export interface ScheduleItem {
   color?: string;
   selectedColor?: string;
 }
-
-

@@ -1,6 +1,6 @@
-import {Task, Timeframe} from '../types/public-types';
-import {BarTask, TaskTypeInternal} from '../types/bar-task';
-import {BarMoveAction} from '../types/gantt-task-actions';
+import { Task, Timeframe } from "../types/public-types";
+import { BarTask, TaskTypeInternal } from "../types/bar-task";
+import { BarMoveAction } from "../types/gantt-task-actions";
 
 export const convertToBarTasks = (
   tasks: Task[],
@@ -70,8 +70,8 @@ const convertToBarTask = (
   columnWidth: number,
   rowHeight: number,
   taskHeight: number,
-  projectHeight:number,
-  timelineHeight:number,
+  projectHeight: number,
+  timelineHeight: number,
   barCornerRadius: number,
   handleWidth: number,
   rtl: boolean,
@@ -87,7 +87,7 @@ const convertToBarTask = (
 ): BarTask => {
   let barTask: BarTask;
   switch (task.type) {
-    case 'timeline':
+    case "timeline":
       barTask = convertToTimeline(
         task,
         index,
@@ -99,7 +99,7 @@ const convertToBarTask = (
         handleWidth
       );
       break;
-    case 'project':
+    case "project":
       barTask = convertToBar(
         task,
         index,
@@ -158,11 +158,11 @@ function computeTypeAndXs(
     x2 = taskXCoordinate(end, dates, columnWidth);
   }
   let typeInternal: TaskTypeInternal = type;
-  if (typeInternal === 'task' && x2 - x1 < handleWidth * 2) {
-    typeInternal = 'smalltask';
+  if (typeInternal === "task" && x2 - x1 < handleWidth * 2) {
+    typeInternal = "smalltask";
     x2 = x1 + handleWidth * 2;
   }
-  return {x1, x2, typeInternal};
+  return { x1, x2, typeInternal };
 }
 
 const convertToBar = (
@@ -181,11 +181,27 @@ const convertToBar = (
   barBackgroundSelectedColor: string,
   showSecondaryDates: boolean
 ): BarTask => {
-  const {x1, x2, typeInternal} =
-    computeTypeAndXs(task.start, task.end, task.type, dates, columnWidth, handleWidth, rtl);
-  const {x1: x1secondary, x2: x2secondary} = showSecondaryDates && task.secondaryStart && task.secondaryEnd ?
-    computeTypeAndXs(task.secondaryStart, task.secondaryEnd, task.type, dates, columnWidth, handleWidth, rtl) :
-    {x1: undefined, x2: undefined};
+  const { x1, x2, typeInternal } = computeTypeAndXs(
+    task.start,
+    task.end,
+    task.type,
+    dates,
+    columnWidth,
+    handleWidth,
+    rtl
+  );
+  const { x1: x1secondary, x2: x2secondary } =
+    showSecondaryDates && task.secondaryStart && task.secondaryEnd
+      ? computeTypeAndXs(
+          task.secondaryStart,
+          task.secondaryEnd,
+          task.type,
+          dates,
+          columnWidth,
+          handleWidth,
+          rtl
+        )
+      : { x1: undefined, x2: undefined };
 
   const [progressWidth, progressX] = progressWithByParams(
     x1,
@@ -194,7 +210,7 @@ const convertToBar = (
     rtl
   );
   const y = taskYCoordinate(index, rowHeight, taskHeight);
-  const hideChildren = task.type === 'project' ? task.hideChildren : undefined;
+  const hideChildren = task.type === "project" ? task.hideChildren : undefined;
 
   const styles = {
     backgroundColor: barBackgroundColor,
@@ -223,13 +239,12 @@ const convertToBar = (
   };
 };
 
-const defaultStyles = (styles: any) =>
-  ({
-    backgroundColor: styles?.backgroundColor ?? '#deadbeef',
-    backgroundSelectedColor: styles?.backgroundSelectedColor ?? '#cafebabe',
-    progressColor: styles?.progressColor ?? '#deadbeef',
-    progressSelectedColor: styles?.progressSelectedColor ?? '#cafebabe',
-  });
+const defaultStyles = (styles: any) => ({
+  backgroundColor: styles?.backgroundColor ?? "#deadbeef",
+  backgroundSelectedColor: styles?.backgroundSelectedColor ?? "#cafebabe",
+  progressColor: styles?.progressColor ?? "#deadbeef",
+  progressSelectedColor: styles?.progressSelectedColor ?? "#cafebabe",
+});
 
 const convertToTimeline = (
   task: Task,
@@ -243,9 +258,16 @@ const convertToTimeline = (
 ): BarTask => {
   const y = taskYCoordinate(index, rowHeight, taskHeight);
 
-  function convertFrameToTask(frame: Timeframe, j:number): BarTask {
-    const {x1, x2} =
-      computeTypeAndXs(frame.start, frame.end, 'task', dates, columnWidth, handleWidth, false);
+  function convertFrameToTask(frame: Timeframe, j: number): BarTask {
+    const { x1, x2 } = computeTypeAndXs(
+      frame.start,
+      frame.end,
+      "task",
+      dates,
+      columnWidth,
+      handleWidth,
+      false
+    );
 
     const n = +frame.start;
     const baseColor = frame.backgroundColor;
@@ -259,7 +281,8 @@ const convertToTimeline = (
       height: taskHeight,
       id: `Frame-${task.id}-${j}`,
       index: n,
-      name: '',
+      name: "",
+      valuesToShow: task.valuesToShow,
       progress: 0,
       progressWidth: 0,
       progressX: 0,
@@ -267,21 +290,28 @@ const convertToTimeline = (
         backgroundColor: baseColor,
         backgroundSelectedColor: selColor,
         progressColor: baseColor,
-        progressSelectedColor: selColor
+        progressSelectedColor: selColor,
       },
       timeline: [],
-      type: 'task',
-      typeInternal: 'timeline',
+      type: "task",
+      typeInternal: "timeline",
       x1,
       x2,
-      y
-    }
+      y,
+    };
   }
 
-  const {x1, x2} =
-    computeTypeAndXs(task.start, task.end, task.type, dates, columnWidth, handleWidth, false);
+  const { x1, x2 } = computeTypeAndXs(
+    task.start,
+    task.end,
+    task.type,
+    dates,
+    columnWidth,
+    handleWidth,
+    false
+  );
 
-  const children = task.timeline?.map(convertFrameToTask)
+  const children = task.timeline?.map(convertFrameToTask);
   return {
     ...task,
     x1,
@@ -297,7 +327,7 @@ const convertToTimeline = (
     height: taskHeight,
     hideChildren: undefined,
     barChildren: children ?? [],
-    styles: defaultStyles(task.styles)
+    styles: defaultStyles(task.styles),
   };
 };
 
@@ -387,7 +417,7 @@ export const getProgressPoint = (
     progressX,
     taskY + taskHeight - 8.66,
   ];
-  return point.join(',');
+  return point.join(",");
 };
 
 const startByX = (x: number, xStep: number, task: BarTask) => {
@@ -428,7 +458,7 @@ const dateByX = (
   let newDate = new Date(((x - taskX) / xStep) * timeStep + taskDate.getTime());
   newDate = new Date(
     newDate.getTime() +
-    (newDate.getTimezoneOffset() - taskDate.getTimezoneOffset()) * 60000
+      (newDate.getTimezoneOffset() - taskDate.getTimezoneOffset()) * 60000
   );
   return newDate;
 };
@@ -464,10 +494,10 @@ const handleTaskBySVGMouseEventForBar = (
   initEventX1Delta: number,
   rtl: boolean
 ): { isChanged: boolean; changedTask: BarTask } => {
-  const changedTask: BarTask = {...selectedTask};
+  const changedTask: BarTask = { ...selectedTask };
   let isChanged = false;
   switch (action) {
-    case 'progress':
+    case "progress":
       if (rtl) {
         changedTask.progress = progressByXRTL(svgX, selectedTask);
       } else {
@@ -485,7 +515,7 @@ const handleTaskBySVGMouseEventForBar = (
         changedTask.progressX = progressX;
       }
       break;
-    case 'start': {
+    case "start": {
       const newX1 = startByX(svgX, xStep, selectedTask);
       changedTask.x1 = newX1;
       isChanged = changedTask.x1 !== selectedTask.x1;
@@ -518,7 +548,7 @@ const handleTaskBySVGMouseEventForBar = (
       }
       break;
     }
-    case 'end': {
+    case "end": {
       const newX2 = endByX(svgX, xStep, selectedTask);
       changedTask.x2 = newX2;
       isChanged = changedTask.x2 !== selectedTask.x2;
@@ -551,7 +581,7 @@ const handleTaskBySVGMouseEventForBar = (
       }
       break;
     }
-    case 'move': {
+    case "move": {
       const [newMoveX1, newMoveX2] = moveByX(
         svgX - initEventX1Delta,
         xStep,
@@ -587,5 +617,5 @@ const handleTaskBySVGMouseEventForBar = (
       break;
     }
   }
-  return {isChanged, changedTask};
+  return { isChanged, changedTask };
 };

@@ -1,12 +1,15 @@
 import { TimeUnit } from "../../types/time-unit";
 import React, { FC, useState } from "react";
-import { convertPhaseToTask, mergeTaskIntoPhases, toViewMode } from "../../helpers/adapter";
+import {
+  convertPhaseToTask,
+  mergeTaskIntoPhases,
+  toViewMode,
+} from "../../helpers/adapter";
 import { GanttByPhaseProps } from "../../types/adapted-types";
 import { DateTime } from "luxon";
 import { ganttDateTimeFormatters } from "../../helpers/time-formatters";
 import { Task } from "../../types/public-types";
 import { Gantt } from "../gantt/gantt";
-
 
 const locale = "it-IT";
 
@@ -17,7 +20,7 @@ export const GanttByPhase: FC<GanttByPhaseProps> = ({
   TaskListHeader,
   TaskListTable,
   onDateChange,
-  stylingOptions = {},  
+  stylingOptions = {},
 }) => {
   const [currentPhases, setCurrentPhases] = useState(phases);
   const tasks = currentPhases?.map(convertPhaseToTask) ?? [];
@@ -47,16 +50,13 @@ export const GanttByPhase: FC<GanttByPhaseProps> = ({
       TaskListHeader={TaskListHeader}
       TaskListTable={TaskListTable}
       dateTimeFormatters={ganttDateTimeFormatters}
-      {...stylingOptions}      
+      {...stylingOptions}
     />
   );
 
   if (returnElement) {
     return returnElement;
+  } else {
+    return <div></div>;
   }
-  else {
-    return <div></div>
-  };
-
-  
 };

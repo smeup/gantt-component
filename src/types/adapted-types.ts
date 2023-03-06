@@ -13,6 +13,10 @@ export interface GanttCommonProps {
   /** Optional renderer for body rows in left-side table */
   TaskListTable?: TaskListTableComponent;
   stylingOptions?: StylingOptions;
+  hideLabel?: boolean;
+  showSecondaryDates?: boolean;
+  ganttHeight?: number;
+  hideDependencies?: boolean;
 }
 
 export interface GanttByProjectProps extends GanttCommonProps {
@@ -86,6 +90,10 @@ export interface StylingOptions {
   barBackgroundSelectedColor?: string;
   barProgressColor?: string;
   barProgressSelectedColor?: string;
+  projectProgressColor?: string;
+  projectProgressSelectedColor?: string;
+  projectBackgroundColor?: string;
+  projectBackgroundSelectedColor?: string;
   /**
    * Can be used on all kind of tasks (task, project, milestone).
    * May corrupt layout for elements of type "project".

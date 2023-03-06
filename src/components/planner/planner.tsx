@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { TaskListHeaderComponent, TaskListTableComponent } from "../../types/adapted-types";
+import {
+  TaskListHeaderComponent,
+  TaskListTableComponent,
+} from "../../types/adapted-types";
 import { Project, Phase, GanttRow } from "../../types/domain";
 import { TimeUnit } from "../../types/time-unit";
 import { CustomTaskListHeaderHOC } from "./custom-task-list-header";
@@ -21,12 +24,15 @@ export interface PlannerProps {
   showSecondaryDates?: boolean;
   ganttHeight?: number;
   hideDependencies?: boolean;
-  items: Phase[] | Project[]  
+  items: Phase[] | Project[];
+  title: string;
 }
 
 export const Planner: React.FC<PlannerProps> = props => {
   const [timeUnit, setTimeUnit] = useState(TimeUnit.MONTH);
-  const [doubleView, setDoubleView] = useState(props.showSecondaryDates ?? false);
+  const [doubleView, setDoubleView] = useState(
+    props.showSecondaryDates ?? false
+  );
   const commonProps = {
     hideLable: props.hideLabel,
     showSecondaryDates: doubleView,
@@ -36,7 +42,6 @@ export const Planner: React.FC<PlannerProps> = props => {
 
   console.log(JSON.stringify(commonProps));
 
-  
   return (
     <div style={{ maxWidth: "90vw" }}>
       <Switcher onTimeUnitChange={timeUnit => setTimeUnit(timeUnit)} />
@@ -51,7 +56,11 @@ export const Planner: React.FC<PlannerProps> = props => {
           }
           TaskListHeader={
             props.taskListHeaderPhase ??
-            CustomTaskListHeaderHOC("Fasi", doubleView ?? true, setDoubleView)
+            CustomTaskListHeaderHOC(
+              props.title,
+              doubleView ?? true,
+              setDoubleView
+            )
           }
           TaskListTable={props.taskListTablePhase}
         />
@@ -67,7 +76,11 @@ export const Planner: React.FC<PlannerProps> = props => {
           }
           TaskListHeader={
             props.taskListHeaderProject ??
-            CustomTaskListHeaderHOC("Commesse", doubleView ?? true, setDoubleView)
+            CustomTaskListHeaderHOC(
+              props.title,
+              doubleView ?? true,
+              setDoubleView
+            )
           }
           TaskListTable={
             props.taskListTableProject ??
