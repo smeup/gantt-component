@@ -1,4 +1,4 @@
-import {DateTime} from 'luxon';
+import { DateTime } from "luxon";
 
 export const parseToDayStart = (ymd: string) =>
   DateTime.fromISO(ymd).toJSDate();
@@ -12,11 +12,10 @@ export const formatToIsoDate = (date: Date) =>
   DateTime.fromJSDate(date).toISODate();
 
 export const formatToLocaleSimple = (date: Date) =>
-  DateTime.fromJSDate(date).toFormat('dd-MM-yy');
+  DateTime.fromJSDate(date).toFormat("dd/MM/yyyy");
 
 export const formatToLocaleDate = (date: Date, locale: string = "it-IT") =>
   DateTime.fromJSDate(date).setLocale(locale).toLocaleString();
-
 
 export function validDates(startDate: string, endDate: string, name: string) {
   let start = parseToDayStart(startDate);
