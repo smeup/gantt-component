@@ -57,7 +57,7 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
         setTaskItem(<Bar {...props} />);
         break;
     }
-  }, [task, isSelected]);
+  },[task.typeInternal, isSelected, props]);
 
   useEffect(() => {
     if (textRef.current) {

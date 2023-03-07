@@ -1,18 +1,19 @@
 export enum ViewMode {
-  Hour = 'Hour',
-  QuarterDay = 'Quarter Day',
-  HalfDay = 'Half Day',
-  Day = 'Day',
+  Hour = "Hour",
+  QuarterDay = "Quarter Day",
+  HalfDay = "Half Day",
+  Day = "Day",
   /** ISO-8601 week */
-  Week = 'Week',
-  Month = 'Month',
-  Year = 'Year',
+  Week = "Week",
+  Month = "Month",
+  Year = "Year",
 }
 export type TaskType = "task" | "project" | "timeline";
 export interface Task {
   id: string;
   type: TaskType;
   name: string;
+  valuesToShow: string[];
   start: Date;
   end: Date;
   secondaryStart?: Date;
@@ -148,34 +149,38 @@ export interface StylingOption {
 type DateTimeFormatter = (date: Date, locale: string) => string;
 export type DateTimeFormatters = {
   /** For top row in ViewMode.Month, bottom row in ViewMode.Year */
-  year?: DateTimeFormatter,
+  year?: DateTimeFormatter;
   /** For top row in ViewMode.Day, bottom row in ViewMode.Month */
-  month?: DateTimeFormatter,
+  month?: DateTimeFormatter;
   /** For top row in ViewMode.Week */
-  monthAndYear?: DateTimeFormatter,
+  monthAndYear?: DateTimeFormatter;
   /** For bottom row in ViewMode.Week */
-  week?: DateTimeFormatter,
+  week?: DateTimeFormatter;
   /** For bottom row in ViewMode.Day */
-  day?: DateTimeFormatter,
+  day?: DateTimeFormatter;
   /** For bottom row in ViewMode.Hour / HalfDay / QuarterDay */
-  hour?: DateTimeFormatter,
+  hour?: DateTimeFormatter;
   /** For top row in ViewMode.Hour / HalfDay / QuarterDay */
-  dayAndMonth?: DateTimeFormatter,
+  dayAndMonth?: DateTimeFormatter;
 };
 
 export interface CustomOptions {
   /** Custom formatters for calendar headers */
-  dateTimeFormatters?: DateTimeFormatters,
+  dateTimeFormatters?: DateTimeFormatters;
   /** If true, show only one line of text in calendar headers */
-  singleLineHeader?: boolean,
+  singleLineHeader?: boolean;
   /** If true, hide task labels in the diagram */
-  hideLabel?: boolean,
+  hideLabel?: boolean;
   /** If true, show an additional box in the gantt for the secondary Task dates when available */
-  showSecondaryDates?: boolean,
+  showSecondaryDates?: boolean;
   /** If true, do not show dependency arrows */
-  hideDependencies?: boolean,
+  hideDependencies?: boolean;
 }
 
-export interface GanttProps extends EventOption, DisplayOption, StylingOption, CustomOptions {
+export interface GanttProps
+  extends EventOption,
+    DisplayOption,
+    StylingOption,
+    CustomOptions {
   tasks: Task[];
 }
