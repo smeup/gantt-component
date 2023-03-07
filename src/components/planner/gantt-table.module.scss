@@ -157,22 +157,19 @@ input:checked + .slider:before {
 
 .switcher {
   width: auto;
-  //grid-template-columns: 10% 10;
   grid-auto-flow: column;
-  //display: grid;
   .f_button {
     border-radius: var(--kup-button-border-radius, 4px);
     padding-right: 0.25em;
     display: inline;
     .button {
-      background-color: var(--kup_button_primary_color, #003b77);
-      color: var(--kup_button_text_on_primary_color, #fafafa);
+      background-color: var(--kup-primary-color, #003b77);
+      color: var(--kup-text-on-primary-color, #fafafa);
       box-shadow: 0 3px 1px -2px rgba(var(--kup-text-color-rgb, 51 51 51), 0.2),0 2px 2px 0 rgba(var(--kup-text-color-rgb, 51 51 51), 0.14),0 1px 5px 0 rgba(var(--kup-text-color-rgb, 51 51 51), 0.12);
       border: none;
       box-sizing: border-box;
       border-radius: var(--kup-button-border-radius, 4px);
-      // padding: var(--kup-button-padding, 0 1.25em);
-      height: var(--kup_button_height, 2.5em);
+      height: 32px;
       .buttonLabel {
 
       }
