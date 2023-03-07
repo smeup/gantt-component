@@ -3,6 +3,7 @@ import { FC } from "react";
 import { Task } from "../../types/public-types";
 import React from "react";
 import { TaskListTableComponent } from "../../types/adapted-types";
+import { formatToLocaleSimple } from "../../helpers/time-converters";
 
 type RowProps = {
   task: Task;
@@ -15,7 +16,7 @@ type RowProps = {
 };
 
 const ProjectRow: FC<RowProps> = ({
-  task: { id, valuesToShow },
+  task: { id, start, end, valuesToShow },
   rowHeight,
   rowWidth,
   fontFamily,
@@ -49,7 +50,11 @@ const ProjectRow: FC<RowProps> = ({
           className={index === 0 ? styles.main : undefined}
           title={v.length > 10 ? v : undefined}
         >
-          {v}
+          {v === "#START#"
+            ? formatToLocaleSimple(start)
+            : v === "#END#"
+            ? formatToLocaleSimple(end)
+            : v}
         </span>
       ))}
     </div>
@@ -57,7 +62,7 @@ const ProjectRow: FC<RowProps> = ({
 };
 
 const SubRow: FC<RowProps> = ({
-  task: { id, valuesToShow, styles: taskStyles },
+  task: { id, start, end, valuesToShow, styles: taskStyles },
   rowHeight,
   rowWidth,
   fontFamily,
@@ -98,7 +103,11 @@ const SubRow: FC<RowProps> = ({
           className={index === 0 ? styles.main : undefined}
           title={v.length > 10 ? v : undefined}
         >
-          {v}
+          {v === "#START#"
+            ? formatToLocaleSimple(start)
+            : v === "#END#"
+            ? formatToLocaleSimple(end)
+            : v}
         </span>
       ))}
     </div>
