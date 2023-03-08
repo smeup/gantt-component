@@ -26,7 +26,7 @@ export const GanttByPhase: FC<GanttByPhaseProps> = ({
   const tasks = currentPhases?.map(convertPhaseToTask) ?? [];
 
   const handleDateChange = (task: Task) => {
-    console.log("onDateChange", task?.id);
+    console.log("gantt-by-phase.tsx onDateChange", task?.id);
     const result = mergeTaskIntoPhases(currentPhases, task);
     if (result) setCurrentPhases(result);
     const updatedPhase = result?.find(p => p.id === task.id);
@@ -37,7 +37,7 @@ export const GanttByPhase: FC<GanttByPhaseProps> = ({
     .minus({ [timeUnit]: stylingOptions?.preStepsCount ?? 11 })
     .toJSDate();
 
-  console.log("TASKS", tasks);
+  console.log("gantt-by-phase.tsx TASKS", tasks);
 
   const returnElement = tasks?.length > 0 && (
     <Gantt

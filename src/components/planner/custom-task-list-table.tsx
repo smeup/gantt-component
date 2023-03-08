@@ -49,6 +49,7 @@ const ProjectRow: FC<RowProps> = ({
         <span
           className={index === 0 ? styles.main : undefined}
           title={v.length > 10 ? v : undefined}
+          key={id + "_valuesToShow_" + index}
         >
           {v === "#START#"
             ? formatToLocaleSimple(start)
@@ -92,6 +93,7 @@ const SubRow: FC<RowProps> = ({
       }}
     >
       <span
+        key={id + "_valuesToShow_color"}
         style={{
           height: 16,
           width: 16,
@@ -102,6 +104,7 @@ const SubRow: FC<RowProps> = ({
         <span
           className={index === 0 ? styles.main : undefined}
           title={v.length > 10 ? v : undefined}
+          key={id + "_valuesToShow_" + index}
         >
           {v === "#START#"
             ? formatToLocaleSimple(start)
@@ -138,9 +141,9 @@ const TimelineSubRow: FC<RowProps> = ({
           height: rowHeight - 5,
         }}
       >
-        <span>{name}</span>
-        <span>A</span>
-        <span>A</span>
+        <span key={id + "_valuesToShow_0"}>{name}</span>
+        <span key={id + "_valuesToShow_1"}>A</span>
+        <span key={id + "_valuesToShow_2"}>A</span>
       </div>
     </div>
   );
@@ -163,7 +166,7 @@ export const CustomTaskListTableHOC = (
         <React.Fragment>
           {task.type === "project" && (
             <ProjectRow
-              key={task.id}
+              key={task.id + "_" + task.type}
               task={task}
               rowHeight={rowHeight}
               rowWidth={rowWidth}
@@ -175,7 +178,7 @@ export const CustomTaskListTableHOC = (
           )}
           {task.type === "task" && (
             <SubRow
-              key={task.id}
+              key={task.id + "_" + task.type}
               task={task}
               rowHeight={rowHeight}
               rowWidth={rowWidth}
@@ -187,7 +190,7 @@ export const CustomTaskListTableHOC = (
           )}
           {task.type === "timeline" && (
             <TimelineSubRow
-              key={task.id}
+              key={task.id + "_" + task.type}
               task={task}
               rowHeight={rowHeight}
               rowWidth={rowWidth}

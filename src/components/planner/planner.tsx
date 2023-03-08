@@ -34,13 +34,13 @@ export const Planner: React.FC<PlannerProps> = props => {
     props.showSecondaryDates ?? false
   );
   const commonProps = {
-    hideLable: props.hideLabel,
+    hideLabel: props.hideLabel,
     showSecondaryDates: doubleView,
     ganttHeight: props.ganttHeight,
     hideDependencies: props.hideDependencies,
   };
 
-  console.log(JSON.stringify(commonProps));
+  console.log("planner.tsx commonProps", commonProps);
 
   return (
     <div style={{ maxWidth: "90vw" }}>
@@ -85,7 +85,7 @@ export const Planner: React.FC<PlannerProps> = props => {
           TaskListTable={
             props.taskListTableProject ??
             CustomTaskListTableHOC(id => {
-              console.log("Clicked on " + id);
+              console.log("planner.tsx Clicked on " + id);
             })
           }
         />

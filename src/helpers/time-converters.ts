@@ -22,7 +22,11 @@ export function validDates(startDate: string, endDate: string, name: string) {
   const end = parseToDayEnd(endDate);
   if (start?.getTime() > end?.getTime()) {
     start = parseToDayStart(endDate);
-    console.log("Error date", { name, start: startDate, end: endDate });
+    console.log("time-converters.ts validDates() Error date", {
+      name,
+      start: startDate,
+      end: endDate,
+    });
   }
   return { start, end };
 }
