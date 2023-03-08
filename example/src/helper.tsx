@@ -6,21 +6,22 @@ export function initTasks() {
   const month = currentDate.getMonth();
   const tasks: Task[] = [
     {
-      start: new Date(year, month-1, 20),
-      end: new Date(year, month-1, 35),
-      secondaryStart: new Date(year, month-1, 15),
-      secondaryEnd: new Date(year, month-1, 29),
+      start: new Date(year, month - 1, 20),
+      end: new Date(year, month - 1, 35),
+      secondaryStart: new Date(year, month - 1, 15),
+      secondaryEnd: new Date(year, month - 1, 29),
       name: "Project One",
       id: "ProjectSample1",
       progress: 25,
       type: "project",
       displayOrder: 0.1,
       hideChildren: false,
+      valuesToShow: ["Project One", "#START#", "#END#"],
       styles: {
-        backgroundColor: '#888888',
-        backgroundSelectedColor: '#bbbbbb',
-        progressColor: '#888888',
-        progressSelectedColor: '#bbbbbb',
+        backgroundColor: "#888888",
+        backgroundSelectedColor: "#bbbbbb",
+        progressColor: "#888888",
+        progressSelectedColor: "#bbbbbb",
       },
     },
     {
@@ -34,11 +35,12 @@ export function initTasks() {
       type: "project",
       displayOrder: 0.2,
       hideChildren: false,
+      valuesToShow: ["Project Two", "#START#", "#END#"],
       styles: {
-        backgroundColor: '#888888',
-        backgroundSelectedColor: '#bbbbbb',
-        progressColor: '#888888',
-        progressSelectedColor: '#bbbbbb',
+        backgroundColor: "#888888",
+        backgroundSelectedColor: "#bbbbbb",
+        progressColor: "#888888",
+        progressSelectedColor: "#bbbbbb",
       },
     },
     {
@@ -52,11 +54,12 @@ export function initTasks() {
       type: "project",
       hideChildren: false,
       displayOrder: 1,
+      valuesToShow: ["Some Project", "#START#", "#END#"],
       styles: {
-        backgroundColor: '#888888',
-        backgroundSelectedColor: '#bbbbbb',
-        progressColor: '#888888',
-        progressSelectedColor: '#bbbbbb',
+        backgroundColor: "#888888",
+        backgroundSelectedColor: "#bbbbbb",
+        progressColor: "#888888",
+        progressSelectedColor: "#bbbbbb",
       },
     },
     {
@@ -70,6 +73,7 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 2,
+      valuesToShow: ["Idea", "#START#", "#END#"],
     },
     {
       start: new Date(year, month, 2),
@@ -83,16 +87,17 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 3,
+      valuesToShow: ["Research", "#START#", "#END#"],
       styles: {
-        backgroundColor: '#00aa00',
-        backgroundSelectedColor: '#02aa44',
-        progressColor: '#00aa00',
-        progressSelectedColor: '#02aa44',
+        backgroundColor: "#00aa00",
+        backgroundSelectedColor: "#02aa44",
+        progressColor: "#00aa00",
+        progressSelectedColor: "#02aa44",
       },
     },
     {
       start: new Date(year, month, 4),
-      end: new Date(year, month, 8 ),
+      end: new Date(year, month, 8),
       secondaryStart: new Date(year, month, 6),
       secondaryEnd: new Date(year, month, 8),
       name: "Discussion with team",
@@ -102,16 +107,17 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 4,
+      valuesToShow: ["Disccussion with team", "#START#", "#END#"],
       styles: {
-        backgroundColor: '#ff0000',
-        backgroundSelectedColor: '#ff2222',
-        progressColor: '#ff0000',
-        progressSelectedColor: '#ff2222',
+        backgroundColor: "#ff0000",
+        backgroundSelectedColor: "#ff2222",
+        progressColor: "#ff0000",
+        progressSelectedColor: "#ff2222",
       },
     },
     {
       start: new Date(year, month, 8),
-      end: new Date(year, month, 9, ),
+      end: new Date(year, month, 9),
       secondaryStart: new Date(year, month, 5),
       secondaryEnd: new Date(year, month, 10),
       name: "Developing",
@@ -121,11 +127,12 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 5,
+      valuesToShow: ["Developing", "#START#", "#END#"],
       styles: {
-        backgroundColor: '#861a08',
-        backgroundSelectedColor: '#b3240b',
-        progressColor: '#861a08',
-        progressSelectedColor: '#b3240b',
+        backgroundColor: "#861a08",
+        backgroundSelectedColor: "#b3240b",
+        progressColor: "#861a08",
+        progressSelectedColor: "#b3240b",
       },
     },
     {
@@ -140,6 +147,7 @@ export function initTasks() {
       dependencies: ["Task 2"],
       project: "ProjectSample",
       displayOrder: 6,
+      valuesToShow: ["Review", "#START#", "#END#"],
     },
     {
       start: new Date(year, month, 1),
@@ -150,11 +158,12 @@ export function initTasks() {
       type: "timeline",
       project: "ProjectSample",
       displayOrder: 7,
+      valuesToShow: ["Mario Rossi", "#START#", "#END#"],
       styles: {
-        backgroundColor: '#D9D9D8',
-        backgroundSelectedColor: '#ffda3a',
-        progressColor: '#D9D9D8',
-        progressSelectedColor: '#ffda3a',
+        backgroundColor: "#D9D9D8",
+        backgroundSelectedColor: "#ffda3a",
+        progressColor: "#D9D9D8",
+        progressSelectedColor: "#ffda3a",
       },
       timeline: [
         {
@@ -171,8 +180,8 @@ export function initTasks() {
           start: new Date(year, month, 8),
           end: new Date(year, month, 15),
           backgroundColor: "#595959",
-        }
-      ]
+        },
+      ],
     },
     {
       start: new Date(year, month, 1),
@@ -183,11 +192,12 @@ export function initTasks() {
       type: "timeline",
       project: "ProjectSample",
       displayOrder: 8,
+      valuesToShow: ["Luigi Bianchi", "#START#", "#END#"],
       styles: {
-        backgroundColor: '#D9D9D8',
-        backgroundSelectedColor: '#ffda3a',
-        progressColor: '#D9D9D8',
-        progressSelectedColor: '#ffda3a',
+        backgroundColor: "#D9D9D8",
+        backgroundSelectedColor: "#ffda3a",
+        progressColor: "#D9D9D8",
+        progressSelectedColor: "#ffda3a",
       },
       timeline: [
         {
@@ -199,8 +209,8 @@ export function initTasks() {
           start: new Date(year, month, 8),
           end: new Date(year, month, 30),
           backgroundColor: "#595959",
-        }
-      ]
+        },
+      ],
     },
     {
       start: new Date(year, month, 1),
@@ -211,11 +221,12 @@ export function initTasks() {
       type: "timeline",
       project: "ProjectSample",
       displayOrder: 9,
+      valuesToShow: ["Italo Verdi", "#START#", "#END#"],
       styles: {
-        backgroundColor: '#D9D9D8',
-        backgroundSelectedColor: '#ffda3a',
-        progressColor: '#D9D9D8',
-        progressSelectedColor: '#ffda3a',
+        backgroundColor: "#D9D9D8",
+        backgroundSelectedColor: "#ffda3a",
+        progressColor: "#D9D9D8",
+        progressSelectedColor: "#ffda3a",
       },
       timeline: [
         {
@@ -227,8 +238,8 @@ export function initTasks() {
           start: new Date(year, month, 12),
           end: new Date(year, month, 31),
           backgroundColor: "#595959",
-        }
-      ]
+        },
+      ],
     },
   ];
   return tasks;

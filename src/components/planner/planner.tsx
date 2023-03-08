@@ -3,16 +3,16 @@ import {
   TaskListHeaderComponent,
   TaskListTableComponent,
 } from "../../types/adapted-types";
-import { Project, Phase, GanttRow } from "../../types/domain";
+import { GanttTask, Phase, GanttRow } from "../../types/domain";
 import { TimeUnit } from "../../types/time-unit";
 import { CustomTaskListHeaderHOC } from "./custom-task-list-header";
 import { CustomTaskListTableHOC } from "./custom-task-list-table";
 import { GanttByPhase } from "./gantt-by-phase";
-import { GanttByProject } from "./gantt-by-project";
+import { GanttByTask } from "./gantt-by-task";
 import { Switcher } from "./switcher";
 
 export interface PlannerProps {
-  onDateChange?: (row: Project | Phase | GanttRow) => void;
+  onDateChange?: (row: GanttTask | Phase | GanttRow) => void;
   onClick?: (row: GanttRow) => void;
   isPhase?: boolean;
   taskListHeaderPhase?: TaskListHeaderComponent;
@@ -24,7 +24,7 @@ export interface PlannerProps {
   showSecondaryDates?: boolean;
   ganttHeight?: number;
   hideDependencies?: boolean;
-  items: Phase[] | Project[];
+  items: Phase[] | GanttTask[];
   title: string;
 }
 
@@ -51,7 +51,7 @@ export const Planner: React.FC<PlannerProps> = props => {
           phases={props.items as Phase[]}
           timeUnit={timeUnit}
           stylingOptions={props.stylingOptions}
-          onDateChange={(row: GanttRow | Phase | Project) =>
+          onDateChange={(row: GanttRow | Phase | GanttTask) =>
             props.onDateChange?.(row)
           }
           TaskListHeader={
@@ -65,13 +65,13 @@ export const Planner: React.FC<PlannerProps> = props => {
           TaskListTable={props.taskListTablePhase}
         />
       ) : (
-        <GanttByProject
+        <GanttByTask
           {...commonProps}
-          projects={props.items as Project[]}
+          projects={props.items as GanttTask[]}
           timeUnit={timeUnit}
           stylingOptions={props.stylingOptions}
           onClick={(row: GanttRow) => props.onClick?.(row)}
-          onDateChange={(row: GanttRow | Phase | Project) =>
+          onDateChange={(row: GanttRow | Phase | GanttTask) =>
             props.onDateChange?.(row)
           }
           TaskListHeader={

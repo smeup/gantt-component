@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { GanttRow, Phase, Project } from "./domain";
+import { GanttRow, Phase, GanttTask } from "./domain";
 import { Task } from "./public-types";
 import { TimeUnit } from "./time-unit";
 
@@ -19,9 +19,9 @@ export interface GanttCommonProps {
   hideDependencies?: boolean;
 }
 
-export interface GanttByProjectProps extends GanttCommonProps {
+export interface GanttByTaskProps extends GanttCommonProps {
   /** Rows to display in chart */
-  projects: Project[];
+  projects: GanttTask[];
   /** Invoked on bar click. */
   onClick?: (row: GanttRow) => void;
   onDateChange?: (row: GanttRow) => void;

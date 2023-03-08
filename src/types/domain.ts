@@ -1,4 +1,4 @@
-export type GanttRowType = "project" | "phase" | "employee";
+export type GanttRowType = "task" | "phase" | "detail";
 
 export interface GanttRow {
   id: string;
@@ -8,13 +8,13 @@ export interface GanttRow {
 }
 
 /** Commessa */
-export interface Project extends GanttRow {
+export interface GanttTask extends GanttRow {
   startDate: string;
   endDate: string;
   secondaryStartDate: string;
   secondaryEndDate: string;
   phases?: Phase[];
-  employees?: Employee[];
+  details?: Detail[];
 }
 
 /** Fase */
@@ -29,7 +29,7 @@ export interface Phase extends GanttRow {
 }
 
 /** Risorsa */
-export interface Employee extends GanttRow {
+export interface Detail extends GanttRow {
   schedule: ScheduleItem[];
 }
 

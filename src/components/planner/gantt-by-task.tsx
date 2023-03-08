@@ -6,18 +6,17 @@ import {
   mergeTaskIntoProjects,
   toViewMode,
 } from "../../helpers/adapter";
-//import { GanttByProjectProps } from "./adapted-types";
-import { Project } from "../../types/domain";
+import { GanttTask } from "../../types/domain";
 import { ganttDateTimeFormatters } from "../../helpers/time-formatters";
 import React from "react";
 import { Task } from "../../types/public-types";
 import { Gantt } from "../gantt/gantt";
-import { GanttByProjectProps } from "../../types/adapted-types";
+import { GanttByTaskProps } from "../../types/adapted-types";
 import { DateTime } from "luxon";
 
 const locale = "it-IT";
 
-export const GanttByProject: React.FC<GanttByProjectProps> = ({
+export const GanttByTask: React.FC<GanttByTaskProps> = ({
   projects = [],
   timeUnit = TimeUnit.DAY,
   TooltipContent,
@@ -65,8 +64,8 @@ export const GanttByProject: React.FC<GanttByProjectProps> = ({
       if (project) onDateChange?.(project);
       return;
     }
-    const parentOfClickedPhase: Project | undefined = currentProjects.find(p =>
-      p.phases?.some(ph => ph?.id === id)
+    const parentOfClickedPhase: GanttTask | undefined = currentProjects.find(
+      p => p.phases?.some(ph => ph?.id === id)
     );
     if (parentOfClickedPhase) {
       const phases = mergeTaskIntoPhases(parentOfClickedPhase.phases, task);
@@ -84,28 +83,27 @@ export const GanttByProject: React.FC<GanttByProjectProps> = ({
   const viewDate = DateTime.now()
     .minus({ [timeUnit]: stylingOptions?.preStepsCount ?? 2 })
     .toJSDate();
-    
+
   const returnElement = tasks?.length > 0 && (
-      <Gantt
-        key={key}
-        tasks={tasks}
-        locale={locale}
-        viewMode={toViewMode(timeUnit)}
-        viewDate={viewDate}
-        onClick={handleClick}
-        onDateChange={handleDateChange}
-        TooltipContent={TooltipContent}
-        TaskListHeader={TaskListHeader}
-        TaskListTable={TaskListTable}
-        dateTimeFormatters={ganttDateTimeFormatters}
-        {...stylingOptions}
-        {...props}
-      />    
+    <Gantt
+      key={key}
+      tasks={tasks}
+      locale={locale}
+      viewMode={toViewMode(timeUnit)}
+      viewDate={viewDate}
+      onClick={handleClick}
+      onDateChange={handleDateChange}
+      TooltipContent={TooltipContent}
+      TaskListHeader={TaskListHeader}
+      TaskListTable={TaskListTable}
+      dateTimeFormatters={ganttDateTimeFormatters}
+      {...stylingOptions}
+      {...props}
+    />
   );
   if (returnElement) {
     return returnElement;
-  }  
-  else {
-    return <div></div>
+  } else {
+    return <div></div>;
   }
 };

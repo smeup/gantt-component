@@ -1,7 +1,7 @@
 // Probably not used
 
 import { TimeUnit } from "../types/time-unit";
-import { Employee, Phase, Project, ScheduleItem } from "../types/domain";
+import { Detail, Phase, GanttTask, ScheduleItem } from "../types/domain";
 import { formatToIsoDate, validDates } from "./time-converters";
 import { Task, Timeframe, ViewMode } from "../types/public-types";
 
@@ -66,7 +66,7 @@ export const convertPhaseToTask = (item: Phase): Task => {
   return mapPhase(item);
 };
 
-export const convertEmployeeToTimeline = (item: Employee): Task => {
+export const convertDetailToTimeline = (item: Detail): Task => {
   const { id, name, schedule } = item;
 
   const convertToFrame = (x: ScheduleItem): Timeframe => {
@@ -106,10 +106,10 @@ export const convertProjectToTasks = ({
   startDate,
   endDate,
   phases,
-  employees,
+  details,
   secondaryStartDate,
   secondaryEndDate,
-}: Project): Task[] => {
+}: GanttTask): Task[] => {
   const { start, end } = validDates(startDate, endDate, name);
   const { start: start2, end: end2 } = validDates(
     secondaryStartDate,
@@ -144,14 +144,14 @@ export const convertProjectToTasks = ({
     hideChildren: false,
   };
   const children1 = (phases ?? []).map(convertPhaseToTask);
-  const children2 = (employees ?? []).map(convertEmployeeToTimeline);
+  const children2 = (details ?? []).map(convertDetailToTimeline);
   return [mainTask, ...children1, ...children2];
 };
 
 export const mergeTaskIntoProjects = (
-  projects: Project[],
+  projects: GanttTask[],
   { id, start, end }: Task
-): Project[] =>
+): GanttTask[] =>
   projects.map(project =>
     project.id === id ? withNewDates(project, start, end) : project
   );
@@ -169,7 +169,7 @@ export const mergeTaskIntoPhases = (
 };
 
 /** Return a shallow copy, with the dates updated */
-const withNewDates = <P extends Phase | Project>(
+const withNewDates = <P extends Phase | GanttTask>(
   p: P,
   start: Date,
   end: Date

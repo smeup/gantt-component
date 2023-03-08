@@ -1,7 +1,7 @@
 export { Gantt } from "./components/gantt/gantt";
-export { GanttByProject } from "./components/planner/gantt-by-project";
+export { GanttByTask } from "./components/planner/gantt-by-task";
 export { GanttByPhase } from "./components/planner/gantt-by-phase";
-export { Planner} from "./components/planner/planner";
+export { Planner } from "./components/planner/planner";
 export { Switcher } from "./components/planner/switcher";
 export { ViewMode } from "./types/public-types";
 export { CustomTaskListHeaderHOC } from "./components/planner/custom-task-list-header";
@@ -19,27 +19,24 @@ export type {
   Task,
   StylingOption,
   DisplayOption,
-  EventOption,  
+  EventOption,
 } from "./types/public-types";
 export type {
   GanttByPhaseProps,
-  GanttByProjectProps,  
+  GanttByTaskProps,
   StylingOptions,
   TaskListHeaderComponent,
   TaskListTableComponent,
   TooltipContentComponent,
   GanttCommonProps,
-} from "./types/adapted-types"
+} from "./types/adapted-types";
 export type {
-  Employee,
+  Detail,
   GanttRow,
   GanttRowType,
   Phase,
-  Project,
+  GanttTask,
   ScheduleItem,
-} from "./types/domain"
+} from "./types/domain";
 export type { PlannerProps } from "./components/planner/planner";
-export {
-  TimeUnit,
-} from "./types/time-unit"
-
+export { TimeUnit } from "./types/time-unit";
