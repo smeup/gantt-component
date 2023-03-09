@@ -1,5 +1,5 @@
 .ganttContainer {
-  background: var(--kup-border-color, #efefef);
+  background: #efefef;
   border-radius: 8px;
   margin: 12px;
   overflow: hidden;
