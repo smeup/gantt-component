@@ -7,14 +7,12 @@ import { GanttTask, Phase, GanttRow } from "../../types/domain";
 import { TimeUnit } from "../../types/time-unit";
 import { CustomTaskListHeaderHOC } from "./custom-task-list-header";
 import { CustomTaskListTableHOC } from "./custom-task-list-table";
-import { GanttByPhase } from "./gantt-by-phase";
 import { GanttByTask } from "./gantt-by-task";
 import { Switcher } from "./switcher";
 
 export interface PlannerProps {
   onDateChange?: (row: GanttTask | Phase | GanttRow) => void;
   onClick?: (row: GanttRow) => void;
-  isPhase?: boolean;
   taskListHeaderPhase?: TaskListHeaderComponent;
   taskListTablePhase?: TaskListTableComponent;
   taskListHeaderProject?: TaskListHeaderComponent;
@@ -24,7 +22,8 @@ export interface PlannerProps {
   showSecondaryDates?: boolean;
   ganttHeight?: number;
   hideDependencies?: boolean;
-  items: Phase[] | GanttTask[];
+  items: GanttTask[];
+  itemDetails: GanttTask[];
   title: string;
 }
 
@@ -45,26 +44,6 @@ export const Planner: React.FC<PlannerProps> = props => {
   return (
     <div style={{ maxWidth: "90vw" }}>
       <Switcher onTimeUnitChange={timeUnit => setTimeUnit(timeUnit)} />
-      {props.isPhase ? (
-        <GanttByPhase
-          {...commonProps}
-          phases={props.items as Phase[]}
-          timeUnit={timeUnit}
-          stylingOptions={props.stylingOptions}
-          onDateChange={(row: GanttRow | Phase | GanttTask) =>
-            props.onDateChange?.(row)
-          }
-          TaskListHeader={
-            props.taskListHeaderPhase ??
-            CustomTaskListHeaderHOC(
-              props.title,
-              doubleView ?? true,
-              setDoubleView
-            )
-          }
-          TaskListTable={props.taskListTablePhase}
-        />
-      ) : (
         <GanttByTask
           {...commonProps}
           projects={props.items as GanttTask[]}
@@ -89,7 +68,6 @@ export const Planner: React.FC<PlannerProps> = props => {
             })
           }
         />
-      )}
     </div>
   );
 };

@@ -4,6 +4,7 @@ import "@sme.up/gantt-component/dist/index.css";
 
 const AppPlanner = () => {
   const [jsonData, setJsonData] = useState(mockDataTasks);
+  const [jsonDataDetails] = useState(mockDataDetails);
   const [clicked, setClicked] = useState(false);
 
   const clickHandler = (row: GanttRow) => {
@@ -18,6 +19,7 @@ const AppPlanner = () => {
 
   const plannerProps: PlannerProps = {
     items: jsonData.tasks,
+    itemsDetail: jsonDataDetails.task,
     stylingOptions: jsonData.stylingOptions,
     ganttHeight: jsonData.ganttHeight,
     hideLabel: jsonData.hideLabel,
