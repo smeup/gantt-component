@@ -13,7 +13,7 @@ const format = (date: Date, locale: string, options: object) => {
     const format1 = getOrBuildCachedFormat(locale, options).format(date);
     return format1;
   } catch (e) {
-    console.log("Format", date, locale, options);
+    console.log("time-formatters.ts format", date, locale, options);
     console.log(e);
   }
 };
