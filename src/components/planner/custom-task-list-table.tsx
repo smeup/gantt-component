@@ -2,7 +2,10 @@ import styles from "./gantt-table.module.scss";
 import { FC } from "react";
 import { Task } from "../../types/public-types";
 import React from "react";
-import { TaskListTableComponent } from "../../types/adapted-types";
+import {
+  TaskListTableComponent,
+  TooltipContentComponent,
+} from "../../types/adapted-types";
 import { formatToLocaleSimple } from "../../helpers/time-converters";
 
 type RowProps = {
@@ -205,4 +208,9 @@ export const CustomTaskListTableHOC = (
     </div>
   );
   return CustomTaskListTable;
+};
+
+export const CustomTooltipHOC = (): TooltipContentComponent => {
+  const CustomTooltip: TooltipContentComponent = () => <div></div>;
+  return CustomTooltip;
 };
