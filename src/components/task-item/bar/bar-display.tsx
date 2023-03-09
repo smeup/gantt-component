@@ -1,5 +1,5 @@
-import React from 'react';
-import style from './bar.module.css';
+import React from "react";
+import style from "./bar.module.css";
 
 type BarDisplayProps = {
   x: number;
@@ -17,28 +17,28 @@ type BarDisplayProps = {
     progressColor: string;
     progressSelectedColor: string;
   };
-  onMouseDown?: (event: React.MouseEvent<SVGPolygonElement, MouseEvent>) => void;
+  onMouseDown?: (
+    event: React.MouseEvent<SVGPolygonElement, MouseEvent>
+  ) => void;
   xSecondary?: number;
   widthSecondary?: number;
   showSecondaryDates: boolean;
 };
-export const BarDisplay: React.FC<BarDisplayProps> = (
-  {
-    x,
-    y,
-    width,
-    height,
-    isSelected,
-    progressX,
-    progressWidth,
-    barCornerRadius,
-    styles,
-    onMouseDown,
-    xSecondary,
-    widthSecondary,
-    showSecondaryDates = false
-  }
-) => {
+export const BarDisplay: React.FC<BarDisplayProps> = ({
+  x,
+  y,
+  width,
+  height,
+  isSelected,
+  progressX,
+  progressWidth,
+  barCornerRadius,
+  styles,
+  onMouseDown,
+  xSecondary,
+  widthSecondary,
+  showSecondaryDates = false,
+}) => {
   const getProcessColor = () => {
     return isSelected ? styles.progressSelectedColor : styles.progressColor;
   };
@@ -47,8 +47,8 @@ export const BarDisplay: React.FC<BarDisplayProps> = (
     return isSelected ? styles.backgroundSelectedColor : styles.backgroundColor;
   };
 
-  if (showSecondaryDates && typeof xSecondary !== 'undefined') {
-    const halfHeight = height / 2
+  if (showSecondaryDates && typeof xSecondary !== "undefined") {
+    const halfHeight = height / 2;
     return (
       <g onMouseDown={onMouseDown}>
         <rect
@@ -86,7 +86,6 @@ export const BarDisplay: React.FC<BarDisplayProps> = (
         />
       </g>
     );
-
   }
   return (
     <g onMouseDown={onMouseDown}>

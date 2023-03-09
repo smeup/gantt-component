@@ -1,3 +1,4 @@
+import classes from "./task-list.module.scss";
 import React, { useEffect, useRef } from "react";
 import { BarTask } from "../../types/bar-task";
 import { Task } from "../../types/public-types";
@@ -81,7 +82,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   };
 
   return (
-    <div ref={taskListRef}>
+    <div ref={taskListRef} className={classes.tasks}>
       <TaskListHeader {...headerProps} />
       <div
         ref={horizontalContainerRef}
