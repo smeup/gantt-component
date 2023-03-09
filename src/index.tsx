@@ -33,7 +33,6 @@ export type {
 export type {
   Detail,
   GanttRow,
-  GanttRowType,
   Phase,
   GanttTask,
   ScheduleItem,

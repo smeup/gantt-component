@@ -12,24 +12,46 @@ import {
   CustomTooltipHOC,
 } from "./custom-task-list-table";
 import { GanttByTask } from "./gantt-by-task";
+import { GanttTimelineCustomTaskList } from "./gantt-timeline-custom-task-list-header";
 import { Switcher } from "./switcher";
 
-export interface PlannerProps {
-  onDateChange?: (row: GanttTask | Phase | GanttRow) => void;
-  onClick?: (row: GanttRow) => void;
+/**
+ * Main Gantt specified props
+ */
+export interface MainGanttProps {
+  items: GanttTask[];
+  title: string;
   taskListHeaderPhase?: TaskListHeaderComponent;
   taskListTablePhase?: TaskListTableComponent;
   taskListHeaderProject?: TaskListHeaderComponent;
   taskListTableProject?: TaskListTableComponent;
   tooltipContent?: TooltipContentComponent;
   stylingOptions?: any;
-  hideLabel?: boolean;
-  showSecondaryDates?: boolean;
   ganttHeight?: number;
-  hideDependencies?: boolean;
+  onDateChange?: (row: GanttTask | Phase | GanttRow) => void;
+  onClick?: (row: GanttRow) => void;
+}
+
+/**
+ * Secondary Gantt specified props
+ */
+export interface SecondaryGanttProps {
   items: GanttTask[];
-  itemDetails: GanttTask[];
   title: string;
+  taskListHeaderPhase?: TaskListHeaderComponent;
+  taskListTablePhase?: TaskListTableComponent;
+  taskListHeaderProject?: TaskListHeaderComponent;
+  taskListTableProject?: TaskListTableComponent;
+  stylingOptions?: any;
+  ganttHeight?: number;
+}
+
+export interface PlannerProps {
+  mainGantt: MainGanttProps;
+  secondaryGantt?: SecondaryGanttProps;
+  showSecondaryDates?: boolean;
+  hideLabel?: boolean;
+  hideDependencies?: boolean;
 }
 
 export const Planner: React.FC<PlannerProps> = props => {
@@ -37,42 +59,67 @@ export const Planner: React.FC<PlannerProps> = props => {
   const [doubleView, setDoubleView] = useState(
     props.showSecondaryDates ?? false
   );
+
+  /**
+   * Common props for each Gantt
+   */
   const commonProps = {
     hideLabel: props.hideLabel,
     showSecondaryDates: doubleView,
-    ganttHeight: props.ganttHeight,
     hideDependencies: props.hideDependencies,
   };
-
-  console.log("planner.tsx commonProps", commonProps);
 
   return (
     <div style={{ maxWidth: "90vw" }}>
       <Switcher onTimeUnitChange={timeUnit => setTimeUnit(timeUnit)} />
       <GanttByTask
+        key="main"
         {...commonProps}
-        projects={props.items}
+        ganttHeight={props.mainGantt.ganttHeight}
+        projects={props.mainGantt.items}
         timeUnit={timeUnit}
-        stylingOptions={props.stylingOptions}
-        onClick={(row: GanttRow) => props.onClick?.(row)}
+        stylingOptions={props.mainGantt.stylingOptions}
+        onClick={(row: GanttRow) => props.mainGantt.onClick?.(row)}
         onDateChange={(row: GanttRow | Phase | GanttTask) =>
-          props.onDateChange?.(row)
+          props.mainGantt.onDateChange?.(row)
         }
         TaskListHeader={
-          props.taskListHeaderProject ??
+          props.mainGantt.taskListHeaderProject ??
           CustomTaskListHeaderHOC(
-            props.title,
+            props.mainGantt.title,
             doubleView ?? true,
             setDoubleView
           )
         }
         TaskListTable={
-          props.taskListTableProject ??
+          props.mainGantt.taskListTableProject ??
           CustomTaskListTableHOC(id => {
             console.log("planner.tsx Clicked on " + id);
           })
         }
-        TooltipContent={props.tooltipContent ?? CustomTooltipHOC()}
+        TooltipContent={props.mainGantt.tooltipContent ?? CustomTooltipHOC()}
+      />
+      <GanttByTask
+        key="secondary"
+        {...commonProps}
+        ganttHeight={props.secondaryGantt?.ganttHeight}
+        projects={
+          props.secondaryGantt?.items ? props.secondaryGantt?.items : []
+        }
+        timeUnit={timeUnit}
+        stylingOptions={props.secondaryGantt?.stylingOptions}
+        TaskListHeader={
+          props.secondaryGantt?.taskListHeaderProject ??
+          GanttTimelineCustomTaskList(
+            props.secondaryGantt?.title ? props.secondaryGantt.title : ""
+          )
+        }
+        TaskListTable={
+          props.secondaryGantt?.taskListTableProject ??
+          CustomTaskListTableHOC(id => {
+            console.log("planner.tsx Clicked on " + id);
+          })
+        }
       />
     </div>
   );
