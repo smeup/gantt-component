@@ -44,7 +44,7 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
 
   const handleClick = (task: Task) => {
     const id = task?.id;
-    console.log("onClick", id);
+    console.log("gantt-by-task.tsx onClick", id);
     const project = getProjectById(id);
     if (project) onClick?.(project);
     const phase = currentProjects
@@ -55,7 +55,7 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
 
   const handleDateChange = (task: Task) => {
     const id = task?.id;
-    console.log("onDateChange", id);
+    console.log("gantt-by-task.tsx onDateChange", id);
     const project = getProjectById(id);
     if (project) {
       const result = mergeTaskIntoProjects(currentProjects, task);
@@ -83,6 +83,8 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
   const viewDate = DateTime.now()
     .minus({ [timeUnit]: stylingOptions?.preStepsCount ?? 2 })
     .toJSDate();
+
+  console.log("gantt-by-task.tsx TASKS", tasks);
 
   const returnElement = tasks?.length > 0 && (
     <Gantt
