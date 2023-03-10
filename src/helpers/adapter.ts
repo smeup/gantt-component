@@ -109,6 +109,7 @@ export const convertProjectToTasks = ({
   details,
   secondaryStartDate,
   secondaryEndDate,
+  type
 }: GanttTask): Task[] => {
   const { start, end } = validDates(startDate, endDate, name);
   const { start: start2, end: end2 } = validDates(
@@ -134,10 +135,10 @@ export const convertProjectToTasks = ({
     end,
     id,
     name,
+    type,
     valuesToShow,
     secondaryStart: start2,
     secondaryEnd: end2,
-    type: "project",
     progress: 100,
     /** Non disabilita clic nè select, ma solo il resize/move */
     isDisabled: false,

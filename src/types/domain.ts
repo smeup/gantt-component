@@ -1,9 +1,9 @@
-export type GanttRowType = "task" | "phase" | "detail";
+import { TaskType } from "./public-types";
 
 export interface GanttRow {
   id: string;
   name: string;
-  type: GanttRowType;
+  type: TaskType;
   valuesToShow: string[];
 }
 

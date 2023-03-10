@@ -28,7 +28,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
   headerHeight = 50,
   columnWidth = 60,
-  listCellWidth = "155px",
+  listCellWidth = "300px",
   rowHeight = 50,
   ganttHeight = 0,
   viewMode = ViewMode.Day,
@@ -330,7 +330,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
     if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {
-      setScrollX(event.currentTarget.scrollLeft);
+      setScrollX(event.currentTarget.scrollLeft); 
       setIgnoreScrollEvent(true);
     } else {
       setIgnoreScrollEvent(false);
