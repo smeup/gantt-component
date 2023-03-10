@@ -130,7 +130,7 @@ const TimelineSubRow: FC<RowProps> = ({
   return (
     <div
       key={id}
-      className={styles.timelineWrapper}
+      className={styles.timeline}
       style={{
         height: rowHeight,
         width: rowWidth,
@@ -138,16 +138,9 @@ const TimelineSubRow: FC<RowProps> = ({
         fontSize,
       }}
     >
-      <div
-        className={styles.timeline}
-        style={{
-          height: rowHeight - 5,
-        }}
-      >
-        <span key={id + "_valuesToShow_0"}>{name}</span>
-        <span key={id + "_valuesToShow_1"}>A</span>
-        <span key={id + "_valuesToShow_2"}>A</span>
-      </div>
+      <span key={id + "_valuesToShow_0"} className={styles.main} >{name}</span>
+      <span key={id + "_valuesToShow_1"}>A</span>
+      <span key={id + "_valuesToShow_2"}>A</span>
     </div>
   );
 };

@@ -31,7 +31,6 @@ const AppPlanner = () => {
       hideDependencies: jsonData.hideDependencies,
       showSecondaryDates: jsonData.showSecondaryDates,
       items: jsonData.tasks,
-      stylingOptions: jsonData.stylingOptions,
       ganttHeight: 400,
       title: "Main Gantt example",
       onClick: row => clickHandler(row),

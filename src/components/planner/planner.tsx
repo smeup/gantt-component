@@ -67,6 +67,7 @@ export const Planner: React.FC<PlannerProps> = props => {
         }}
       >
         <GanttByTask
+          id="main"
           key="main"
           hideLabel={props.mainGantt.hideLabel}
           showSecondaryDates={mainGanttDoubleView}
@@ -98,6 +99,7 @@ export const Planner: React.FC<PlannerProps> = props => {
           }
         />
         <GanttByTask
+          id="secondary"
           key="secondary"
           hideLabel={props.secondaryGantt?.hideLabel}
           showSecondaryDates={secondaryGanttDoubleView}
