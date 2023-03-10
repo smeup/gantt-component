@@ -12,7 +12,7 @@ const AppPlanner = () => {
   const [clicked, setClicked] = useState(false);
 
   const clickHandler = (row: GanttRow) => {
-    console.log(row.name);
+    console.log("appplanner.tsx " + row.name);
     if (clicked) {
       setJsonData(mockDataTasks);
     } else {

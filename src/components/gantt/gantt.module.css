@@ -1,3 +1,11 @@
+.ganttContainer {
+  background: #efefef;
+  border-radius: 8px;
+  margin: 12px;
+  overflow: hidden;
+  padding: 12px;
+}
+
 .ganttVerticalContainer {
   overflow: hidden;
   font-size: 0;

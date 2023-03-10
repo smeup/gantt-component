@@ -38,38 +38,40 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   }, [scrollX]);
 
   return (
-    <div
-      className={styles.ganttVerticalContainer}
-      ref={verticalGanttContainerRef}
-      dir="ltr"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width={gridProps.svgWidth}
-        height={calendarProps.headerHeight}
-        fontFamily={barProps.fontFamily}
-      >
-        <Calendar {...calendarProps} />
-      </svg>
+    <div className={styles.ganttContainer}>
       <div
-        ref={horizontalContainerRef}
-        className={styles.horizontalContainer}
-        style={
-          ganttHeight
-            ? { height: ganttHeight, width: gridProps.svgWidth }
-            : { width: gridProps.svgWidth }
-        }
+        className={styles.ganttVerticalContainer}
+        ref={verticalGanttContainerRef}
+        dir="ltr"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={gridProps.svgWidth}
-          height={barProps.rowHeight * barProps.tasks.length}
+          height={calendarProps.headerHeight}
           fontFamily={barProps.fontFamily}
-          ref={ganttSVGRef}
         >
-          <Grid {...gridProps} />
-          <TaskGanttContent {...newBarProps} />
+          <Calendar {...calendarProps} />
         </svg>
+        <div
+          ref={horizontalContainerRef}
+          className={styles.horizontalContainer}
+          style={
+            ganttHeight
+              ? { height: ganttHeight, width: gridProps.svgWidth }
+              : { width: gridProps.svgWidth }
+          }
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={gridProps.svgWidth}
+            height={barProps.rowHeight * barProps.tasks.length}
+            fontFamily={barProps.fontFamily}
+            ref={ganttSVGRef}
+          >
+            <Grid {...gridProps} />
+            <TaskGanttContent {...newBarProps} />
+          </svg>
+        </div>
       </div>
     </div>
   );
