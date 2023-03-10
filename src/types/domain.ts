@@ -29,7 +29,7 @@ export interface Phase extends GanttRow {
 }
 
 /** Risorsa */
-export interface Detail extends GanttRow {
+export interface Detail extends GanttTask {
   schedule: ScheduleItem[];
 }
 
