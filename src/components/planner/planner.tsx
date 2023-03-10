@@ -98,40 +98,42 @@ export const Planner: React.FC<PlannerProps> = props => {
             props.mainGantt.onDateChange?.(row)
           }
         />
-        <GanttByTask
-          id="secondary"
-          key="secondary"
-          hideLabel={props.secondaryGantt?.hideLabel}
-          showSecondaryDates={secondaryGanttDoubleView}
-          hideDependencies={props.secondaryGantt?.hideDependencies}
-          ganttHeight={props.secondaryGantt?.ganttHeight}
-          projects={
-            props.secondaryGantt?.items ? props.secondaryGantt?.items : []
-          }
-          timeUnit={timeUnit}
-          stylingOptions={props.secondaryGantt?.stylingOptions}
-          TaskListHeader={
-            props.mainGantt.taskListHeaderProject ??
-            GanttTimelineCustomTaskList(
-              props.secondaryGantt?.title ? props.secondaryGantt.title : ""
-            )
-          }
-          TaskListTable={
-            props.secondaryGantt?.taskListTableProject ??
-            CustomTaskListTableHOC(id => {
-              console.log("planner.tsx Clicked on " + id);
-            })
-          }
-          // tooltip
-          TooltipContent={
-            props.secondaryGantt?.tooltipContent ?? CustomTooltipHOC()
-          }
-          // events
-          onClick={(row: GanttRow) => props.secondaryGantt?.onClick?.(row)}
-          onDateChange={(row: GanttRow | Phase | GanttTask) =>
-            props.secondaryGantt?.onDateChange?.(row)
-          }
-        />
+        {props.secondaryGantt && (
+          <GanttByTask
+            id="secondary"
+            key="secondary"
+            hideLabel={props.secondaryGantt?.hideLabel}
+            showSecondaryDates={secondaryGanttDoubleView}
+            hideDependencies={props.secondaryGantt?.hideDependencies}
+            ganttHeight={props.secondaryGantt?.ganttHeight}
+            projects={
+              props.secondaryGantt?.items ? props.secondaryGantt?.items : []
+            }
+            timeUnit={timeUnit}
+            stylingOptions={props.secondaryGantt?.stylingOptions}
+            TaskListHeader={
+              props.mainGantt.taskListHeaderProject ??
+              GanttTimelineCustomTaskList(
+                props.secondaryGantt?.title ? props.secondaryGantt.title : ""
+              )
+            }
+            TaskListTable={
+              props.secondaryGantt?.taskListTableProject ??
+              CustomTaskListTableHOC(id => {
+                console.log("planner.tsx Clicked on " + id);
+              })
+            }
+            // tooltip
+            TooltipContent={
+              props.secondaryGantt?.tooltipContent ?? CustomTooltipHOC()
+            }
+            // events
+            onClick={(row: GanttRow) => props.secondaryGantt?.onClick?.(row)}
+            onDateChange={(row: GanttRow | Phase | GanttTask) =>
+              props.secondaryGantt?.onDateChange?.(row)
+            }
+          />
+        )}
       </div>
     </div>
   );
