@@ -28,7 +28,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
   headerHeight = 50,
   columnWidth = 60,
-  listCellWidth = "155px",
+  listCellWidth = "300px",
   rowHeight = 50,
   ganttHeight = 0,
   viewMode = ViewMode.Day,

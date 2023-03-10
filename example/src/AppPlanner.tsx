@@ -21,21 +21,30 @@ const AppPlanner = () => {
     setClicked(!clicked);
   };
 
+  const secondaryGanttClickHandler = (row: GanttRow) => {
+    console.log("Clicked", row.id)
+  }
+
   const plannerProps: PlannerProps = {
     mainGantt: {
+      hideLabel: jsonData.hideLabel,
+      hideDependencies: jsonData.hideDependencies,
+      showSecondaryDates: jsonData.showSecondaryDates,
       items: jsonData.tasks,
       stylingOptions: jsonData.stylingOptions,
-      ganttHeight: jsonData.ganttHeight,
+      ganttHeight: 400,
       title: "Main Gantt example",
       onClick: row => clickHandler(row),
     },
     secondaryGantt: {
+      hideLabel: jsonData.hideLabel,
+      hideDependencies: jsonData.hideDependencies,
+      showSecondaryDates: jsonData.showSecondaryDates,
       items: mockDataDetails,
-      title: "Second Gantt example"
+      title: "Secondary Gantt example",
+      ganttHeight: 200,
+      onClick: row => secondaryGanttClickHandler(row)
     },
-    hideLabel: jsonData.hideLabel,
-    hideDependencies: jsonData.hideDependencies,
-    showSecondaryDates: jsonData.showSecondaryDates,
   };
 
   return <Planner {...plannerProps} />;
