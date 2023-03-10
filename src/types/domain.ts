@@ -39,3 +39,11 @@ export interface ScheduleItem {
   color?: string;
   selectedColor?: string;
 }
+
+/**
+ * Event payload for gantt-sync-scroll-event
+ */
+export interface GanttSyncScrollEvent {
+  componentId: string;
+  scrollX: number;
+}

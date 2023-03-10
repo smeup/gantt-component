@@ -114,6 +114,7 @@ const App = () => {
       <div style={{ padding: 3, border: "1px solid violet" }}>
         <h2>Customized Gantt</h2>
         <Gantt
+          id="1"
           locale="it"
           singleLineHeader
           hideLabel
@@ -156,6 +157,7 @@ const App = () => {
         <summary>Default styles</summary>
         <h3>Gantt With Unlimited Height</h3>
         <Gantt
+          id="1"
           locale="it"
           tasks={tasks}
           viewMode={view}
@@ -171,6 +173,7 @@ const App = () => {
         />
         <h3>Gantt With Limited Height</h3>
         <Gantt
+          id="1"
           tasks={tasks}
           viewMode={view}
           onDateChange={handleTaskChange}

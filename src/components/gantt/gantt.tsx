@@ -23,12 +23,14 @@ import { DateSetup } from "../../types/date-setup";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import { removeHiddenTasks, sortTasks } from "../../helpers/other-helper";
 import styles from "./gantt.module.css";
+import { GanttSyncScrollEvent } from "../../types/domain";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
+  id,
   tasks,
   headerHeight = 50,
   columnWidth = 60,
-  listCellWidth = "300px",
+  listCellWidth = "297px",
   rowHeight = 50,
   ganttHeight = 0,
   viewMode = ViewMode.Day,
@@ -106,6 +108,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     [rowHeight, timelineFill]
   );
 
+  console.log("ROW HEIGHT", rowHeight);
+
   const [selectedTask, setSelectedTask] = useState<BarTask>();
   const [failedTask, setFailedTask] = useState<BarTask | null>(null);
 
@@ -115,6 +119,16 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(-1);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
+
+  // sync scroll event
+  useEffect(() => {
+    // create event listener
+    window.addEventListener("gantt-sync-scroll-event", function(e: any){
+      if(e.detail.id !== id) {
+        setScrollX(e.detail.scrollX);
+      }
+    });
+  }, [id]);
 
   // task change events
   useEffect(() => {
@@ -298,7 +312,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           event.preventDefault();
         }
       }
-
       setIgnoreScrollEvent(true);
     };
 
@@ -330,8 +343,17 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
     if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {
-      setScrollX(event.currentTarget.scrollLeft); 
+      setScrollX(event.currentTarget.scrollLeft);
       setIgnoreScrollEvent(true);
+      // emit event to sync scroll
+      window.dispatchEvent(
+        new CustomEvent<GanttSyncScrollEvent>("gantt-sync-scroll-event", {
+          detail: {
+            componentId: id,
+            scrollX: event.currentTarget.scrollLeft,
+          },
+        })
+      );
     } else {
       setIgnoreScrollEvent(false);
     }
@@ -372,6 +394,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         newScrollX = svgWidth;
       }
       setScrollX(newScrollX);
+      // emit event to sync scroll
+      window.dispatchEvent(
+        new CustomEvent<GanttSyncScrollEvent>("gantt-sync-scroll-event", {
+          detail: {
+            componentId: id,
+            scrollX: newScrollX,
+          },
+        })
+      );
     } else {
       if (newScrollY < 0) {
         newScrollY = 0;

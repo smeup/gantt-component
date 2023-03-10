@@ -20,6 +20,8 @@ export interface GanttCommonProps {
 }
 
 export interface GanttByTaskProps extends GanttCommonProps {
+  /** Id */
+  id: string;
   /** Rows to display in chart */
   projects: GanttTask[];
   /** Invoked on bar click. */

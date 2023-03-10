@@ -182,5 +182,6 @@ export interface GanttProps
     DisplayOption,
     StylingOption,
     CustomOptions {
+  id: string;
   tasks: Task[];
 }
