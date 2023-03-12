@@ -4,7 +4,7 @@ import {
   TaskListTableComponent,
   TooltipContentComponent,
 } from "../../types/adapted-types";
-import { GanttTask, Phase, GanttRow } from "../../types/domain";
+import { GanttTask, Phase, GanttRow, Detail } from "../../types/domain";
 import { TimeUnit } from "../../types/time-unit";
 import { CustomTaskListHeaderHOC } from "./custom-task-list-header";
 import {
@@ -19,7 +19,7 @@ import { Switcher } from "./switcher";
  * Available props for each Gantt
  */
 export interface GanttPlannerProps {
-  items: GanttTask[];
+  items: GanttTask[] | Detail[];
   taskListHeaderProject?: TaskListHeaderComponent;
   taskListTableProject?: TaskListTableComponent;
   tooltipContent?: TooltipContentComponent;

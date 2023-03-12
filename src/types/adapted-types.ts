@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { GanttRow, Phase, GanttTask } from "./domain";
+import { GanttRow, Phase, GanttTask, Detail } from "./domain";
 import { Task } from "./public-types";
 import { TimeUnit } from "./time-unit";
 
@@ -23,7 +23,7 @@ export interface GanttByTaskProps extends GanttCommonProps {
   /** Id */
   id: string;
   /** Rows to display in chart */
-  projects: GanttTask[];
+  projects: GanttTask[] | Detail[];
   /** Invoked on bar click. */
   onClick?: (row: GanttRow) => void;
   onDateChange?: (row: GanttRow) => void;
