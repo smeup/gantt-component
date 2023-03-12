@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { GanttProps, Task, ViewMode } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
-import { ganttDateRange, seedDates } from "../../helpers/date-helper";
+import { ganttDateRangeFromTask, seedDates } from "../../helpers/date-helper";
 import { CalendarProps } from "../calendar/calendar";
 import { TaskGanttContentProps } from "./task-gantt-content";
 import { TaskListHeaderDefault } from "../task-list/task-list-header";
@@ -76,7 +76,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
-    const [startDate, endDate] = ganttDateRange(
+    const [startDate, endDate] = ganttDateRangeFromTask(
       tasks,
       viewMode,
       preStepsCount,
@@ -108,8 +108,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     [rowHeight, timelineFill]
   );
 
-  console.log("ROW HEIGHT", rowHeight);
-
   const [selectedTask, setSelectedTask] = useState<BarTask>();
   const [failedTask, setFailedTask] = useState<BarTask | null>(null);
 
@@ -123,8 +121,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   // sync scroll event
   useEffect(() => {
     // create event listener
-    window.addEventListener("gantt-sync-scroll-event", function(e: any){
-      if(e.detail.id !== id) {
+    window.addEventListener("gantt-sync-scroll-event", function (e: any) {
+      if (e.detail.id !== id) {
         setScrollX(e.detail.scrollX);
       }
     });
@@ -139,7 +137,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       filteredTasks = tasks;
     }
     filteredTasks = filteredTasks.sort(sortTasks);
-    const [startDate, endDate] = ganttDateRange(
+    const [startDate, endDate] = ganttDateRangeFromTask(
       filteredTasks,
       viewMode,
       preStepsCount,

@@ -40,7 +40,7 @@ const ProjectRow: FC<RowProps> = ({
   };
   return (
     <div
-      key={id}
+      key={"task_" + id}
       className={styles.project}
       style={customStyle}
       onClick={() => {
@@ -52,7 +52,7 @@ const ProjectRow: FC<RowProps> = ({
         <span
           className={index === 0 ? styles.main : undefined}
           title={v.length > 10 ? v : undefined}
-          key={id + "_valuesToShow_" + index}
+          key={"task_" + id + "_valuesToShow_" + index}
         >
           {v === "#START#"
             ? formatToLocaleSimple(start)
@@ -87,7 +87,7 @@ const SubRow: FC<RowProps> = ({
   };
   return (
     <div
-      key={id}
+      key={"phase_" + id}
       className={styles.subrow}
       style={customStyle}
       onClick={() => {
@@ -96,7 +96,7 @@ const SubRow: FC<RowProps> = ({
       }}
     >
       <span
-        key={id + "_valuesToShow_color"}
+        key={"phase_" + id + "_valuesToShow_color"}
         style={{
           height: 16,
           width: 16,
@@ -107,7 +107,7 @@ const SubRow: FC<RowProps> = ({
         <span
           className={index === 0 ? styles.main : undefined}
           title={v.length > 10 ? v : undefined}
-          key={id + "_valuesToShow_" + index}
+          key={"phase_" + id + "_valuesToShow_" + index}
         >
           {v === "#START#"
             ? formatToLocaleSimple(start)
@@ -121,32 +121,41 @@ const SubRow: FC<RowProps> = ({
 };
 
 const TimelineSubRow: FC<RowProps> = ({
-  task: { id, name },
+  task: { id, valuesToShow },
   rowHeight,
   rowWidth,
   fontFamily,
   fontSize,
 }) => {
+  let str = "";
+  for (let i = 0; i < valuesToShow.length; i++) {
+    str += "1fr ";
+  }
+  const customStyle = {
+    height: rowHeight,
+    width: rowWidth,
+    fontFamily,
+    fontSize,
+    "--grid-fasi-columns": str,
+  };
   return (
-    <div
-      key={id}
-      className={styles.timeline}
-      style={{
-        height: rowHeight,
-        width: rowWidth,
-        fontFamily,
-        fontSize,
-      }}
-    >
-      <span key={id + "_valuesToShow_0"} className={styles.main} >{name}</span>
-      <span key={id + "_valuesToShow_1"}>A</span>
-      <span key={id + "_valuesToShow_2"}>A</span>
+    <div key={"detail_" + id} className={styles.timeline} style={customStyle}>
+      {valuesToShow?.map((v, index) => (
+        <span
+          className={index === 0 ? styles.main : undefined}
+          title={v.length > 10 ? v : undefined}
+          key={"detail_" + id + "_valuesToShow_" + index}
+        >
+          {v}
+        </span>
+      ))}
     </div>
   );
 };
 
 export const CustomTaskListTableHOC = (
-  onclickTaskList: (id: string) => void
+  onclickTaskList: (id: string) => void,
+  id: string
 ): TaskListTableComponent => {
   // noinspection UnnecessaryLocalVariableJS
   const CustomTaskListTable: TaskListTableComponent = ({
@@ -157,7 +166,7 @@ export const CustomTaskListTableHOC = (
     tasks,
     setSelectedTask,
   }) => (
-    <div className={styles.container}>
+    <div className={styles.container} key={"tasks_container_" + id}>
       {tasks.map(task => (
         <React.Fragment>
           {task.type === "project" && (
