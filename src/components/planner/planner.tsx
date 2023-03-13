@@ -115,7 +115,12 @@ export const Planner: React.FC<PlannerProps> = props => {
           TaskListTable={
             props.mainGantt.taskListTableProject ??
             CustomTaskListTableHOC(id => {
-              console.log("planner.tsx Clicked on " + id);
+              const row = (props.mainGantt.items as GanttRow[]).find(
+                row => row.id === id
+              );
+              if (row) {
+                props.mainGantt.onClick?.(row);
+              }                            
             }, "main")
           }
           // tooltip
