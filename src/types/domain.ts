@@ -38,7 +38,7 @@ export interface ScheduleItem {
   endDate: string;
   color?: string;
   selectedColor?: string;
-  valueToShow: []
+  valueToShow?: []
 }
 
 /**
