@@ -31,7 +31,7 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
   ...props
 }) => {
   const [currentProjects, setCurrentProjects] = useState(projects);
-
+  
   useEffect(() => {
     if (projects) setCurrentProjects(projects);
   }, [projects]);
@@ -51,7 +51,7 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
       );
     }
     return tasks;
-  }, [currentProjects]);
+  }, [currentProjects, mainGanttEndDate, mainGanttStartDate]);
 
   const getProjectById = (id: string): GanttTask | Detail | undefined => {
     for (let i = 0; i < currentProjects.length; i++) {

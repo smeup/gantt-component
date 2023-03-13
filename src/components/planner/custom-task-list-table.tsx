@@ -168,7 +168,7 @@ export const CustomTaskListTableHOC = (
   }) => (
     <div className={styles.container} key={"tasks_container_" + id}>
       {tasks.map(task => (
-        <React.Fragment>
+        <React.Fragment key={task.id}>
           {task.type === "project" && (
             <ProjectRow
               key={task.id + "_" + task.type}

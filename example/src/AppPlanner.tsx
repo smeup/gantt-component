@@ -44,7 +44,12 @@ const AppPlanner = () => {
     },
   };
 
-  return <Planner {...plannerProps} />;
+  return (
+    <React.StrictMode>
+      <Planner {...plannerProps} />
+    </React.StrictMode>
+  )
+  
 };
 
 const ganttPlannerProps: GanttPlannerProps = {
@@ -1680,7 +1685,7 @@ const ganttPlannerDetailsProps: GanttPlannerDetailsProps = {
     barBackgroundSelectedColor: "#A2A415",
   },
   hideLabel: true,
-  ganttHeight: 350,
+  ganttHeight: 200,
   hideDependencies: true,
   title: "Detail Gantt",
 };
