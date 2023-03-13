@@ -24,6 +24,8 @@ export interface GanttByTaskProps extends GanttCommonProps {
   id: string;
   /** Rows to display in chart */
   projects: GanttTask[] | Detail[];
+  mainGanttStartDate?: string;
+  mainGanttEndDate?: string;
   /** Invoked on bar click. */
   onClick?: (row: GanttRow) => void;
   onDateChange?: (row: GanttRow) => void;

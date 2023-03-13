@@ -41,6 +41,7 @@ export const GanttByPhase: FC<GanttByPhaseProps> = ({
 
   const returnElement = tasks?.length > 0 && (
     <Gantt
+      id="1_phase"
       tasks={tasks}
       locale={locale}
       viewMode={toViewMode(timeUnit)}
