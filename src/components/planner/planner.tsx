@@ -108,7 +108,7 @@ export const Planner: React.FC<PlannerProps> = props => {
             props.mainGantt.taskListHeaderProject ??
             CustomTaskListHeaderHOC(
               props.mainGantt.title,
-              mainGanttDoubleView ?? true,
+              mainGanttDoubleView ?? false,
               setMainGanttDoubleView
             )
           }
@@ -121,29 +121,27 @@ export const Planner: React.FC<PlannerProps> = props => {
           // tooltip
           TooltipContent={props.mainGantt.tooltipContent ?? CustomTooltipHOC()}
           // events
-          onClick={(row: GanttRow) => props.mainGantt.onClick?.(row)}
-          onDateChange={(row: GanttRow) => props.mainGantt.onDateChange?.(row)}
+          onClick={props.mainGantt.onClick}
+          onDateChange={props.mainGantt.onDateChange}
         />
         {props.secondaryGantt && (
           <GanttByTask
             id="secondary"
             key="secondary"
-            hideLabel={props.secondaryGantt?.hideLabel}
+            hideLabel={props.secondaryGantt.hideLabel}
             showSecondaryDates={mainGanttDoubleView}
-            hideDependencies={props.secondaryGantt?.hideDependencies}
-            ganttHeight={props.secondaryGantt?.ganttHeight}
+            hideDependencies={props.secondaryGantt.hideDependencies}
+            ganttHeight={props.secondaryGantt.ganttHeight}
             mainGanttStartDate={mainGanttStartDate}
             mainGanttEndDate={mainGanttEndDate}
             projects={
-              props.secondaryGantt?.items ? props.secondaryGantt?.items : []
+              props.secondaryGantt.items ? props.secondaryGantt.items : []
             }
             timeUnit={timeUnit}
-            stylingOptions={props.secondaryGantt?.stylingOptions}
+            stylingOptions={props.secondaryGantt.stylingOptions}
             TaskListHeader={
               props.mainGantt.taskListHeaderProject ??
-              CustomTaskListHeaderHOC(
-                props.secondaryGantt?.title ? props.secondaryGantt.title : ""
-              )
+              CustomTaskListHeaderHOC(props.secondaryGantt.title)
             }
             TaskListTable={
               props.secondaryGantt?.taskListTableProject ??
@@ -153,13 +151,11 @@ export const Planner: React.FC<PlannerProps> = props => {
             }
             // tooltip
             TooltipContent={
-              props.secondaryGantt?.tooltipContent ?? CustomTooltipHOC()
+              props.secondaryGantt.tooltipContent ?? CustomTooltipHOC()
             }
             // events
-            onClick={(row: GanttRow) => props.secondaryGantt?.onClick?.(row)}
-            onDateChange={(row: GanttRow) =>
-              props.secondaryGantt?.onDateChange?.(row)
-            }
+            onClick={props.secondaryGantt.onClick}
+            onDateChange={props.secondaryGantt.onDateChange}
           />
         )}
       </div>

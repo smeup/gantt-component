@@ -25,9 +25,9 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
   TooltipContent,
   TaskListHeader,
   TaskListTable,
+  stylingOptions = {},
   onDateChange,
   onClick,
-  stylingOptions = {},
   ...props
 }) => {
   const [currentProjects, setCurrentProjects] = useState(projects);
