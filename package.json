@@ -34,8 +34,7 @@
     "test:watch": "react-scripts test --env=jsdom",
     "predeploy": "cd example && npm install && npm run build",
     "deploy": "gh-pages -d example/build",
-    "clean": "rimraf dist && rimraf node_modules",
-    "kup:dev": "cd ../ketchup/packages/ketchup && npx link ../../../gantt-component && cd ../../../gantt-component && npx link ../ketchup/packages/ketchup/node_modules/react ../ketchup/packages/ketchup/node_modules/react-dom"
+    "clean": "rimraf dist && rimraf node_modules"
   },
   "peerDependencies": {
     "react": "18.2.0"
