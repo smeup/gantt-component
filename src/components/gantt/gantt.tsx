@@ -194,6 +194,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     rtl,
     scrollX,
     onExpanderClick,
+    showSecondaryDates,
+    projectHeight,
+    timelineHeight,
   ]);
 
   useEffect(() => {
