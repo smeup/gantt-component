@@ -15,7 +15,6 @@ import {
   CustomTooltipHOC,
 } from "./custom-task-list-table";
 import { GanttByTask } from "./gantt-by-task";
-import { GanttTimelineCustomTaskList } from "./gantt-timeline-custom-task-list-header";
 import { Switcher } from "./switcher";
 
 /**
@@ -142,7 +141,7 @@ export const Planner: React.FC<PlannerProps> = props => {
             stylingOptions={props.secondaryGantt?.stylingOptions}
             TaskListHeader={
               props.mainGantt.taskListHeaderProject ??
-              GanttTimelineCustomTaskList(
+              CustomTaskListHeaderHOC(
                 props.secondaryGantt?.title ? props.secondaryGantt.title : ""
               )
             }

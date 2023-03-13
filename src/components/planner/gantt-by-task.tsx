@@ -138,8 +138,6 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
     .minus({ [timeUnit]: stylingOptions?.preStepsCount ?? 2 })
     .toJSDate();
 
-  console.log("gantt-by-task.tsx TASKS", tasks);
-
   const returnElement = tasks?.length > 0 && (
     <Gantt
       key={key}

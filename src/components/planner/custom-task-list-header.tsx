@@ -4,29 +4,42 @@ import { TaskListHeaderComponent } from "../../types/adapted-types";
 
 export const CustomTaskListHeaderHOC = (
   label: string,
-  doubleView: boolean,
-  setDoubleView: (checked: boolean) => void
+  doubleView?: boolean,
+  setDoubleView?: (checked: boolean) => void
 ): TaskListHeaderComponent => {
-  const CustomTaskListHeader: TaskListHeaderComponent = () => (
-    <div className={classes.wrapper}>
+  const CustomTaskListHeader: TaskListHeaderComponent = ({
+    headerHeight,
+    fontFamily,
+    fontSize,
+  }) => (
+    <div
+      style={{
+        fontFamily,
+        fontSize,
+        height: headerHeight,
+      }}
+      className={classes.wrapper}
+    >
       <div className={classes.title}>
         <span>{label}</span>
       </div>
-      <div className={classes.toggler}>
-        <label htmlFor="ch2" className={classes.switch}>
-          <input
-            className={classes.input}
-            id="ch2"
-            type="checkbox"
-            defaultChecked={doubleView}
-            onClick={() => {
-              setDoubleView(!doubleView);
-            }}
-          />
-          <span className={classes.slider}></span>
-        </label>
-        <span className={classes.label}>Mostra previsioni</span>
-      </div>
+      {setDoubleView && (
+        <div className={classes.toggler}>
+          <label htmlFor="ch2" className={classes.switch}>
+            <input
+              className={classes.input}
+              id="ch2"
+              type="checkbox"
+              defaultChecked={doubleView}
+              onClick={() => {
+                setDoubleView(!doubleView);
+              }}
+            />
+            <span className={classes.slider}></span>
+          </label>
+          <span className={classes.label}>Mostra previsioni</span>
+        </div>
+      )}
     </div>
   );
   return CustomTaskListHeader;
