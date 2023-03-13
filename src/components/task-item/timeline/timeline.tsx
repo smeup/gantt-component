@@ -24,6 +24,7 @@ export const Timeline: FC<TaskItemProps> = ({
       />
       {task.barChildren.map(bar => (
         <rect
+          style={{ cursor: "pointer" }}
           key={bar.id}
           fill={bar.styles.backgroundColor}
           x={bar.x1}
