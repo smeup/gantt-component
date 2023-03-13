@@ -15,14 +15,13 @@ import {
   CustomTooltipHOC,
 } from "./custom-task-list-table";
 import { GanttByTask } from "./gantt-by-task";
-import { GanttTimelineCustomTaskList } from "./gantt-timeline-custom-task-list-header";
 import { Switcher } from "./switcher";
 
 /**
  * Available props for each Gantt
  */
 export interface GanttPlannerProps {
-  items: GanttTask[];
+  items: GanttTask[] | Detail[];
   taskListHeaderProject?: TaskListHeaderComponent;
   taskListTableProject?: TaskListTableComponent;
   tooltipContent?: TooltipContentComponent;
@@ -70,7 +69,7 @@ export const Planner: React.FC<PlannerProps> = props => {
     { mainGanttStartDate, mainGanttEndDate } /*, setMainGanttStartEndDate*/,
   ] = useState(() => {
     const dates: Date[] = ganttDateRangeFromGanttTask(
-      props.mainGantt.items,
+      props.mainGantt.items as GanttTask[],
       toViewMode(timeUnit),
       props.mainGantt.stylingOptions?.preStepsCount ?? 1,
       mainGanttDoubleView
@@ -142,7 +141,7 @@ export const Planner: React.FC<PlannerProps> = props => {
             stylingOptions={props.secondaryGantt?.stylingOptions}
             TaskListHeader={
               props.mainGantt.taskListHeaderProject ??
-              GanttTimelineCustomTaskList(
+              CustomTaskListHeaderHOC(
                 props.secondaryGantt?.title ? props.secondaryGantt.title : ""
               )
             }

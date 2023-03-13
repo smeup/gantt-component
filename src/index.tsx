@@ -37,5 +37,5 @@ export type {
   GanttTask,
   ScheduleItem,
 } from "./types/domain";
-export type { PlannerProps } from "./components/planner/planner";
+export type { PlannerProps, GanttPlannerDetailsProps, GanttPlannerProps } from "./components/planner/planner";
 export { TimeUnit } from "./types/time-unit";
