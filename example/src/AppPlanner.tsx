@@ -16,8 +16,8 @@ const AppPlanner = () => {
   );
   const [clicked, setClicked] = useState(false);
 
-  const clickHandler = (row: GanttRow) => {
-    console.log("applanner.tsx", row);
+  const mainGanttClickHandler = (row: GanttRow) => {
+    console.log("appplanner.tsx " + row.name);
     if (clicked) {
       setJsonData(ganttPlannerProps.items);
     } else {
@@ -36,11 +36,11 @@ const AppPlanner = () => {
       items: jsonData,
       title: "Main Gantt",
 
-      onClick: row => clickHandler(row),
+      onClick: mainGanttClickHandler,
     },
     secondaryGantt: {
       ...ganttPlannerDetailsProps,
-      onClick: row => secondaryGanttClickHandler(row),
+      onClick: secondaryGanttClickHandler,
     },
   };
 
@@ -48,8 +48,7 @@ const AppPlanner = () => {
     <React.StrictMode>
       <Planner {...plannerProps} />
     </React.StrictMode>
-  )
-  
+  );
 };
 
 const ganttPlannerProps: GanttPlannerProps = {
@@ -766,10 +765,11 @@ const ganttPlannerProps: GanttPlannerProps = {
     barBackgroundSelectedColor: "#A2A415",
   },
   hideLabel: true,
-  showSecondaryDates: true,
+  showSecondaryDates: false,
   ganttHeight: 350,
   hideDependencies: true,
   title: "",
+
 };
 
 const mockDataTasksSelected: GanttTask[] = [

@@ -1,12 +1,18 @@
-import React, { FC } from 'react';
-import { TaskItemProps } from '../task-item';
+import React, { FC } from "react";
+import { TaskItemProps } from "../task-item";
 
-export const Timeline: FC<TaskItemProps> = ({task, isSelected}) => {
-  const {styles} = task
-  const col = isSelected ? styles.backgroundSelectedColor : styles.backgroundColor
+export const Timeline: FC<TaskItemProps> = ({
+  task,
+  isSelected,
+  onEventStart,
+}) => {
+  const { styles } = task;
+  const col = isSelected
+    ? styles.backgroundSelectedColor
+    : styles.backgroundColor;
 
   return (
-    <g tabIndex={0}>
+    <g tabIndex={0} onMouseDown={e => onEventStart("move", task, e)}>
       <rect
         fill={col}
         x="0"
@@ -16,7 +22,7 @@ export const Timeline: FC<TaskItemProps> = ({task, isSelected}) => {
         rx={0}
         ry={0}
       />
-      {task.barChildren.map(bar =>
+      {task.barChildren.map(bar => (
         <rect
           key={bar.id}
           fill={bar.styles.backgroundColor}
@@ -26,8 +32,8 @@ export const Timeline: FC<TaskItemProps> = ({task, isSelected}) => {
           height={bar.height}
           rx={bar.barCornerRadius}
           ry={bar.barCornerRadius}
-        />)}
+        />
+      ))}
     </g>
   );
 };
-
