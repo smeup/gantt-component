@@ -79,7 +79,6 @@ export const Planner: React.FC<PlannerProps> = props => {
     // create projections if phase is clicked
     if (row.type === "task" && props.secondaryGantt) {
       const phase = row as Phase;
-      console.log("EVENT LOG", phase);
       // set projection state
       setProjection({
         start: new Date(phase.startDate),

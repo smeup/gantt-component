@@ -96,7 +96,6 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
   const handleDateChange = (task: Task) => {
     const id = task?.id;
     const type = task?.type;
-    console.log("gantt-by-task.tsx onDateChange", id, type);
 
     /** per il timeline, ha senso gestire il dateChange???? per adesso non gestito */
     if (type === "timeline") {
