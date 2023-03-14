@@ -27,11 +27,17 @@ export type TaskGanttContentProps = {
   fontSize: string;
   fontFamily: string;
   rtl: boolean;
+  ganttHeight: number;
+  hideLabel?: boolean;
+  showSecondaryDates?: boolean;
+  projection?: {
+    x0: number;
+    xf: number;
+    color: string;
+  };
   setGanttEvent: (value: GanttEvent) => void;
   setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
-  hideLabel?: boolean;
-  showSecondaryDates?: boolean;
 } & EventOption;
 
 export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
@@ -49,6 +55,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   fontFamily,
   fontSize,
   rtl,
+  hideLabel = false,
+  showSecondaryDates = false,
+  ganttHeight,
+  projection,
   setGanttEvent,
   setFailedTask,
   setSelectedTask,
@@ -57,8 +67,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onDoubleClick,
   onClick,
   onDelete,
-  hideLabel = false,
-  showSecondaryDates = false,
 }) => {
   const point = svg?.current?.createSVGPoint();
   const [xStep, setXStep] = useState(0);
@@ -272,6 +280,16 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
   return (
     <g className="content">
+      {projection && (
+        <rect
+          fill={projection.color}
+          x={projection.x0}
+          y="0"
+          width={projection.xf - projection.x0}
+          height={ganttHeight}
+          fillOpacity="35%"
+        />
+      )}
       <g className="arrows" fill={arrowColor} stroke={arrowColor}>
         {tasks.map(task => {
           return task.barChildren.map(child => {

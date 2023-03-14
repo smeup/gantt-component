@@ -1,3 +1,5 @@
+import { GanttPhaseProjection } from "./domain";
+
 export enum ViewMode {
   Hour = "Hour",
   QuarterDay = "Quarter Day",
@@ -184,4 +186,5 @@ export interface GanttProps
     CustomOptions {
   id: string;
   tasks: Task[];
+  projection?: GanttPhaseProjection;
 }

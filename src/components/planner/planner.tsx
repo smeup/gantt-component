@@ -7,7 +7,12 @@ import {
   TaskListTableComponent,
   TooltipContentComponent,
 } from "../../types/adapted-types";
-import { GanttTask, GanttRow, Detail } from "../../types/domain";
+import {
+  GanttTask,
+  GanttRow,
+  Detail,
+  GanttPhaseProjection,
+} from "../../types/domain";
 import { TimeUnit } from "../../types/time-unit";
 import { CustomTaskListHeaderHOC } from "./custom-task-list-header";
 import {
@@ -60,10 +65,28 @@ export interface PlannerProps {
 export const Planner: React.FC<PlannerProps> = props => {
   const [timeUnit, setTimeUnit] = useState(TimeUnit.MONTH);
 
+  // projections
+  const [projection, setProjection] = useState<GanttPhaseProjection>();
+
   // main gantt
   const [mainGanttDoubleView, setMainGanttDoubleView] = useState(
     props.mainGantt.showSecondaryDates ?? false
   );
+
+  // handle click
+  const handleClick = (row: GanttRow) => {
+    // create projections if phase is clicked
+    if (row.type === "task" && props.secondaryGantt) {
+      console.log("EVENT LOG", row);
+      // get complete data
+      setProjection({
+        start: new Date((row as GanttTask).startDate),
+        end: new Date((row as GanttTask).endDate),
+        color: "#ff00ff",
+      });
+    }
+    props.mainGantt.onClick?.(row);
+  };
 
   const [
     { mainGanttStartDate, mainGanttEndDate } /*, setMainGanttStartEndDate*/,
@@ -120,13 +143,13 @@ export const Planner: React.FC<PlannerProps> = props => {
               );
               if (row) {
                 props.mainGantt.onClick?.(row);
-              }                            
+              }
             }, "main")
           }
           // tooltip
           TooltipContent={props.mainGantt.tooltipContent ?? CustomTooltipHOC()}
           // events
-          onClick={props.mainGantt.onClick}
+          onClick={handleClick}
           onDateChange={props.mainGantt.onDateChange}
         />
         {props.secondaryGantt && (
@@ -158,6 +181,8 @@ export const Planner: React.FC<PlannerProps> = props => {
             TooltipContent={
               props.secondaryGantt.tooltipContent ?? CustomTooltipHOC()
             }
+            // projections
+            projection={projection}
             // events
             onClick={props.secondaryGantt.onClick}
             onDateChange={props.secondaryGantt.onDateChange}

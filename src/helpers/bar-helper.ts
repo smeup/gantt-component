@@ -619,3 +619,23 @@ const handleTaskBySVGMouseEventForBar = (
   }
   return { isChanged, changedTask };
 };
+
+/**
+ * Calculate the coordinate of projections
+ * @param start
+ * @param end
+ * @param dates
+ * @param columnWidth
+ * @returns
+ */
+export function calculateProjection(
+  start: Date,
+  end: Date,
+  dates: Date[],
+  columnWidth: number
+) {
+  return {
+    x0: taskXCoordinate(start, dates, columnWidth),
+    xf: taskXCoordinate(end, dates, columnWidth),
+  };
+}
