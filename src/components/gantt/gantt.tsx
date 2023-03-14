@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { GanttProps, Task, ViewMode } from "../../types/public-types";
+import { CurrentDateIndicator, GanttProps, Task, ViewMode } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import { ganttDateRangeFromTask, seedDates } from "../../helpers/date-helper";
 import { CalendarProps } from "../calendar/calendar";
@@ -59,7 +59,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   fontFamily = "Arial, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue",
   fontSize = "14px",
   arrowIndent = 20,
-  todayColor = "rgba(252, 248, 227, 0.5)",
+  todayColor = "#ff0000",
   viewDate,
   TooltipContent = StandardTooltipContent,
   TaskListHeader = TaskListHeaderDefault,
@@ -69,9 +69,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   hideLabel = false,
   showSecondaryDates = false,
   hideDependencies = false,
-  currentDateIndicator = {
-    color: "#ff0000",
-  },
   projection,
   onDateChange,
   onProgressChange,
@@ -127,10 +124,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
 
   const [currentDateIndicatorContent, setCurrentDateIndicatorContent] =
-    useState<{
-      color: string;
-      x: number;
-    }>();
+    useState<CurrentDateIndicator>();
 
   const [projectionContent, setProjectionContent] = useState<{
     x0: number;
@@ -440,11 +434,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
    */
   useEffect(() => {
     const x = calculateCurrentDateCalculator(dateSetup.dates, columnWidth);
+    console.log("CURRENT DATE X", x);
     setCurrentDateIndicatorContent({
-      color: currentDateIndicator.color,
+      color: todayColor,
       x,
     });
-  }, [columnWidth, currentDateIndicator.color, dateSetup.dates]);
+  }, [columnWidth, dateSetup.dates, todayColor]);
 
   /**
    * Projections hook

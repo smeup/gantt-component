@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { EventOption } from "../../types/public-types";
+import { CurrentDateIndicator, EventOption } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
 import { Arrow } from "../other/arrow";
 import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
@@ -30,10 +30,7 @@ export type TaskGanttContentProps = {
   ganttHeight: number;
   hideLabel?: boolean;
   showSecondaryDates?: boolean;
-  currentDateIndicator?: {
-    color: string;
-    x: number;
-  };
+  currentDateIndicator?: CurrentDateIndicator
   projection?: {
     x0: number;
     xf: number;
@@ -289,9 +286,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         // current date indicator
         <rect
           fill={currentDateIndicator.color}
-          x={currentDateIndicator.x}
+          x={currentDateIndicator.x + 1.5}
           y="0"
-          width="2px"
+          width="2"
           height="100%"
         />
       )}

@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { DateTimeFormatters, ViewMode } from "../../types/public-types";
+import { CurrentDateIndicator, DateTimeFormatters, ViewMode } from "../../types/public-types";
 import { TopPartOfCalendar } from "./top-part-of-calendar";
 import { SinglePartOfCalendar } from "./single-part-of-calendar";
 import {
@@ -20,10 +20,7 @@ export type CalendarProps = {
   fontSize: string;
   dateTimeFormatters?: DateTimeFormatters;
   singleLineHeader: boolean;
-  currentDateIndicator?: {
-    color: string;
-    x: number;
-  };
+  currentDateIndicator?: CurrentDateIndicator
 };
 
 export const Calendar: React.FC<CalendarProps> = ({
@@ -343,7 +340,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         // current date indicator
         <circle
           fill={currentDateIndicator.color}
-          cx={currentDateIndicator.x + 1}
+          cx={currentDateIndicator.x + 2.5}
           cy={headerHeight-8}
           r="8"
         />
