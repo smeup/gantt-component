@@ -17,7 +17,10 @@ import { VerticalScroll } from "../other/vertical-scroll";
 import { TaskList, TaskListProps } from "../task-list/task-list";
 import { TaskGantt } from "./task-gantt";
 import { BarTask } from "../../types/bar-task";
-import { convertToBarTasks } from "../../helpers/bar-helper";
+import {
+  calculateProjection,
+  convertToBarTasks,
+} from "../../helpers/bar-helper";
 import { GanttEvent } from "../../types/gantt-task-actions";
 import { DateSetup } from "../../types/date-setup";
 import { HorizontalScroll } from "../other/horizontal-scroll";
@@ -72,6 +75,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   hideLabel = false,
   showSecondaryDates = false,
   hideDependencies = false,
+  projection
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -117,6 +121,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(-1);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
+
+  const [projectionContent, setProjectionContent] = useState<{
+    x0: number;
+    xf: number;
+    color: string;
+  }>();
 
   // sync scroll event
   useEffect(() => {
@@ -416,6 +426,27 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
 
   /**
+   * Projections hook
+   */
+  useEffect(() => {
+    // convert init date and final date to coordinate
+    if (projection) {
+      const { x0, xf } = calculateProjection(
+        projection.start,
+        projection.end,
+        dateSetup.dates,
+        columnWidth
+      );
+
+      setProjectionContent({
+        x0,
+        xf,
+        color: projection.color,
+      });
+    }
+  }, [columnWidth, dateSetup.dates, projection]);
+
+  /**
    * Task select event
    */
   const handleSelectedTask = (taskId: string) => {
@@ -484,6 +515,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     onDelete,
     hideLabel,
     showSecondaryDates,
+    ganttHeight,
+    projection: projectionContent,
   };
 
   const tableProps: TaskListProps = {

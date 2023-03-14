@@ -776,7 +776,6 @@ const mockDataTasksSelected: GanttTask[] = [
   {
     id: "1",
     name: "G456",
-
     startDate: "2021-10-25",
     endDate: "2023-07-04",
     secondaryStartDate: "2021-10-25",

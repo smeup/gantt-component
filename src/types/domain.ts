@@ -48,3 +48,9 @@ export interface GanttSyncScrollEvent {
   componentId: string;
   scrollX: number;
 }
+
+export interface GanttPhaseProjection {
+  start: Date;
+  end: Date;
+  color: string;
+}
