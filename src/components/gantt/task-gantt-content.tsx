@@ -30,6 +30,10 @@ export type TaskGanttContentProps = {
   ganttHeight: number;
   hideLabel?: boolean;
   showSecondaryDates?: boolean;
+  currentDateIndicator?: {
+    color: string;
+    x: number;
+  };
   projection?: {
     x0: number;
     xf: number;
@@ -58,6 +62,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   hideLabel = false,
   showSecondaryDates = false,
   ganttHeight,
+  currentDateIndicator,
   projection,
   setGanttEvent,
   setFailedTask,
@@ -280,6 +285,16 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
   return (
     <g className="content">
+      {currentDateIndicator && (
+        // current date indicator
+        <rect
+          fill={currentDateIndicator.color}
+          x={currentDateIndicator.x}
+          y="0"
+          width="2px"
+          height="100%"
+        />
+      )}
       {projection && (
         // projection background
         <rect
