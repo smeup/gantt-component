@@ -105,11 +105,7 @@ export const Planner: React.FC<PlannerProps> = props => {
   });
 
   return (
-    <div
-      style={{
-        maxWidth: "90vw",
-      }}
-    >
+    <div>
       <Switcher onTimeUnitChange={timeUnit => setTimeUnit(timeUnit)} />
       <div
         style={{
