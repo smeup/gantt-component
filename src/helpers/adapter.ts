@@ -64,7 +64,7 @@ export const convertPhaseToTask = (item: Phase): Task => {
   return mapPhase(item);
 };
 
-export const convertDetailToTimeline = (
+const convertDetailToTimeline = (
   item: Detail,
   mainGanttStartDate?: string,
   mainGanttEndDate?: string

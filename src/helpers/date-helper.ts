@@ -1,4 +1,4 @@
-import { GanttTask } from "../types/domain";
+import { Detail, GanttTask } from "../types/domain";
 import { Task, ViewMode } from "../types/public-types";
 import { parseToDayEnd, parseToDayStart } from "./time-converters";
 import DateTimeFormatOptions = Intl.DateTimeFormatOptions;
@@ -130,6 +130,41 @@ export const ganttDateRangeFromGanttTask = (
   );
 };
 
+export const ganttDateRangeFromDetail = (
+  details: Detail[],
+  viewMode: ViewMode,
+  preStepsCount: number,
+  showSecondaryDates: boolean
+) => {
+  const dates: {
+    start: Date;
+    end: Date;
+    secondaryStart?: Date;
+    secondaryEnd?: Date;
+  }[] = [];
+
+  details.forEach(item => {
+    const scheduleItems = item.schedule;
+    if (scheduleItems) {
+      scheduleItems.forEach(item => {
+        dates.push({
+          start: parseToDayStart(item.startDate),
+          end: parseToDayEnd(item.endDate),
+          secondaryStart: undefined,
+          secondaryEnd: undefined,
+        });
+      });
+    }
+  });
+  return ganttDateRangeGeneric(
+    dates,
+    viewMode,
+    preStepsCount,
+    showSecondaryDates,
+    true
+  );
+};
+
 export const ganttDateRangeGeneric = (
   dates: {
     start: Date;
@@ -143,7 +178,7 @@ export const ganttDateRangeGeneric = (
   realDates?: boolean
 ) => {
   let newStartDate: Date = dates[0].start;
-  let newEndDate: Date = dates[0].start;
+  let newEndDate: Date = dates[0].end;
   for (const d of dates) {
     if (d.start < newStartDate) {
       newStartDate = d.start;

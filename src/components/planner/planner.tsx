@@ -83,15 +83,13 @@ export const Planner: React.FC<PlannerProps> = props => {
       setProjection({
         start: new Date(phase.startDate),
         end: new Date(phase.endDate),
-        color: phase.color ? phase.color : "#ED7D31"
+        color: phase.color ? phase.color : "#ED7D31",
       });
     }
     props.mainGantt.onClick?.(row);
   };
 
-  const [
-    { mainGanttStartDate, mainGanttEndDate },
-  ] = useState(() => {
+  const [{ mainGanttStartDate, mainGanttEndDate }] = useState(() => {
     const dates: Date[] = ganttDateRangeFromGanttTask(
       props.mainGantt.items as GanttTask[],
       toViewMode(timeUnit),
