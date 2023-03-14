@@ -188,3 +188,11 @@ export interface GanttProps
   tasks: Task[];
   projection?: GanttPhaseProjection;
 }
+
+/**
+ * Interface for current date indicator located into gantt content
+ */
+export interface CurrentDateIndicator {
+  color: string;
+  x: number;
+}

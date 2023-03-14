@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { EventOption } from "../../types/public-types";
+import { CurrentDateIndicator, EventOption } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
 import { Arrow } from "../other/arrow";
 import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
@@ -30,6 +30,7 @@ export type TaskGanttContentProps = {
   ganttHeight: number;
   hideLabel?: boolean;
   showSecondaryDates?: boolean;
+  currentDateIndicator?: CurrentDateIndicator
   projection?: {
     x0: number;
     xf: number;
@@ -58,6 +59,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   hideLabel = false,
   showSecondaryDates = false,
   ganttHeight,
+  currentDateIndicator,
   projection,
   setGanttEvent,
   setFailedTask,
@@ -280,6 +282,16 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
   return (
     <g className="content">
+      {currentDateIndicator && (
+        // current date indicator
+        <rect
+          fill={currentDateIndicator.color}
+          x={currentDateIndicator.x + 1.5}
+          y="0"
+          width="2"
+          height="100%"
+        />
+      )}
       {projection && (
         // projection background
         <rect

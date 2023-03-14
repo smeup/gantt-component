@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { GanttProps, Task, ViewMode } from "../../types/public-types";
+import { CurrentDateIndicator, GanttProps, Task, ViewMode } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import { ganttDateRangeFromTask, seedDates } from "../../helpers/date-helper";
 import { CalendarProps } from "../calendar/calendar";
@@ -18,6 +18,7 @@ import { TaskList, TaskListProps } from "../task-list/task-list";
 import { TaskGantt } from "./task-gantt";
 import { BarTask } from "../../types/bar-task";
 import {
+  calculateCurrentDateCalculator,
   calculateProjection,
   convertToBarTasks,
 } from "../../helpers/bar-helper";
@@ -58,11 +59,17 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   fontFamily = "Arial, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue",
   fontSize = "14px",
   arrowIndent = 20,
-  todayColor = "rgba(252, 248, 227, 0.5)",
+  todayColor = "#ff0000",
   viewDate,
   TooltipContent = StandardTooltipContent,
   TaskListHeader = TaskListHeaderDefault,
   TaskListTable = TaskListTableDefault,
+  dateTimeFormatters,
+  singleLineHeader = false,
+  hideLabel = false,
+  showSecondaryDates = false,
+  hideDependencies = false,
+  projection,
   onDateChange,
   onProgressChange,
   onDoubleClick,
@@ -70,12 +77,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onDelete,
   onSelect,
   onExpanderClick,
-  dateTimeFormatters,
-  singleLineHeader = false,
-  hideLabel = false,
-  showSecondaryDates = false,
-  hideDependencies = false,
-  projection
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -121,6 +122,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(-1);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
+
+  const [currentDateIndicatorContent, setCurrentDateIndicatorContent] =
+    useState<CurrentDateIndicator>();
 
   const [projectionContent, setProjectionContent] = useState<{
     x0: number;
@@ -426,6 +430,18 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
 
   /**
+   * Current date calculator hook
+   */
+  useEffect(() => {
+    const x = calculateCurrentDateCalculator(dateSetup.dates, columnWidth);
+    console.log("CURRENT DATE X", x);
+    setCurrentDateIndicatorContent({
+      color: todayColor,
+      x,
+    });
+  }, [columnWidth, dateSetup.dates, todayColor]);
+
+  /**
    * Projections hook
    */
   useEffect(() => {
@@ -489,6 +505,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     rtl,
     dateTimeFormatters,
     singleLineHeader,
+    currentDateIndicator: currentDateIndicatorContent,
   };
   const barProps: TaskGanttContentProps = {
     tasks: barTasks,
@@ -505,6 +522,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     arrowIndent,
     svgWidth,
     rtl,
+    hideLabel,
+    showSecondaryDates,
+    ganttHeight,
+    currentDateIndicator: currentDateIndicatorContent,
+    projection: projectionContent,
     setGanttEvent,
     setFailedTask,
     setSelectedTask: handleSelectedTask,
@@ -513,10 +535,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     onDoubleClick,
     onClick,
     onDelete,
-    hideLabel,
-    showSecondaryDates,
-    ganttHeight,
-    projection: projectionContent,
   };
 
   const tableProps: TaskListProps = {
