@@ -12,6 +12,7 @@ import {
   GanttRow,
   Detail,
   GanttPhaseProjection,
+  Phase,
 } from "../../types/domain";
 import { TimeUnit } from "../../types/time-unit";
 import { CustomTaskListHeaderHOC } from "./custom-task-list-header";
@@ -77,19 +78,20 @@ export const Planner: React.FC<PlannerProps> = props => {
   const handleClick = (row: GanttRow) => {
     // create projections if phase is clicked
     if (row.type === "task" && props.secondaryGantt) {
-      console.log("EVENT LOG", row);
-      // get complete data
+      const phase = row as Phase;
+      console.log("EVENT LOG", phase);
+      // set projection state
       setProjection({
-        start: new Date((row as GanttTask).startDate),
-        end: new Date((row as GanttTask).endDate),
-        color: "#ff00ff",
+        start: new Date(phase.startDate),
+        end: new Date(phase.endDate),
+        color: phase.color ? phase.color : "#ED7D31"
       });
     }
     props.mainGantt.onClick?.(row);
   };
 
   const [
-    { mainGanttStartDate, mainGanttEndDate } /*, setMainGanttStartEndDate*/,
+    { mainGanttStartDate, mainGanttEndDate },
   ] = useState(() => {
     const dates: Date[] = ganttDateRangeFromGanttTask(
       props.mainGantt.items as GanttTask[],

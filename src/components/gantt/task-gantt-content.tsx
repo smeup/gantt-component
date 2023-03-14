@@ -281,6 +281,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   return (
     <g className="content">
       {projection && (
+        // projection background
         <rect
           fill={projection.color}
           x={projection.x0}

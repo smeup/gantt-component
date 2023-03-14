@@ -75,7 +75,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   hideLabel = false,
   showSecondaryDates = false,
   hideDependencies = false,
-  projection,
+  projection
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
