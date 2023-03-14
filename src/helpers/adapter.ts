@@ -75,16 +75,14 @@ export const convertDetailToTimeline = (
     let start = mainGanttStartDate ?? "";
     let end = mainGanttEndDate ?? "";
 
-    if (!start || !end) {
-      for (let i = 0; i < item.schedule.length; i++) {
-        const lstart = item.schedule[i].startDate;
-        const lend = item.schedule[i].endDate;
-        if (!start || lstart.localeCompare(start) < 0) {
-          start = lstart;
-        }
-        if (!end || lend.localeCompare(end) > 0) {
-          end = lend;
-        }
+    for (let i = 0; i < item.schedule.length; i++) {
+      const lstart = item.schedule[i].startDate;
+      const lend = item.schedule[i].endDate;
+      if (!start || lstart.localeCompare(start) < 0) {
+        start = lstart;
+      }
+      if (!end || lend.localeCompare(end) > 0) {
+        end = lend;
       }
     }
 
