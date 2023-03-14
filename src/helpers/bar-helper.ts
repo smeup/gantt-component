@@ -621,6 +621,21 @@ const handleTaskBySVGMouseEventForBar = (
 };
 
 /**
+ * Calculate current date indicator
+ * @param start
+ * @param end
+ * @param dates
+ * @param columnWidth
+ * @returns
+ */
+export function calculateCurrentDateCalculator(
+  dates: Date[],
+  columnWidth: number
+) {
+  return taskXCoordinate(new Date(), dates, columnWidth);
+}
+
+/**
  * Calculate the coordinate of projections
  * @param start
  * @param end

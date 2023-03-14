@@ -38,7 +38,7 @@ export interface ScheduleItem {
   endDate: string;
   color?: string;
   selectedColor?: string;
-  valueToShow?: []
+  valueToShow?: [];
 }
 
 /**
@@ -49,6 +49,16 @@ export interface GanttSyncScrollEvent {
   scrollX: number;
 }
 
+/**
+ * Interface for current date indicator located into gantt content
+ */
+export interface CurrentDateIndicator {
+  color: string;
+}
+
+/**
+ * Interface for phase projection
+ */
 export interface GanttPhaseProjection {
   start: Date;
   end: Date;

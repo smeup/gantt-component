@@ -1,4 +1,4 @@
-import { GanttPhaseProjection } from "./domain";
+import { CurrentDateIndicator, GanttPhaseProjection } from "./domain";
 
 export enum ViewMode {
   Hour = "Hour",
@@ -186,5 +186,6 @@ export interface GanttProps
     CustomOptions {
   id: string;
   tasks: Task[];
+  currentDateIndicator?: CurrentDateIndicator;
   projection?: GanttPhaseProjection;
 }

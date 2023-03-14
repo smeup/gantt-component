@@ -18,6 +18,7 @@ import { TaskList, TaskListProps } from "../task-list/task-list";
 import { TaskGantt } from "./task-gantt";
 import { BarTask } from "../../types/bar-task";
 import {
+  calculateCurrentDateCalculator,
   calculateProjection,
   convertToBarTasks,
 } from "../../helpers/bar-helper";
@@ -63,6 +64,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   TooltipContent = StandardTooltipContent,
   TaskListHeader = TaskListHeaderDefault,
   TaskListTable = TaskListTableDefault,
+  dateTimeFormatters,
+  singleLineHeader = false,
+  hideLabel = false,
+  showSecondaryDates = false,
+  hideDependencies = false,
+  currentDateIndicator = {
+    color: "#ff0000",
+  },
+  projection,
   onDateChange,
   onProgressChange,
   onDoubleClick,
@@ -70,12 +80,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onDelete,
   onSelect,
   onExpanderClick,
-  dateTimeFormatters,
-  singleLineHeader = false,
-  hideLabel = false,
-  showSecondaryDates = false,
-  hideDependencies = false,
-  projection
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -121,6 +125,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(-1);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
+
+  const [currentDateIndicatorContent, setCurrentDateIndicatorContent] =
+    useState<{
+      color: string;
+      x: number;
+    }>();
 
   const [projectionContent, setProjectionContent] = useState<{
     x0: number;
@@ -426,6 +436,17 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
 
   /**
+   * Current date calculator hook
+   */
+  useEffect(() => {
+    const x = calculateCurrentDateCalculator(dateSetup.dates, columnWidth);
+    setCurrentDateIndicatorContent({
+      color: currentDateIndicator.color,
+      x,
+    });
+  }, [columnWidth, currentDateIndicator.color, dateSetup.dates]);
+
+  /**
    * Projections hook
    */
   useEffect(() => {
@@ -489,6 +510,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     rtl,
     dateTimeFormatters,
     singleLineHeader,
+    currentDateIndicator: currentDateIndicatorContent,
   };
   const barProps: TaskGanttContentProps = {
     tasks: barTasks,
@@ -505,6 +527,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     arrowIndent,
     svgWidth,
     rtl,
+    hideLabel,
+    showSecondaryDates,
+    ganttHeight,
+    currentDateIndicator: currentDateIndicatorContent,
+    projection: projectionContent,
     setGanttEvent,
     setFailedTask,
     setSelectedTask: handleSelectedTask,
@@ -513,10 +540,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     onDoubleClick,
     onClick,
     onDelete,
-    hideLabel,
-    showSecondaryDates,
-    ganttHeight,
-    projection: projectionContent,
   };
 
   const tableProps: TaskListProps = {
