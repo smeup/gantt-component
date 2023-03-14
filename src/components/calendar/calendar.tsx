@@ -8,6 +8,7 @@ import {
 } from "../../helpers/date-helper";
 import { DateSetup } from "../../types/date-setup";
 import styles from "./calendar.module.css";
+import { CurrentDateIndicator } from "../../types/domain";
 
 export type CalendarProps = {
   dateSetup: DateSetup;
@@ -20,10 +21,7 @@ export type CalendarProps = {
   fontSize: string;
   dateTimeFormatters?: DateTimeFormatters;
   singleLineHeader: boolean;
-  currentDateIndicator?: {
-    color: string;
-    x: number;
-  };
+  currentDateIndicator?: CurrentDateIndicator
 };
 
 export const Calendar: React.FC<CalendarProps> = ({
@@ -343,7 +341,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         // current date indicator
         <circle
           fill={currentDateIndicator.color}
-          cx={currentDateIndicator.x + 1}
+          cx={Math.ceil(currentDateIndicator.x) + 2.5}
           cy={headerHeight-8}
           r="8"
         />

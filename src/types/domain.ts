@@ -54,6 +54,7 @@ export interface GanttSyncScrollEvent {
  */
 export interface CurrentDateIndicator {
   color: string;
+  x: number
 }
 
 /**

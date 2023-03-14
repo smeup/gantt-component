@@ -59,7 +59,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   fontFamily = "Arial, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue",
   fontSize = "14px",
   arrowIndent = 20,
-  todayColor = "rgba(252, 248, 227, 0.5)",
+  todayColor = "#ff0000",
   viewDate,
   TooltipContent = StandardTooltipContent,
   TaskListHeader = TaskListHeaderDefault,
@@ -69,9 +69,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   hideLabel = false,
   showSecondaryDates = false,
   hideDependencies = false,
-  currentDateIndicator = {
-    color: "#ff0000",
-  },
   projection,
   onDateChange,
   onProgressChange,
@@ -441,10 +438,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   useEffect(() => {
     const x = calculateCurrentDateCalculator(dateSetup.dates, columnWidth);
     setCurrentDateIndicatorContent({
-      color: currentDateIndicator.color,
+      color: todayColor,
       x,
     });
-  }, [columnWidth, currentDateIndicator.color, dateSetup.dates]);
+  }, [columnWidth, dateSetup.dates, todayColor]);
 
   /**
    * Projections hook
@@ -530,7 +527,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     hideLabel,
     showSecondaryDates,
     ganttHeight,
-    currentDateIndicator: currentDateIndicatorContent,
     projection: projectionContent,
     setGanttEvent,
     setFailedTask,

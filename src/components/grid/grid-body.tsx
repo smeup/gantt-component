@@ -1,7 +1,7 @@
-import React, { ReactElement } from 'react';
-import { Task } from '../../types/public-types';
-import { addToDate } from '../../helpers/date-helper';
-import styles from './grid.module.css';
+import React, { ReactElement } from "react";
+import { Task } from "../../types/public-types";
+import { addToDate } from "../../helpers/date-helper";
+import styles from "./grid.module.css";
 
 export type GridBodyProps = {
   tasks: Task[];
@@ -13,14 +13,14 @@ export type GridBodyProps = {
   rtl: boolean;
 };
 export const GridBody: React.FC<GridBodyProps> = ({
-                                                    tasks,
-                                                    dates,
-                                                    rowHeight,
-                                                    svgWidth,
-                                                    columnWidth,
-                                                    todayColor,
-                                                    rtl,
-                                                  }) => {
+  tasks,
+  dates,
+  rowHeight,
+  svgWidth,
+  columnWidth,
+  todayColor,
+  rtl,
+}) => {
   let y = 0;
   const gridRows: ReactElement[] = [];
   const rowLines: ReactElement[] = [
@@ -36,7 +36,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
   for (const task of tasks) {
     gridRows.push(
       <rect
-        key={'Row' + task.id}
+        key={"Row" + task.id}
         x="0"
         y={y}
         width={svgWidth}
@@ -46,7 +46,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
     );
     rowLines.push(
       <line
-        key={'RowLine' + task.id}
+        key={"RowLine" + task.id}
         x="0"
         y1={y + rowHeight}
         x2={svgWidth}
@@ -60,7 +60,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
   const now = new Date();
   let tickX = 0;
   const ticks: ReactElement[] = [];
-  let today: ReactElement = <rect/>;
+  let today: ReactElement = <rect />;
   for (let i = 0; i < dates.length; i++) {
     const date = dates[i];
     ticks.push(
@@ -84,7 +84,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
         addToDate(
           date,
           date.getTime() - dates[i - 1].getTime(),
-          'millisecond'
+          "millisecond"
         ).getTime() >= now.getTime())
     ) {
       today = (
@@ -106,7 +106,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
     ) {
       today = (
         <rect
-          x={tickX + columnWidth / 2}
+          x={tickX + columnWidth / 2 + 2}
           y={0}
           width={2}
           height={y}
