@@ -19,9 +19,9 @@ import { parseToDayStart } from "../../helpers/time-converters";
 const locale = "it-IT";
 
 export const GanttByTask: React.FC<GanttByTaskProps> = ({
-  projects = [],
-  mainGanttStartDate,
-  mainGanttEndDate,
+  items: projects = [],
+  displayedStartDate: mainGanttStartDate,
+  displayedEndDate: mainGanttEndDate,
   timeUnit = TimeUnit.DAY,
   TooltipContent,
   TaskListHeader,
@@ -153,8 +153,8 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
       dateTimeFormatters={ganttDateTimeFormatters}
       {...stylingOptions}
       {...props}
-      mainGanttStartDate={parseToDayStart(mainGanttStartDate)}
-      mainGanttEndDate={parseToDayStart(mainGanttEndDate)}
+      displayedStartDate={parseToDayStart(mainGanttStartDate)}
+      displayedEndDate={parseToDayStart(mainGanttEndDate)}
     />
   );
   if (returnElement) {

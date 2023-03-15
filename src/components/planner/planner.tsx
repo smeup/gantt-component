@@ -92,7 +92,7 @@ export const Planner: React.FC<PlannerProps> = props => {
     props.mainGantt.onClick?.(row);
   };
 
-  const [{ mainGanttStartDate, mainGanttEndDate }] = useState(() => {
+  const [{ displayedStartDate, displayedEndDate }] = useState(() => {
     const dates: Date[] = ganttDateRangeFromGanttTask(
       props.mainGantt.items as GanttTask[],
       toViewMode(timeUnit),
@@ -114,8 +114,8 @@ export const Planner: React.FC<PlannerProps> = props => {
       }
     }
     return {
-      mainGanttStartDate: formatToIsoDate(dates[0]),
-      mainGanttEndDate: formatToIsoDate(dates[1]),
+      displayedStartDate: formatToIsoDate(dates[0]),
+      displayedEndDate: formatToIsoDate(dates[1]),
     };
   });
 
@@ -135,9 +135,9 @@ export const Planner: React.FC<PlannerProps> = props => {
           showSecondaryDates={mainGanttDoubleView}
           hideDependencies={props.mainGantt.hideDependencies}
           ganttHeight={props.mainGantt.ganttHeight}
-          mainGanttStartDate={mainGanttStartDate}
-          mainGanttEndDate={mainGanttEndDate}
-          projects={props.mainGantt.items}
+          displayedStartDate={displayedStartDate}
+          displayedEndDate={displayedEndDate}
+          items={props.mainGantt.items}
           timeUnit={timeUnit}
           stylingOptions={props.mainGantt.stylingOptions}
           TaskListHeader={
@@ -173,11 +173,9 @@ export const Planner: React.FC<PlannerProps> = props => {
             showSecondaryDates={mainGanttDoubleView}
             hideDependencies={props.secondaryGantt.hideDependencies}
             ganttHeight={props.secondaryGantt.ganttHeight}
-            mainGanttStartDate={mainGanttStartDate}
-            mainGanttEndDate={mainGanttEndDate}
-            projects={
-              props.secondaryGantt.items ? props.secondaryGantt.items : []
-            }
+            displayedStartDate={displayedStartDate}
+            displayedEndDate={displayedEndDate}
+            items={props.secondaryGantt.items}
             timeUnit={timeUnit}
             stylingOptions={props.secondaryGantt.stylingOptions}
             TaskListHeader={

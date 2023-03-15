@@ -75,8 +75,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   showSecondaryDates = false,
   hideDependencies = false,
   projection,
-  mainGanttStartDate,
-  mainGanttEndDate,
+  displayedStartDate,
+  displayedEndDate,
   onDateChange,
   onProgressChange,
   onDoubleClick,
@@ -93,8 +93,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       viewMode,
       preStepsCount,
       showSecondaryDates,
-      mainGanttStartDate,
-      mainGanttEndDate
+      displayedStartDate,
+      displayedEndDate
     );
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
@@ -165,8 +165,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       viewMode,
       preStepsCount,
       showSecondaryDates,
-      mainGanttStartDate,
-      mainGanttEndDate
+      displayedStartDate,
+      displayedEndDate
     );
     let newDates = seedDates(startDate, endDate, viewMode);
     if (rtl) {
@@ -222,6 +222,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     showSecondaryDates,
     projectHeight,
     timelineHeight,
+    displayedStartDate,
+    displayedEndDate,
   ]);
 
   useEffect(() => {

@@ -29,11 +29,11 @@ export interface GanttByTaskProps extends GanttCommonProps {
   /** Id */
   id: string;
   /** Rows to display in chart */
-  projects: GanttTask[] | Detail[];
+  items: GanttTask[] | Detail[];
   /** Current date indicator */
   currentDateIndicator?: CurrentDateIndicator;
-  mainGanttStartDate: string;
-  mainGanttEndDate: string;
+  displayedStartDate: string;
+  displayedEndDate: string;
   /** Projections */
   projection?: GanttPhaseProjection;
   /** Invoked on bar click. */

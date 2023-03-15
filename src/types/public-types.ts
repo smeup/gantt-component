@@ -95,6 +95,9 @@ export interface DisplayOption {
    */
   locale?: string;
   rtl?: boolean;
+  /** Gantt date range */
+  displayedStartDate: Date;
+  displayedEndDate: Date;
 }
 
 export interface StylingOption {
@@ -186,8 +189,6 @@ export interface GanttProps
     CustomOptions {
   id: string;
   tasks: Task[];
-  mainGanttStartDate: Date;
-  mainGanttEndDate: Date;
   projection?: GanttPhaseProjection;
 }
 

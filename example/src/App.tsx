@@ -1,195 +1,1692 @@
-import React from "react";
-import { Gantt, Task, ViewMode } from "@sme.up/gantt-component";
-import { ViewSwitcher } from "./components/view-switcher";
-import { getStartEndDateForProject, initTasks } from "./helper";
+import React, { useState } from "react";
+import {
+  Detail,
+  GanttPlannerDetailsProps,
+  GanttPlannerProps,
+  GanttRow,
+  GanttTask,
+  Planner,
+  PlannerProps,
+} from "@sme.up/gantt-component";
 import "@sme.up/gantt-component/dist/index.css";
 
-const App = () => {
-  const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
-  const [tasks, setTasks] = React.useState<Task[]>(initTasks());
-  const [doubleView, setDoubleView] = React.useState(true);
-  const [showArrows, setShowArrows] = React.useState(false);
+const AppPlanner = () => {
+  const [jsonData, setJsonData] = useState<GanttTask[] | Detail[]>(
+    ganttPlannerProps.items
+  );
+  const [clicked, setClicked] = useState(false);
 
-  const [isChecked, setIsChecked] = React.useState(true);
-  let columnWidth = 20;
-  if (view === ViewMode.Year) {
-    columnWidth = 250;
-  } else if (view === ViewMode.Month) {
-    columnWidth = 200;
-  } else if (view === ViewMode.Week) {
-    columnWidth = 100;
-  }
-
-  const handleTaskChange = (task: Task) => {
-    console.log("app.tsx On date change Id:" + task.id);
-    let newTasks = tasks.map(t => (t.id === task.id ? task : t));
-    if (task.project) {
-      const [start, end] = getStartEndDateForProject(newTasks, task.project);
-      const project = newTasks[newTasks.findIndex(t => t.id === task.project)];
-      if (
-        project.start.getTime() !== start.getTime() ||
-        project.end.getTime() !== end.getTime()
-      ) {
-        const changedProject = { ...project, start, end };
-        newTasks = newTasks.map(t =>
-          t.id === task.project ? changedProject : t
-        );
-      }
+  const mainGanttClickHandler = (row: GanttRow) => {
+    console.log("appplanner.tsx " + row.name);
+    if (clicked) {
+      setJsonData(ganttPlannerProps.items);
+    } else {
+      setJsonData(mockDataTasksSelected);
     }
-    setTasks(newTasks);
+    setClicked(!clicked);
   };
 
-  const handleTaskDelete = (task: Task) => {
-    const conf = window.confirm("Are you sure about " + task.name + " ?");
-    if (conf) {
-      setTasks(tasks.filter(t => t.id !== task.id));
-    }
-    return conf;
+  const secondaryGanttClickHandler = (row: GanttRow) => {
+    console.log("Clicked", row.id);
   };
 
-  const handleProgressChange = async (task: Task) => {
-    setTasks(tasks.map(t => (t.id === task.id ? task : t)));
-    console.log("app.tsx On progress change Id:" + task.id);
-  };
+  const plannerProps: PlannerProps = {
+    mainGantt: {
+      ...ganttPlannerProps,
+      items: jsonData,
+      title: "Main Gantt",
 
-  const handleDblClick = (task: Task) => {
-    alert("On Double Click event Id:" + task.id);
-  };
-
-  const handleClick = (task: Task) => {
-    console.log("app.tsx On Click event Id:" + task.id);
-  };
-
-  const handleSelect = (task: Task, isSelected: boolean) => {
-    console.log(
-      "app.tsx " +
-        task.name +
-        " has " +
-        (isSelected ? "selected" : "unselected")
-    );
-  };
-
-  const handleExpanderClick = (task: Task) => {
-    setTasks(tasks.map(t => (t.id === task.id ? task : t)));
-    console.log("app.tsx On expander click Id:" + task.id);
+      onClick: mainGanttClickHandler,
+    },
+    secondaryGantt: {
+      ...ganttPlannerDetailsProps,
+      onClick: secondaryGanttClickHandler,
+    },
   };
 
   return (
-    <div className="Wrapper">
-      <ViewSwitcher
-        onViewModeChange={viewMode => setView(viewMode)}
-        onViewListChange={setIsChecked}
-        isChecked={isChecked}
-      >
-        <div
-          style={{
-            border: "1px solid #ccd",
-            display: "flex",
-            gap: 12,
-            marginRight: 12,
-            padding: 6,
-          }}
-        >
-          <label htmlFor="arrows">
-            <input
-              id="arrows"
-              type="checkbox"
-              defaultChecked={showArrows}
-              onClick={() => setShowArrows(!showArrows)}
-            />
-            Show dependencies
-          </label>
-          <label htmlFor="ch2">
-            <input
-              id="ch2"
-              type="checkbox"
-              defaultChecked={doubleView}
-              onClick={() => setDoubleView(!doubleView)}
-            />
-            View 2 lines
-          </label>
-        </div>
-      </ViewSwitcher>
-
-      <div style={{ padding: 3, border: "1px solid violet" }}>
-        <h2>Customized Gantt</h2>
-        <Gantt
-          id="1"
-          locale="it"
-          singleLineHeader
-          hideLabel
-          todayColor="red"
-          showSecondaryDates={doubleView}
-          hideDependencies={!showArrows}
-          dateTimeFormatters={{
-            year: (date: Date) => "A.D. " + date.getFullYear(),
-            month: (date: Date, locale: string) =>
-              date.toLocaleString(locale, { month: "short" }).toUpperCase() +
-              ".",
-            monthAndYear: (date: Date, locale: string) =>
-              date.toLocaleString(locale, { month: "short" }) +
-              " '" +
-              (date.getFullYear() % 100),
-            day: (date: Date) => `${date.getDate()}`,
-            dayAndMonth: (date: Date, locale: string) =>
-              date.toLocaleString(locale, { day: "numeric" }).toUpperCase(),
-          }}
-          tasks={tasks}
-          viewMode={view}
-          onDateChange={handleTaskChange}
-          onDelete={handleTaskDelete}
-          onProgressChange={handleProgressChange}
-          onDoubleClick={handleDblClick}
-          onClick={handleClick}
-          onSelect={handleSelect}
-          onExpanderClick={handleExpanderClick}
-          columnWidth={columnWidth}
-          listCellWidth={isChecked ? "155px" : ""}
-          rowHeight={25 /* smaller rows */}
-          barFill={99 /* bar fills entire height of row */}
-          projectFill={66}
-          timelineFill={33}
-          barCornerRadius={0}
-        />
-      </div>
-
-      <details>
-        <summary>Default styles</summary>
-        <h3>Gantt With Unlimited Height</h3>
-        <Gantt
-          id="1"
-          locale="it"
-          tasks={tasks}
-          viewMode={view}
-          onDateChange={handleTaskChange}
-          onDelete={handleTaskDelete}
-          onProgressChange={handleProgressChange}
-          onDoubleClick={handleDblClick}
-          onClick={handleClick}
-          onSelect={handleSelect}
-          onExpanderClick={handleExpanderClick}
-          listCellWidth={isChecked ? "155px" : ""}
-          columnWidth={columnWidth}
-        />
-        <h3>Gantt With Limited Height</h3>
-        <Gantt
-          id="1"
-          tasks={tasks}
-          viewMode={view}
-          onDateChange={handleTaskChange}
-          onDelete={handleTaskDelete}
-          onProgressChange={handleProgressChange}
-          onDoubleClick={handleDblClick}
-          onClick={handleClick}
-          onSelect={handleSelect}
-          onExpanderClick={handleExpanderClick}
-          listCellWidth={isChecked ? "155px" : ""}
-          ganttHeight={300}
-          columnWidth={columnWidth}
-        />
-      </details>
-    </div>
+    <React.StrictMode>
+      <Planner {...plannerProps} />
+    </React.StrictMode>
   );
 };
 
-export default App;
+const ganttPlannerProps: GanttPlannerProps = {
+  items: [
+    {
+      id: "1",
+      name: "G456",
+      startDate: "2021-10-25",
+      endDate: "2023-07-04",
+      secondaryStartDate: "2021-10-25",
+      secondaryEndDate: "2023-03-07",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G456", "#START#", "#END#"],
+    },
+    {
+      id: "2",
+      name: "G460",
+      startDate: "2021-10-20",
+      endDate: "2023-04-07",
+      secondaryStartDate: "2021-10-20",
+      secondaryEndDate: "2022-12-16",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G460", "#START#", "#END#"],
+    },
+    {
+      id: "3",
+      name: "G452",
+      startDate: "2022-01-03",
+      endDate: "2023-06-30",
+      secondaryStartDate: "2022-01-03",
+      secondaryEndDate: "2023-03-06",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G452", "#START#", "#END#"],
+    },
+    {
+      id: "4",
+      name: "G453",
+      startDate: "2022-01-03",
+      endDate: "2023-06-30",
+      secondaryStartDate: "2022-01-03",
+      secondaryEndDate: "2023-07-06",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G453", "#START#", "#END#"],
+    },
+    {
+      id: "5",
+      name: "G458",
+      startDate: "2021-11-02",
+      endDate: "2023-04-04",
+      secondaryStartDate: "2021-11-02",
+      secondaryEndDate: "2022-10-19",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G458", "#START#", "#END#"],
+    },
+    {
+      id: "6",
+      name: "G462",
+      startDate: "2021-12-15",
+      endDate: "2023-07-07",
+      secondaryStartDate: "2021-12-15",
+      secondaryEndDate: "2023-03-06",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G462", "#START#", "#END#"],
+    },
+    {
+      id: "7",
+      name: "G465",
+
+      startDate: "2021-12-08",
+      endDate: "2023-07-07",
+      secondaryStartDate: "2021-12-08",
+      secondaryEndDate: "2023-02-17",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G465", "#START#", "#END#"],
+    },
+    {
+      id: "8",
+      name: "G466",
+      startDate: "2022-01-20",
+      endDate: "2023-07-07",
+      secondaryStartDate: "2022-01-20",
+      secondaryEndDate: "2023-02-24",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G466", "#START#", "#END#"],
+    },
+    {
+      id: "9",
+      name: "G468",
+      startDate: "2022-02-02",
+      endDate: "2023-07-21",
+      secondaryStartDate: "2022-02-02",
+      secondaryEndDate: "2023-03-03",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G468", "#START#", "#END#"],
+    },
+    {
+      id: "10",
+      name: "G469",
+      startDate: "2021-11-02",
+      endDate: "2023-07-21",
+      secondaryStartDate: "2021-11-02",
+      secondaryEndDate: "2023-06-16",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G469", "#START#", "#END#"],
+    },
+    {
+      id: "11",
+      name: "G418",
+      startDate: "2022-01-20",
+      endDate: "2023-10-06",
+      secondaryStartDate: "2022-01-20",
+      secondaryEndDate: "2023-01-20",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G418", "#START#", "#END#"],
+    },
+    {
+      id: "12",
+      name: "G471",
+      startDate: "2022-02-21",
+      endDate: "2023-07-28",
+      secondaryStartDate: "2022-02-21",
+      secondaryEndDate: "2023-02-27",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G471", "#START#", "#END#"],
+    },
+    {
+      id: "13",
+      name: "G472",
+      startDate: "2022-04-02",
+      endDate: "2023-09-29",
+      secondaryStartDate: "2022-04-02",
+      secondaryEndDate: "2023-05-12",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G472", "#START#", "#END#"],
+    },
+    {
+      id: "14",
+      name: "G474",
+      startDate: "2022-01-07",
+      endDate: "2023-04-14",
+      secondaryStartDate: "2022-01-07",
+      secondaryEndDate: "2023-03-09",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G474", "#START#", "#END#"],
+    },
+    {
+      id: "15",
+      name: "G480",
+      startDate: "2021-11-20",
+      endDate: "2023-07-21",
+      secondaryStartDate: "2021-11-20",
+      secondaryEndDate: "2023-05-03",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G480", "#START#", "#END#"],
+    },
+    {
+      id: "16",
+      name: "G470",
+      startDate: "2022-01-15",
+      endDate: "2023-05-19",
+      secondaryStartDate: "2022-01-15",
+      secondaryEndDate: "2023-02-17",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G470", "#START#", "#END#"],
+    },
+    {
+      id: "17",
+      name: "G481",
+      startDate: "2022-05-20",
+      endDate: "2023-07-21",
+      secondaryStartDate: "2022-05-20",
+      secondaryEndDate: "2023-05-23",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G481", "#START#", "#END#"],
+    },
+    {
+      id: "18",
+      name: "G473",
+      startDate: "2022-05-20",
+      endDate: "2023-10-13",
+      secondaryStartDate: "2022-05-20",
+      secondaryEndDate: "2023-08-01",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G473", "#START#", "#END#"],
+    },
+    {
+      id: "19",
+      name: "G482",
+      startDate: "2022-03-15",
+      endDate: "2023-09-08",
+      secondaryStartDate: "2022-03-15",
+      secondaryEndDate: "2023-03-27",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G482", "#START#", "#END#"],
+    },
+    {
+      id: "20",
+      name: "G483",
+      startDate: "2022-03-15",
+      endDate: "2023-11-03",
+      secondaryStartDate: "2022-03-15",
+      secondaryEndDate: "2023-10-30",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G483", "#START#", "#END#"],
+    },
+    {
+      id: "21",
+      name: "G487",
+      startDate: "2022-05-02",
+      endDate: "2024-02-23",
+      secondaryStartDate: "2022-05-02",
+      secondaryEndDate: "2023-11-30",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G487", "#START#", "#END#"],
+    },
+    {
+      id: "22",
+      name: "G488",
+      startDate: "2023-03-01",
+      endDate: "2023-03-01",
+      secondaryStartDate: "2023-03-01",
+      secondaryEndDate: "2023-03-01",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G488", "#START#", "#END#"],
+    },
+    {
+      id: "23",
+      name: "G489",
+      startDate: "2023-03-01",
+      endDate: "2023-03-01",
+      secondaryStartDate: "2023-03-01",
+      secondaryEndDate: "2023-03-01",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G489", "#START#", "#END#"],
+    },
+    {
+      id: "24",
+      name: "G490",
+      startDate: "2023-03-01",
+      endDate: "2023-03-01",
+      secondaryStartDate: "2023-03-01",
+      secondaryEndDate: "2023-03-01",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G490", "#START#", "#END#"],
+    },
+    {
+      id: "25",
+      name: "G491",
+      startDate: "2023-03-01",
+      endDate: "2023-03-01",
+      secondaryStartDate: "2023-03-01",
+      secondaryEndDate: "2023-03-01",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G491", "#START#", "#END#"],
+    },
+    {
+      id: "26",
+      name: "G492",
+      startDate: "2022-09-01",
+      endDate: "2024-02-09",
+      secondaryStartDate: "2022-09-01",
+      secondaryEndDate: "2023-12-22",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G492", "#START#", "#END#"],
+    },
+    {
+      id: "27",
+      name: "G493",
+      startDate: "2022-10-20",
+      endDate: "2024-02-09",
+      secondaryStartDate: "2022-10-20",
+      secondaryEndDate: "2024-01-10",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G493", "#START#", "#END#"],
+    },
+    {
+      id: "28",
+      name: "G495",
+      startDate: "2022-04-15",
+      endDate: "2024-01-26",
+      secondaryStartDate: "2022-04-15",
+      secondaryEndDate: "2023-11-07",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G495", "#START#", "#END#"],
+    },
+    {
+      id: "29",
+      name: "G496",
+      startDate: "2022-01-07",
+      endDate: "2023-09-07",
+      secondaryStartDate: "2022-01-07",
+      secondaryEndDate: "2023-07-27",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G496", "#START#", "#END#"],
+    },
+    {
+      id: "30",
+      name: "G484",
+      startDate: "2021-12-05",
+      endDate: "2023-04-06",
+      secondaryStartDate: "2021-12-05",
+      secondaryEndDate: "2023-04-07",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G484", "#START#", "#END#"],
+    },
+    {
+      id: "31",
+      name: "G485",
+      startDate: "2022-02-25",
+      endDate: "2024-01-16",
+      secondaryStartDate: "2022-02-25",
+      secondaryEndDate: "2023-10-16",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G485", "#START#", "#END#"],
+    },
+    {
+      id: "32",
+      name: "G497",
+      startDate: "2022-09-02",
+      endDate: "2024-01-19",
+      secondaryStartDate: "2022-09-02",
+      secondaryEndDate: "2023-12-05",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G497", "#START#", "#END#"],
+    },
+    {
+      id: "33",
+      name: "G498",
+      startDate: "2022-11-02",
+      endDate: "2024-03-29",
+      secondaryStartDate: "2022-11-02",
+      secondaryEndDate: "2024-02-07",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G498", "#START#", "#END#"],
+    },
+    {
+      id: "34",
+      name: "G477",
+      startDate: "2022-05-02",
+      endDate: "2023-07-28",
+      secondaryStartDate: "2022-05-02",
+      secondaryEndDate: "2023-06-06",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G477", "#START#", "#END#"],
+    },
+    {
+      id: "35",
+      name: "G478",
+      startDate: "2022-05-02",
+      endDate: "2023-12-01",
+      secondaryStartDate: "2022-05-02",
+      secondaryEndDate: "2023-11-17",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G478", "#START#", "#END#"],
+    },
+    {
+      id: "36",
+      name: "G479",
+      startDate: "2022-05-02",
+      endDate: "2024-07-05",
+      secondaryStartDate: "2022-05-02",
+      secondaryEndDate: "2024-06-26",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G479", "#START#", "#END#"],
+    },
+    {
+      id: "37",
+      name: "G486",
+      startDate: "2022-05-20",
+      endDate: "2023-07-07",
+      secondaryStartDate: "2022-05-20",
+      secondaryEndDate: "2023-04-27",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G486", "#START#", "#END#"],
+    },
+    {
+      id: "38",
+      name: "G499",
+      startDate: "2022-09-15",
+      endDate: "2024-05-03",
+      secondaryStartDate: "2022-09-15",
+      secondaryEndDate: "2024-01-24",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G499", "#START#", "#END#"],
+    },
+    {
+      id: "39",
+      name: "G501",
+      startDate: "2022-09-02",
+      endDate: "2024-05-31",
+      secondaryStartDate: "2022-09-02",
+      secondaryEndDate: "2024-04-16",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G501", "#START#", "#END#"],
+    },
+    {
+      id: "40",
+      name: "G502",
+      startDate: "2022-09-02",
+      endDate: "2024-05-31",
+      secondaryStartDate: "2022-09-02",
+      secondaryEndDate: "2024-05-24",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G502", "#START#", "#END#"],
+    },
+    {
+      id: "41",
+      name: "G504",
+      startDate: "2022-10-20",
+      endDate: "2024-05-24",
+      secondaryStartDate: "2022-10-20",
+      secondaryEndDate: "2024-04-22",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G504", "#START#", "#END#"],
+    },
+    {
+      id: "42",
+      name: "G507",
+      startDate: "2022-10-20",
+      endDate: "2023-12-22",
+      secondaryStartDate: "2022-10-20",
+      secondaryEndDate: "2024-02-05",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G507", "#START#", "#END#"],
+    },
+    {
+      id: "43",
+      name: "G509",
+      startDate: "2022-11-15",
+      endDate: "2023-12-22",
+      secondaryStartDate: "2022-11-15",
+      secondaryEndDate: "2024-02-02",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G509", "#START#", "#END#"],
+    },
+    {
+      id: "44",
+      name: "G503",
+      startDate: "2022-10-17",
+      endDate: "2024-02-23",
+      secondaryStartDate: "2022-10-17",
+      secondaryEndDate: "2023-11-20",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G503", "#START#", "#END#"],
+    },
+    {
+      id: "45",
+      name: "G510",
+      startDate: "2022-12-02",
+      endDate: "2024-04-19",
+      secondaryStartDate: "2022-12-02",
+      secondaryEndDate: "2024-04-15",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G510", "#START#", "#END#"],
+    },
+    {
+      id: "46",
+      name: "G511",
+      startDate: "2022-09-15",
+      endDate: "2024-05-31",
+      secondaryStartDate: "2022-09-15",
+      secondaryEndDate: "2024-05-08",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G511", "#START#", "#END#"],
+    },
+    {
+      id: "47",
+      name: "G505",
+      startDate: "2022-08-02",
+      endDate: "2024-06-21",
+      secondaryStartDate: "2022-08-02",
+      secondaryEndDate: "2024-05-21",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G505", "#START#", "#END#"],
+    },
+    {
+      id: "48",
+      name: "G508",
+      startDate: "2022-11-14",
+      endDate: "2024-03-22",
+      secondaryStartDate: "2022-11-14",
+      secondaryEndDate: "2024-03-01",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G508", "#START#", "#END#"],
+    },
+    {
+      id: "49",
+      name: "G494",
+      startDate: "2022-11-14",
+      endDate: "2024-01-26",
+      secondaryStartDate: "2022-11-14",
+      secondaryEndDate: "2023-12-07",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G494", "#START#", "#END#"],
+    },
+    {
+      id: "50",
+      name: "G515",
+      startDate: "2022-11-29",
+      endDate: "2024-12-20",
+      secondaryStartDate: "2022-11-29",
+      secondaryEndDate: "2024-12-23",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G515", "#START#", "#END#"],
+    },
+    {
+      id: "51",
+      name: "G519",
+      startDate: "2023-03-01",
+      endDate: "2023-03-01",
+      secondaryStartDate: "2023-03-01",
+      secondaryEndDate: "2023-03-01",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G519", "#START#", "#END#"],
+    },
+    {
+      id: "52",
+      name: "G523",
+      startDate: "2023-03-01",
+      endDate: "2023-03-01",
+      secondaryStartDate: "2023-03-01",
+      secondaryEndDate: "2023-03-01",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G523", "#START#", "#END#"],
+    },
+    {
+      id: "53",
+      name: "G520",
+      startDate: "2023-03-01",
+      endDate: "2023-03-01",
+      secondaryStartDate: "2023-03-01",
+      secondaryEndDate: "2023-03-01",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G520", "#START#", "#END#"],
+    },
+    {
+      id: "54",
+      name: "G521",
+      startDate: "2023-03-01",
+      endDate: "2023-03-01",
+      secondaryStartDate: "2023-03-01",
+      secondaryEndDate: "2023-03-01",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G521", "#START#", "#END#"],
+    },
+    {
+      id: "55",
+      name: "G518",
+      startDate: "2023-03-01",
+      endDate: "2023-03-01",
+      secondaryStartDate: "2023-03-01",
+      secondaryEndDate: "2023-03-01",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G518", "#START#", "#END#"],
+    },
+    {
+      id: "56",
+      name: "G522",
+      startDate: "2023-03-01",
+      endDate: "2023-03-01",
+      secondaryStartDate: "2023-03-01",
+      secondaryEndDate: "2023-03-01",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G522", "#START#", "#END#"],
+    },
+    {
+      id: "57",
+      name: "G516",
+      startDate: "2023-03-01",
+      endDate: "2023-03-01",
+      secondaryStartDate: "2023-03-01",
+      secondaryEndDate: "2023-03-01",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G516", "#START#", "#END#"],
+    },
+    {
+      id: "58",
+      name: "G517",
+      startDate: "2023-03-01",
+      endDate: "2023-03-01",
+      secondaryStartDate: "2023-03-01",
+      secondaryEndDate: "2023-03-01",
+      type: "project",
+      phases: [],
+      details: [],
+      valuesToShow: ["G517", "#START#", "#END#"],
+    },
+  ],
+  stylingOptions: {
+    listCellWidth: "297px",
+    rowHeight: 40,
+    barFill: 90,
+    projectProgressColor: "#CBCBCB",
+    projectProgressSelectedColor: "#CBCBCB",
+    projectBackgroundColor: "#CBCBCB",
+    projectBackgroundSelectedColor: "#CBCBCB",
+    barProgressColor: "#A2A415",
+    barProgressSelectedColor: "#A2A415",
+    barBackgroundColor: "#A2A415",
+    barBackgroundSelectedColor: "#A2A415",
+  },
+  hideLabel: true,
+  showSecondaryDates: false,
+  ganttHeight: 350,
+  hideDependencies: true,
+  title: "",
+
+};
+
+const mockDataTasksSelected: GanttTask[] = [
+  {
+    id: "1",
+    name: "G456",
+    startDate: "2021-10-25",
+    endDate: "2023-07-04",
+    secondaryStartDate: "2021-10-25",
+    secondaryEndDate: "2023-03-07",
+    type: "project",
+    valuesToShow: ["G456", "#START#", "#END#"],
+    phases: [
+      {
+        id: "P410           ",
+        name: "P410           ",
+        startDate: "2022-10-17",
+        endDate: "2023-03-10",
+        secondaryStartDate: "2022-11-07",
+        secondaryEndDate: "2022-11-04",
+        color: "#ED7D31",
+        selectedColor: "#ED7D31",
+        valuesToShow: ["P410", "#START#", "#END#"],
+        dependencies: [],
+        type: "task",
+      },
+      {
+        id: "P420           ",
+        name: "P420           ",
+        startDate: "2022-11-21",
+        endDate: "2023-03-10",
+        secondaryStartDate: "2023-01-13",
+        secondaryEndDate: "2022-11-11",
+        color: "#FF0000",
+        selectedColor: "#FF0000",
+        valuesToShow: ["P420", "#START#", "#END#"],
+        dependencies: [],
+        type: "task",
+      },
+      {
+        id: "P610           ",
+        name: "P610           ",
+        startDate: "2023-03-27",
+        endDate: "2023-04-14",
+        secondaryStartDate: "2023-03-01",
+        secondaryEndDate: "2023-01-02",
+        color: "#70AD47",
+        selectedColor: "#70AD47",
+        valuesToShow: ["P610", "#START#", "#END#"],
+        dependencies: ["P410           "],
+        type: "task",
+      },
+      {
+        id: "P620           ",
+        name: "P620           ",
+        startDate: "2023-03-27",
+        endDate: "2023-04-14",
+        secondaryStartDate: "2023-03-01",
+        secondaryEndDate: "2022-11-30",
+        color: "#C6E0B4",
+        selectedColor: "#C6E0B4",
+        valuesToShow: ["P620", "#START#", "#END#"],
+        dependencies: ["P410           "],
+        type: "task",
+      },
+      {
+        id: "P630           ",
+        name: "P630           ",
+        startDate: "2023-03-20",
+        endDate: "2023-04-07",
+        secondaryStartDate: "2023-03-01",
+        secondaryEndDate: "2022-12-21",
+        color: "#BDD7EE",
+        selectedColor: "#BDD7EE",
+        valuesToShow: ["P630", "#START#", "#END#"],
+        dependencies: ["P410           "],
+        type: "task",
+      },
+      {
+        id: "P710           ",
+        name: "P710           ",
+        startDate: "2023-04-17",
+        endDate: "2023-04-28",
+        secondaryStartDate: "2023-03-01",
+        secondaryEndDate: "2023-01-10",
+        color: "#FFFF00",
+        selectedColor: "#FFFF00",
+        valuesToShow: ["P710", "#START#", "#END#"],
+        dependencies: ["P610           "],
+        type: "task",
+      },
+      {
+        id: "P720           ",
+        name: "P720           ",
+        startDate: "2023-05-02",
+        endDate: "2023-05-10",
+        secondaryStartDate: "2023-03-01",
+        secondaryEndDate: "2023-01-17",
+        color: "#BDD7EE",
+        selectedColor: "#BDD7EE",
+        valuesToShow: ["P720", "#START#", "#END#"],
+        dependencies: ["P710           "],
+        type: "task",
+      },
+      {
+        id: "P730           ",
+        name: "P730           ",
+        startDate: "2023-05-17",
+        endDate: "2023-05-30",
+        secondaryStartDate: "2023-03-01",
+        secondaryEndDate: "2023-01-31",
+        color: "#F8CBAD",
+        selectedColor: "#F8CBAD",
+        valuesToShow: ["P730", "#START#", "#END#"],
+        dependencies: ["P720           "],
+        type: "task",
+      },
+      {
+        id: "P750           ",
+        name: "P750           ",
+        startDate: "2023-05-31",
+        endDate: "2023-07-04",
+        secondaryStartDate: "2023-03-01",
+        secondaryEndDate: "2023-03-07",
+        color: "#7030A0",
+        selectedColor: "#7030A0",
+        valuesToShow: ["P750", "#START#", "#END#"],
+        dependencies: ["P730           "],
+        type: "task",
+      },
+    ],
+  },
+  {
+    id: "2",
+    name: "G460",
+
+    startDate: "2021-10-20",
+    endDate: "2023-04-07",
+    secondaryStartDate: "2021-10-20",
+    secondaryEndDate: "2022-12-16",
+    type: "project",
+    valuesToShow: ["G460", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "3",
+    name: "G452",
+
+    startDate: "2022-01-03",
+    endDate: "2023-06-30",
+    secondaryStartDate: "2022-01-03",
+    secondaryEndDate: "2023-03-06",
+    type: "project",
+    valuesToShow: ["G452", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "4",
+    name: "G453",
+
+    startDate: "2022-01-03",
+    endDate: "2023-06-30",
+    secondaryStartDate: "2022-01-03",
+    secondaryEndDate: "2023-07-06",
+    type: "project",
+    valuesToShow: ["G453", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "5",
+    name: "G458",
+
+    startDate: "2021-11-02",
+    endDate: "2023-04-04",
+    secondaryStartDate: "2021-11-02",
+    secondaryEndDate: "2022-10-19",
+    type: "project",
+    valuesToShow: ["G458", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "6",
+    name: "G462",
+
+    startDate: "2021-12-15",
+    endDate: "2023-07-07",
+    secondaryStartDate: "2021-12-15",
+    secondaryEndDate: "2023-03-06",
+    type: "project",
+    valuesToShow: ["G462", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "7",
+    name: "G465",
+
+    startDate: "2021-12-08",
+    endDate: "2023-07-07",
+    secondaryStartDate: "2021-12-08",
+    secondaryEndDate: "2023-02-17",
+    type: "project",
+    valuesToShow: ["G465", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "8",
+    name: "G466",
+
+    startDate: "2022-01-20",
+    endDate: "2023-07-07",
+    secondaryStartDate: "2022-01-20",
+    secondaryEndDate: "2023-02-24",
+    type: "project",
+    valuesToShow: ["G466", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "9",
+    name: "G468",
+
+    startDate: "2022-02-02",
+    endDate: "2023-07-21",
+    secondaryStartDate: "2022-02-02",
+    secondaryEndDate: "2023-03-03",
+    type: "project",
+    valuesToShow: ["G468", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "10",
+    name: "G469",
+
+    startDate: "2021-11-02",
+    endDate: "2023-07-21",
+    secondaryStartDate: "2021-11-02",
+    secondaryEndDate: "2023-06-16",
+    type: "project",
+    valuesToShow: ["G469", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "11",
+    name: "G418",
+
+    startDate: "2022-01-20",
+    endDate: "2023-10-06",
+    secondaryStartDate: "2022-01-20",
+    secondaryEndDate: "2023-01-20",
+    type: "project",
+    valuesToShow: ["G418", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "12",
+    name: "G471",
+
+    startDate: "2022-02-21",
+    endDate: "2023-07-28",
+    secondaryStartDate: "2022-02-21",
+    secondaryEndDate: "2023-02-27",
+    type: "project",
+    valuesToShow: ["G471", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "13",
+    name: "G472",
+
+    startDate: "2022-04-02",
+    endDate: "2023-09-29",
+    secondaryStartDate: "2022-04-02",
+    secondaryEndDate: "2023-05-12",
+    type: "project",
+    valuesToShow: ["G472", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "14",
+    name: "G474",
+
+    startDate: "2022-01-07",
+    endDate: "2023-04-14",
+    secondaryStartDate: "2022-01-07",
+    secondaryEndDate: "2023-03-09",
+    type: "project",
+    valuesToShow: ["G474", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "15",
+    name: "G480",
+
+    startDate: "2021-11-20",
+    endDate: "2023-07-21",
+    secondaryStartDate: "2021-11-20",
+    secondaryEndDate: "2023-05-03",
+    type: "project",
+    valuesToShow: ["G480", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "16",
+    name: "G470",
+
+    startDate: "2022-01-15",
+    endDate: "2023-05-19",
+    secondaryStartDate: "2022-01-15",
+    secondaryEndDate: "2023-02-17",
+    type: "project",
+    valuesToShow: ["G470", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "17",
+    name: "G481",
+
+    startDate: "2022-05-20",
+    endDate: "2023-07-21",
+    secondaryStartDate: "2022-05-20",
+    secondaryEndDate: "2023-05-23",
+    type: "project",
+    valuesToShow: ["G481", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "18",
+    name: "G473",
+
+    startDate: "2022-05-20",
+    endDate: "2023-10-13",
+    secondaryStartDate: "2022-05-20",
+    secondaryEndDate: "2023-08-01",
+    type: "project",
+    valuesToShow: ["G473", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "19",
+    name: "G482",
+
+    startDate: "2022-03-15",
+    endDate: "2023-09-08",
+    secondaryStartDate: "2022-03-15",
+    secondaryEndDate: "2023-03-27",
+    type: "project",
+    valuesToShow: ["G482", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "20",
+    name: "G483",
+
+    startDate: "2022-03-15",
+    endDate: "2023-11-03",
+    secondaryStartDate: "2022-03-15",
+    secondaryEndDate: "2023-10-30",
+    type: "project",
+    valuesToShow: ["G483", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "21",
+    name: "G487",
+
+    startDate: "2022-05-02",
+    endDate: "2024-02-23",
+    secondaryStartDate: "2022-05-02",
+    secondaryEndDate: "2023-11-30",
+    type: "project",
+    valuesToShow: ["G487", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "22",
+    name: "G488",
+
+    startDate: "2023-03-01",
+    endDate: "2023-03-01",
+    secondaryStartDate: "2023-03-01",
+    secondaryEndDate: "2023-03-01",
+    type: "project",
+    valuesToShow: ["G488", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "23",
+    name: "G489",
+
+    startDate: "2023-03-01",
+    endDate: "2023-03-01",
+    secondaryStartDate: "2023-03-01",
+    secondaryEndDate: "2023-03-01",
+    type: "project",
+    valuesToShow: ["G489", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "24",
+    name: "G490",
+
+    startDate: "2023-03-01",
+    endDate: "2023-03-01",
+    secondaryStartDate: "2023-03-01",
+    secondaryEndDate: "2023-03-01",
+    type: "project",
+    valuesToShow: ["G490", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "25",
+    name: "G491",
+
+    startDate: "2023-03-01",
+    endDate: "2023-03-01",
+    secondaryStartDate: "2023-03-01",
+    secondaryEndDate: "2023-03-01",
+    type: "project",
+    valuesToShow: ["G491", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "26",
+    name: "G492",
+
+    startDate: "2022-09-01",
+    endDate: "2024-02-09",
+    secondaryStartDate: "2022-09-01",
+    secondaryEndDate: "2023-12-22",
+    type: "project",
+    valuesToShow: ["G492", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "27",
+    name: "G493",
+
+    startDate: "2022-10-20",
+    endDate: "2024-02-09",
+    secondaryStartDate: "2022-10-20",
+    secondaryEndDate: "2024-01-10",
+    type: "project",
+    valuesToShow: ["G493", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "28",
+    name: "G495",
+
+    startDate: "2022-04-15",
+    endDate: "2024-01-26",
+    secondaryStartDate: "2022-04-15",
+    secondaryEndDate: "2023-11-07",
+    type: "project",
+    valuesToShow: ["G495", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "29",
+    name: "G496",
+
+    startDate: "2022-01-07",
+    endDate: "2023-09-07",
+    secondaryStartDate: "2022-01-07",
+    secondaryEndDate: "2023-07-27",
+    type: "project",
+    valuesToShow: ["G496", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "30",
+    name: "G484",
+
+    startDate: "2021-12-05",
+    endDate: "2023-04-06",
+    secondaryStartDate: "2021-12-05",
+    secondaryEndDate: "2023-04-07",
+    type: "project",
+    valuesToShow: ["G484", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "31",
+    name: "G485",
+
+    startDate: "2022-02-25",
+    endDate: "2024-01-16",
+    secondaryStartDate: "2022-02-25",
+    secondaryEndDate: "2023-10-16",
+    type: "project",
+    valuesToShow: ["G485", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "32",
+    name: "G497",
+
+    startDate: "2022-09-02",
+    endDate: "2024-01-19",
+    secondaryStartDate: "2022-09-02",
+    secondaryEndDate: "2023-12-05",
+    type: "project",
+    valuesToShow: ["G497", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "33",
+    name: "G498",
+
+    startDate: "2022-11-02",
+    endDate: "2024-03-29",
+    secondaryStartDate: "2022-11-02",
+    secondaryEndDate: "2024-02-07",
+    type: "project",
+    valuesToShow: ["G498", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "34",
+    name: "G477",
+
+    startDate: "2022-05-02",
+    endDate: "2023-07-28",
+    secondaryStartDate: "2022-05-02",
+    secondaryEndDate: "2023-06-06",
+    type: "project",
+    valuesToShow: ["G477", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "35",
+    name: "G478",
+
+    startDate: "2022-05-02",
+    endDate: "2023-12-01",
+    secondaryStartDate: "2022-05-02",
+    secondaryEndDate: "2023-11-17",
+    type: "project",
+    valuesToShow: ["G478", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "36",
+    name: "G479",
+
+    startDate: "2022-05-02",
+    endDate: "2024-07-05",
+    secondaryStartDate: "2022-05-02",
+    secondaryEndDate: "2024-06-26",
+    type: "project",
+    valuesToShow: ["G479", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "37",
+    name: "G486",
+
+    startDate: "2022-05-20",
+    endDate: "2023-07-07",
+    secondaryStartDate: "2022-05-20",
+    secondaryEndDate: "2023-04-27",
+    type: "project",
+    valuesToShow: ["G486", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "38",
+    name: "G499",
+
+    startDate: "2022-09-15",
+    endDate: "2024-05-03",
+    secondaryStartDate: "2022-09-15",
+    secondaryEndDate: "2024-01-24",
+    type: "project",
+    valuesToShow: ["G499", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "39",
+    name: "G501",
+
+    startDate: "2022-09-02",
+    endDate: "2024-05-31",
+    secondaryStartDate: "2022-09-02",
+    secondaryEndDate: "2024-04-16",
+    type: "project",
+    valuesToShow: ["G501", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "40",
+    name: "G502",
+
+    startDate: "2022-09-02",
+    endDate: "2024-05-31",
+    secondaryStartDate: "2022-09-02",
+    secondaryEndDate: "2024-05-24",
+    type: "project",
+    valuesToShow: ["G502", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "41",
+    name: "G504",
+
+    startDate: "2022-10-20",
+    endDate: "2024-05-24",
+    secondaryStartDate: "2022-10-20",
+    secondaryEndDate: "2024-04-22",
+    type: "project",
+    valuesToShow: ["G504", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "42",
+    name: "G507",
+
+    startDate: "2022-10-20",
+    endDate: "2023-12-22",
+    secondaryStartDate: "2022-10-20",
+    secondaryEndDate: "2024-02-05",
+    type: "project",
+    valuesToShow: ["G507", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "43",
+    name: "G509",
+
+    startDate: "2022-11-15",
+    endDate: "2023-12-22",
+    secondaryStartDate: "2022-11-15",
+    secondaryEndDate: "2024-02-02",
+    type: "project",
+    valuesToShow: ["G509", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "44",
+    name: "G503",
+
+    startDate: "2022-10-17",
+    endDate: "2024-02-23",
+    secondaryStartDate: "2022-10-17",
+    secondaryEndDate: "2023-11-20",
+    type: "project",
+    valuesToShow: ["G503", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "45",
+    name: "G510",
+
+    startDate: "2022-12-02",
+    endDate: "2024-04-19",
+    secondaryStartDate: "2022-12-02",
+    secondaryEndDate: "2024-04-15",
+    type: "project",
+    valuesToShow: ["G510", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "46",
+    name: "G511",
+
+    startDate: "2022-09-15",
+    endDate: "2024-05-31",
+    secondaryStartDate: "2022-09-15",
+    secondaryEndDate: "2024-05-08",
+    type: "project",
+    valuesToShow: ["G511", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "47",
+    name: "G505",
+
+    startDate: "2022-08-02",
+    endDate: "2024-06-21",
+    secondaryStartDate: "2022-08-02",
+    secondaryEndDate: "2024-05-21",
+    type: "project",
+    valuesToShow: ["G505", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "48",
+    name: "G508",
+    startDate: "2022-11-14",
+    endDate: "2024-03-22",
+    secondaryStartDate: "2022-11-14",
+    secondaryEndDate: "2024-03-01",
+    type: "project",
+    valuesToShow: ["G508", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "49",
+    name: "G494",
+    startDate: "2022-11-14",
+    endDate: "2024-01-26",
+    secondaryStartDate: "2022-11-14",
+    secondaryEndDate: "2023-12-07",
+    type: "project",
+    valuesToShow: ["G494", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "50",
+    name: "G515",
+    startDate: "2022-11-29",
+    endDate: "2024-12-20",
+    secondaryStartDate: "2022-11-29",
+    secondaryEndDate: "2024-12-23",
+    type: "project",
+    valuesToShow: ["G515", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "51",
+    name: "G519",
+    startDate: "2023-03-01",
+    endDate: "2023-03-01",
+    secondaryStartDate: "2023-03-01",
+    secondaryEndDate: "2023-03-01",
+    type: "project",
+    valuesToShow: ["G519", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "52",
+    name: "G523",
+    startDate: "2023-03-01",
+    endDate: "2023-03-01",
+    secondaryStartDate: "2023-03-01",
+    secondaryEndDate: "2023-03-01",
+    type: "project",
+    valuesToShow: ["G523", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "53",
+    name: "G520",
+    startDate: "2023-03-01",
+    endDate: "2023-03-01",
+    secondaryStartDate: "2023-03-01",
+    secondaryEndDate: "2023-03-01",
+    type: "project",
+    valuesToShow: ["G520", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "54",
+    name: "G521",
+    startDate: "2023-03-01",
+    endDate: "2023-03-01",
+    secondaryStartDate: "2023-03-01",
+    secondaryEndDate: "2023-03-01",
+    type: "project",
+    valuesToShow: ["G521", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "55",
+    name: "G518",
+    startDate: "2023-03-01",
+    endDate: "2023-03-01",
+    secondaryStartDate: "2023-03-01",
+    secondaryEndDate: "2023-03-01",
+    type: "project",
+    valuesToShow: ["G518", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "56",
+    name: "G522",
+    startDate: "2023-03-01",
+    endDate: "2023-03-01",
+    secondaryStartDate: "2023-03-01",
+    secondaryEndDate: "2023-03-01",
+    type: "project",
+    valuesToShow: ["G522", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "57",
+    name: "G516",
+    startDate: "2023-03-01",
+    endDate: "2023-03-01",
+    secondaryStartDate: "2023-03-01",
+    secondaryEndDate: "2023-03-01",
+    type: "project",
+    valuesToShow: ["G516", "#START#", "#END#"],
+    phases: [],
+  },
+  {
+    id: "58",
+    name: "G517",
+    startDate: "2023-03-01",
+    endDate: "2023-03-01",
+    secondaryStartDate: "2023-03-01",
+    secondaryEndDate: "2023-03-01",
+    type: "project",
+    valuesToShow: ["G517", "#START#", "#END#"],
+    phases: [],
+  },
+];
+
+const ganttPlannerDetailsProps: GanttPlannerDetailsProps = {
+  items: [
+    {
+      id: "RIS1",
+      name: "Risorsa 1",
+      schedule: [
+        { startDate: "2023-01-01", endDate: "2023-02-01", color: "#ff0000" },
+        { startDate: "2023-03-01", endDate: "2023-04-01", color: "#ff0000" },
+      ],
+      type: "timeline",
+      valuesToShow: ["Risorsa 1"],
+    },
+    {
+      id: "RIS2",
+      name: "Risorsa 2",
+      schedule: [
+        { startDate: "2023-01-10", endDate: "2023-02-10", color: "#ff0000" },
+        { startDate: "2023-03-10", endDate: "2023-04-10", color: "#ff0000" },
+      ],
+      type: "timeline",
+      valuesToShow: ["Risorsa 2"],
+    },
+    {
+      id: "RIS3",
+      name: "Risorsa 3",
+      schedule: [
+        { startDate: "2023-01-15", endDate: "2023-02-15", color: "#ff0000" },
+        { startDate: "2023-03-15", endDate: "2023-04-15", color: "#ff0000" },
+      ],
+      type: "timeline",
+      valuesToShow: ["Risorsa 3"],
+    },
+    {
+      id: "RIS4",
+      name: "Risorsa 4",
+      schedule: [
+        { startDate: "2023-01-11", endDate: "2023-02-01", color: "#ff0000" },
+        { startDate: "2023-03-11", endDate: "2023-04-01", color: "#ff0000" },
+      ],
+      type: "timeline",
+      valuesToShow: ["Risorsa 4"],
+    },
+    {
+      id: "RIS5",
+      name: "Risorsa 5",
+      schedule: [
+        { startDate: "2023-01-01", endDate: "2023-02-01", color: "#ff0000" },
+        { startDate: "2023-03-01", endDate: "2023-04-01", color: "#ff0000" },
+      ],
+      type: "timeline",
+      valuesToShow: ["Risorsa 5"],
+    },
+    {
+      id: "RIS6",
+      name: "Risorsa 6",
+      schedule: [
+        { startDate: "2023-01-20", endDate: "2023-02-20", color: "#ff0000" },
+        { startDate: "2023-03-20", endDate: "2023-04-20", color: "#ff0000" },
+      ],
+      type: "timeline",
+      valuesToShow: ["Risorsa 6"],
+    },
+    {
+      id: "RIS7",
+      name: "Risorsa 7",
+      schedule: [
+        { startDate: "2023-01-01", endDate: "2023-02-01", color: "#ff0000" },
+        { startDate: "2023-03-01", endDate: "2023-04-01", color: "#ff0000" },
+      ],
+      type: "timeline",
+      valuesToShow: ["Risorsa 7"],
+    },
+    {
+      id: "RIS8",
+      name: "Risorsa 8",
+      schedule: [
+        { startDate: "2023-01-27", endDate: "2023-02-01", color: "#ff0000" },
+        { startDate: "2023-03-27", endDate: "2023-04-01", color: "#ff0000" },
+      ],
+      type: "timeline",
+      valuesToShow: ["Risorsa 8"],
+    },
+    {
+      id: "RIS9",
+      name: "Risorsa 9",
+      schedule: [
+        { startDate: "2023-01-01", endDate: "2023-02-01", color: "#ff0000" },
+        { startDate: "2023-03-01", endDate: "2023-04-01", color: "#ff0000" },
+      ],
+      type: "timeline",
+      valuesToShow: ["Risorsa 9"],
+    },
+  ],
+  stylingOptions: {
+    listCellWidth: "297px",
+    rowHeight: 40,
+    barFill: 90,
+    projectProgressColor: "#CBCBCB",
+    projectProgressSelectedColor: "#CBCBCB",
+    projectBackgroundColor: "#CBCBCB",
+    projectBackgroundSelectedColor: "#CBCBCB",
+    barProgressColor: "#A2A415",
+    barProgressSelectedColor: "#A2A415",
+    barBackgroundColor: "#A2A415",
+    barBackgroundSelectedColor: "#A2A415",
+  },
+  hideLabel: true,
+  ganttHeight: 200,
+  hideDependencies: true,
+  title: "Detail Gantt",
+};
+
+export default AppPlanner;
