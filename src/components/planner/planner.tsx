@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  calculateDislayedDateRange,
-} from "../../helpers/date-helper";
+import { calculateDislayedDateRange } from "../../helpers/date-helper";
 import {
   TaskListHeaderComponent,
   TaskListTableComponent,
@@ -122,15 +120,15 @@ export const Planner: React.FC<PlannerProps> = props => {
   };
 
   useEffect(() => {
-    setDisplayedDates(
-      calculateDislayedDateRange(
-        props.mainGantt.items as GanttTask[],
-        timeUnit,
-        mainGanttDoubleView,
-        props.secondaryGantt?.items,
-        props.preStepsCount
-      )
+    const dates = calculateDislayedDateRange(
+      props.mainGantt.items as GanttTask[],
+      timeUnit,
+      mainGanttDoubleView,
+      props.secondaryGantt?.items,
+      props.preStepsCount
     );
+    // console.log("planner.tsx recalculated dates ", dates);
+    setDisplayedDates(dates);
   }, [
     mainGanttDoubleView,
     props.mainGantt.items,

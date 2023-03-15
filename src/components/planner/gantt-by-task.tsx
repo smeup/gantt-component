@@ -14,9 +14,7 @@ import { Task } from "../../types/public-types";
 import { Gantt } from "../gantt/gantt";
 import { GanttByTaskProps } from "../../types/adapted-types";
 import { DateTime } from "luxon";
-import {
-  formatToIsoDate,
-} from "../../helpers/time-converters";
+import { formatToIsoDate } from "../../helpers/time-converters";
 
 const locale = "it-IT";
 
@@ -84,8 +82,6 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
 
   const handleClick = (task: Task) => {
     const id = task?.id;
-    const type = task?.type;
-    console.log("gantt-by-task.tsx onClick", id, type);
     const project = getProjectById(id);
     if (project) {
       onClick?.(project);

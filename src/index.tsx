@@ -1,6 +1,5 @@
 export { Gantt } from "./components/gantt/gantt";
 export { GanttByTask } from "./components/planner/gantt-by-task";
-//export { GanttByPhase } from "./components/planner/gantt-by-phase";
 export { Planner } from "./components/planner/planner";
 export { Switcher } from "./components/planner/switcher";
 export { ViewMode } from "./types/public-types";
@@ -23,7 +22,6 @@ export type {
   EventOption,
 } from "./types/public-types";
 export type {
-  // GanttByPhaseProps,
   GanttByTaskProps,
   StylingOptions,
   TaskListHeaderComponent,

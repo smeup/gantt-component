@@ -1,11 +1,5 @@
 import { FC } from "react";
-import {
-  GanttRow,
-  Phase,
-  GanttTask,
-  Detail,
-  GanttPhaseProjection,
-} from "./domain";
+import { GanttRow, GanttTask, Detail, GanttPhaseProjection } from "./domain";
 import { CurrentDateIndicator, Task } from "./public-types";
 import { TimeUnit } from "./time-unit";
 
@@ -39,17 +33,6 @@ export interface GanttByTaskProps extends GanttCommonProps {
   /** Invoked on bar click. */
   onClick?: (row: GanttRow) => void;
   onDateChange?: (row: GanttRow) => void;
-}
-
-export interface GanttByPhaseProps extends GanttCommonProps {
-  /** Rows to display in chart */
-  phases: Phase[];
-  /**
-   * Invoked on start/end time change.
-   * Return false or error to undo operation.
-   * If not specified, the drag and resize operations are disabled
-   */
-  onDateChange?: (phase: Phase) => void | boolean;
 }
 
 export type TooltipContentComponent = FC<{
