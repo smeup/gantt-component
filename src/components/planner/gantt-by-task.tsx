@@ -14,6 +14,7 @@ import { Task } from "../../types/public-types";
 import { Gantt } from "../gantt/gantt";
 import { GanttByTaskProps } from "../../types/adapted-types";
 import { DateTime } from "luxon";
+import { parseToDayStart } from "../../helpers/time-converters";
 
 const locale = "it-IT";
 
@@ -31,7 +32,7 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
   ...props
 }) => {
   const [currentProjects, setCurrentProjects] = useState(projects);
-  
+
   useEffect(() => {
     if (projects) setCurrentProjects(projects);
   }, [projects]);
@@ -152,6 +153,8 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
       dateTimeFormatters={ganttDateTimeFormatters}
       {...stylingOptions}
       {...props}
+      mainGanttStartDate={parseToDayStart(mainGanttStartDate)}
+      mainGanttEndDate={parseToDayStart(mainGanttEndDate)}
     />
   );
   if (returnElement) {

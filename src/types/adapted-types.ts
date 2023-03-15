@@ -1,6 +1,12 @@
 import { FC } from "react";
-import { GanttRow, Phase, GanttTask, Detail, GanttPhaseProjection, CurrentDateIndicator } from "./domain";
-import { Task } from "./public-types";
+import {
+  GanttRow,
+  Phase,
+  GanttTask,
+  Detail,
+  GanttPhaseProjection,
+} from "./domain";
+import { CurrentDateIndicator, Task } from "./public-types";
 import { TimeUnit } from "./time-unit";
 
 export interface GanttCommonProps {
@@ -24,10 +30,10 @@ export interface GanttByTaskProps extends GanttCommonProps {
   id: string;
   /** Rows to display in chart */
   projects: GanttTask[] | Detail[];
-  mainGanttStartDate?: string;
-  mainGanttEndDate?: string;
   /** Current date indicator */
   currentDateIndicator?: CurrentDateIndicator;
+  mainGanttStartDate: string;
+  mainGanttEndDate: string;
   /** Projections */
   projection?: GanttPhaseProjection;
   /** Invoked on bar click. */

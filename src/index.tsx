@@ -12,6 +12,7 @@ export {
   formatToLocaleSimple,
   parseToDayEnd,
   parseToDayStart,
+  parseToDate,
   validDates,
 } from "./helpers/time-converters";
 export type {
@@ -37,5 +38,9 @@ export type {
   GanttTask,
   ScheduleItem,
 } from "./types/domain";
-export type { PlannerProps, GanttPlannerDetailsProps, GanttPlannerProps } from "./components/planner/planner";
+export type {
+  PlannerProps,
+  GanttPlannerDetailsProps,
+  GanttPlannerProps,
+} from "./components/planner/planner";
 export { TimeUnit } from "./types/time-unit";

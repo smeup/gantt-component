@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { toViewMode } from "../../helpers/adapter";
-import { ganttDateRangeFromGanttTask } from "../../helpers/date-helper";
+import {
+  ganttDateRangeFromDetail,
+  ganttDateRangeFromGanttTask,
+} from "../../helpers/date-helper";
 import { formatToIsoDate } from "../../helpers/time-converters";
 import {
   TaskListHeaderComponent,
@@ -96,6 +99,20 @@ export const Planner: React.FC<PlannerProps> = props => {
       props.mainGantt.stylingOptions?.preStepsCount ?? 1,
       mainGanttDoubleView
     );
+    if (props.secondaryGantt?.items) {
+      const dates2: Date[] = ganttDateRangeFromDetail(
+        props.secondaryGantt.items,
+        toViewMode(timeUnit),
+        props.mainGantt.stylingOptions?.preStepsCount ?? 1,
+        mainGanttDoubleView
+      );
+      if (dates2[0] < dates[0]) {
+        dates[0] = dates2[0];
+      }
+      if (dates2[1] > dates[1]) {
+        dates[1] = dates2[1];
+      }
+    }
     return {
       mainGanttStartDate: formatToIsoDate(dates[0]),
       mainGanttEndDate: formatToIsoDate(dates[1]),
@@ -109,7 +126,6 @@ export const Planner: React.FC<PlannerProps> = props => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: 50,
         }}
       >
         <GanttByTask
@@ -119,6 +135,8 @@ export const Planner: React.FC<PlannerProps> = props => {
           showSecondaryDates={mainGanttDoubleView}
           hideDependencies={props.mainGantt.hideDependencies}
           ganttHeight={props.mainGantt.ganttHeight}
+          mainGanttStartDate={mainGanttStartDate}
+          mainGanttEndDate={mainGanttEndDate}
           projects={props.mainGantt.items}
           timeUnit={timeUnit}
           stylingOptions={props.mainGantt.stylingOptions}

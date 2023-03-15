@@ -186,6 +186,8 @@ export interface GanttProps
     CustomOptions {
   id: string;
   tasks: Task[];
+  mainGanttStartDate: Date;
+  mainGanttEndDate: Date;
   projection?: GanttPhaseProjection;
 }
 
