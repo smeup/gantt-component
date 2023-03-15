@@ -32,8 +32,8 @@ export interface GanttByTaskProps extends GanttCommonProps {
   items: GanttTask[] | Detail[];
   /** Current date indicator */
   currentDateIndicator?: CurrentDateIndicator;
-  displayedStartDate: string;
-  displayedEndDate: string;
+  displayedStartDate: Date;
+  displayedEndDate: Date;
   /** Projections */
   projection?: GanttPhaseProjection;
   /** Invoked on bar click. */

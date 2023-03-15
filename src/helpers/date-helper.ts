@@ -1,5 +1,7 @@
 import { Detail, GanttTask } from "../types/domain";
 import { Task, ViewMode } from "../types/public-types";
+import { TimeUnit } from "../types/time-unit";
+import { toViewMode } from "./adapter";
 import { parseToDayEnd, parseToDayStart } from "./time-converters";
 import DateTimeFormatOptions = Intl.DateTimeFormatOptions;
 import DateTimeFormat = Intl.DateTimeFormat;
@@ -108,6 +110,48 @@ export const ganttDateRangeFromTask = (
     preStepsCount,
     showSecondaryDates
   );
+};
+
+/**
+ * Calculate date range valid for each Gantt
+ * @param mainGanttItems
+ * @param timeUnit
+ * @param mainGanttDoubleView
+ * @param secondaryGanttItems
+ * @param preStepsCount
+ * @returns
+ */
+export const calculateDislayedDateRange = (
+  mainGanttItems: GanttTask[],
+  timeUnit: TimeUnit,
+  mainGanttDoubleView: boolean,
+  secondaryGanttItems?: Detail[],
+  preStepsCount?: number
+) => {
+  const dates: Date[] = ganttDateRangeFromGanttTask(
+    mainGanttItems as GanttTask[],
+    toViewMode(timeUnit),
+    preStepsCount ?? 1,
+    mainGanttDoubleView
+  );
+  if (secondaryGanttItems) {
+    const dates2: Date[] = ganttDateRangeFromDetail(
+      secondaryGanttItems,
+      toViewMode(timeUnit),
+      preStepsCount ?? 1,
+      mainGanttDoubleView
+    );
+    if (dates2[0] < dates[0]) {
+      dates[0] = dates2[0];
+    }
+    if (dates2[1] > dates[1]) {
+      dates[1] = dates2[1];
+    }
+  }
+  return {
+    displayedStartDate: dates[0],
+    displayedEndDate: dates[1],
+  };
 };
 
 export const ganttDateRangeFromGanttTask = (

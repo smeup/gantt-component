@@ -1,10 +1,7 @@
-import React, { useState } from "react";
-import { toViewMode } from "../../helpers/adapter";
+import React, { useEffect, useState } from "react";
 import {
-  ganttDateRangeFromDetail,
-  ganttDateRangeFromGanttTask,
+  calculateDislayedDateRange,
 } from "../../helpers/date-helper";
-import { formatToIsoDate } from "../../helpers/time-converters";
 import {
   TaskListHeaderComponent,
   TaskListTableComponent,
@@ -71,13 +68,27 @@ export interface PlannerProps {
 export const Planner: React.FC<PlannerProps> = props => {
   const [timeUnit, setTimeUnit] = useState(TimeUnit.MONTH);
 
-  // projections
-  const [projection, setProjection] = useState<GanttPhaseProjection>();
-
   // main gantt
   const [mainGanttDoubleView, setMainGanttDoubleView] = useState(
     props.mainGantt.showSecondaryDates ?? false
   );
+
+  // date range
+  const [displayedDates, setDisplayedDates] = useState<{
+    displayedStartDate: Date;
+    displayedEndDate: Date;
+  }>(
+    calculateDislayedDateRange(
+      props.mainGantt.items as GanttTask[],
+      timeUnit,
+      mainGanttDoubleView,
+      props.secondaryGantt?.items,
+      props.preStepsCount
+    )
+  );
+
+  // projections
+  const [projection, setProjection] = useState<GanttPhaseProjection>();
 
   // handle click
   const handleClick = (row: GanttRow) => {
@@ -110,32 +121,23 @@ export const Planner: React.FC<PlannerProps> = props => {
     props.mainGantt.onDateChange?.(row);
   };
 
-  const [{ displayedStartDate, displayedEndDate }] = useState(() => {
-    const dates: Date[] = ganttDateRangeFromGanttTask(
-      props.mainGantt.items as GanttTask[],
-      toViewMode(timeUnit),
-      props.preStepsCount ?? 1,
-      mainGanttDoubleView
+  useEffect(() => {
+    setDisplayedDates(
+      calculateDislayedDateRange(
+        props.mainGantt.items as GanttTask[],
+        timeUnit,
+        mainGanttDoubleView,
+        props.secondaryGantt?.items,
+        props.preStepsCount
+      )
     );
-    if (props.secondaryGantt?.items) {
-      const dates2: Date[] = ganttDateRangeFromDetail(
-        props.secondaryGantt.items,
-        toViewMode(timeUnit),
-        props.preStepsCount ?? 1,
-        mainGanttDoubleView
-      );
-      if (dates2[0] < dates[0]) {
-        dates[0] = dates2[0];
-      }
-      if (dates2[1] > dates[1]) {
-        dates[1] = dates2[1];
-      }
-    }
-    return {
-      displayedStartDate: formatToIsoDate(dates[0]),
-      displayedEndDate: formatToIsoDate(dates[1]),
-    };
-  });
+  }, [
+    mainGanttDoubleView,
+    props.mainGantt.items,
+    props.preStepsCount,
+    props.secondaryGantt?.items,
+    timeUnit,
+  ]);
 
   return (
     <div>
@@ -153,8 +155,8 @@ export const Planner: React.FC<PlannerProps> = props => {
           showSecondaryDates={mainGanttDoubleView}
           hideDependencies={props.mainGantt.hideDependencies}
           ganttHeight={props.mainGantt.ganttHeight}
-          displayedStartDate={displayedStartDate}
-          displayedEndDate={displayedEndDate}
+          displayedStartDate={displayedDates.displayedStartDate}
+          displayedEndDate={displayedDates.displayedEndDate}
           items={props.mainGantt.items}
           timeUnit={timeUnit}
           stylingOptions={props.mainGantt.stylingOptions}
@@ -191,8 +193,8 @@ export const Planner: React.FC<PlannerProps> = props => {
             showSecondaryDates={mainGanttDoubleView}
             hideDependencies={props.secondaryGantt.hideDependencies}
             ganttHeight={props.secondaryGantt.ganttHeight}
-            displayedStartDate={displayedStartDate}
-            displayedEndDate={displayedEndDate}
+            displayedStartDate={displayedDates.displayedStartDate}
+            displayedEndDate={displayedDates.displayedEndDate}
             items={props.secondaryGantt.items}
             timeUnit={timeUnit}
             stylingOptions={props.secondaryGantt.stylingOptions}

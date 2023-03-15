@@ -775,8 +775,8 @@ const mockDataTasksSelected: GanttTask[] = [
   {
     id: "1",
     name: "G456",
-    startDate: "2021-10-25",
-    endDate: "2023-07-04",
+    startDate: "2023-10-25",
+    endDate: "2027-07-04",
     secondaryStartDate: "2021-10-25",
     secondaryEndDate: "2023-03-07",
     type: "project",
@@ -785,7 +785,7 @@ const mockDataTasksSelected: GanttTask[] = [
       {
         id: "P410           ",
         name: "P410           ",
-        startDate: "2022-10-17",
+        startDate: "2023-10-17",
         endDate: "2023-03-10",
         secondaryStartDate: "2022-11-07",
         secondaryEndDate: "2022-11-04",

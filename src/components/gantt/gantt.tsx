@@ -85,6 +85,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onSelect,
   onExpanderClick,
 }) => {
+  console.log("DATE RANGE", displayedStartDate, displayedEndDate);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
