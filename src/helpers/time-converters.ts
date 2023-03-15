@@ -1,5 +1,7 @@
 import { DateTime } from "luxon";
 
+export const parseToDate = (ymd: string) => DateTime.fromISO(ymd).toJSDate();
+
 export const parseToDayStart = (ymd: string) =>
   DateTime.fromISO(ymd).toJSDate();
 

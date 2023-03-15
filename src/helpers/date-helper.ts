@@ -75,7 +75,9 @@ export const ganttDateRangeFromTask = (
   tasks: Task[],
   viewMode: ViewMode,
   preStepsCount: number,
-  showSecondaryDates: boolean
+  showSecondaryDates: boolean,
+  mainGanttStartDate: Date,
+  mainGanttEndDate: Date
 ) => {
   const dates: {
     start: Date;
@@ -92,6 +94,14 @@ export const ganttDateRangeFromTask = (
       secondaryEnd: item.secondaryEnd,
     });
   });
+  if (mainGanttStartDate && mainGanttEndDate) {
+    dates.push({
+      start: mainGanttStartDate,
+      end: mainGanttEndDate,
+      secondaryStart: undefined,
+      secondaryEnd: undefined,
+    });
+  }
   return ganttDateRangeGeneric(
     dates,
     viewMode,

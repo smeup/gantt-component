@@ -95,6 +95,9 @@ export interface DisplayOption {
    */
   locale?: string;
   rtl?: boolean;
+  /** Gantt date range */
+  displayedStartDate: Date;
+  displayedEndDate: Date;
 }
 
 export interface StylingOption {

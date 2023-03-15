@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { toViewMode } from "../../helpers/adapter";
-import { ganttDateRangeFromGanttTask } from "../../helpers/date-helper";
+import {
+  ganttDateRangeFromDetail,
+  ganttDateRangeFromGanttTask,
+} from "../../helpers/date-helper";
 import { formatToIsoDate } from "../../helpers/time-converters";
 import {
   TaskListHeaderComponent,
@@ -14,6 +17,7 @@ import {
   GanttPhaseProjection,
   Phase,
 } from "../../types/domain";
+import { StylingOption } from "../../types/public-types";
 import { TimeUnit } from "../../types/time-unit";
 import { CustomTaskListHeaderHOC } from "./custom-task-list-header";
 import {
@@ -31,7 +35,7 @@ export interface GanttPlannerProps {
   taskListHeaderProject?: TaskListHeaderComponent;
   taskListTableProject?: TaskListTableComponent;
   tooltipContent?: TooltipContentComponent;
-  stylingOptions?: any;
+  stylingOptions?: StylingOption;
   hideLabel?: boolean;
   showSecondaryDates?: boolean;
   ganttHeight?: number;
@@ -47,7 +51,7 @@ export interface GanttPlannerDetailsProps {
   taskListHeaderProject?: TaskListHeaderComponent;
   taskListTableProject?: TaskListTableComponent;
   tooltipContent?: TooltipContentComponent;
-  stylingOptions?: any;
+  stylingOptions?: StylingOption;
   hideLabel?: boolean;
   ganttHeight?: number;
   hideDependencies?: boolean;
@@ -61,6 +65,7 @@ export interface GanttPlannerDetailsProps {
 export interface PlannerProps {
   mainGantt: GanttPlannerProps;
   secondaryGantt?: GanttPlannerDetailsProps;
+  preStepsCount?: number;
 }
 
 export const Planner: React.FC<PlannerProps> = props => {
@@ -89,16 +94,30 @@ export const Planner: React.FC<PlannerProps> = props => {
     props.mainGantt.onClick?.(row);
   };
 
-  const [{ mainGanttStartDate, mainGanttEndDate }] = useState(() => {
+  const [{ displayedStartDate, displayedEndDate }] = useState(() => {
     const dates: Date[] = ganttDateRangeFromGanttTask(
       props.mainGantt.items as GanttTask[],
       toViewMode(timeUnit),
-      props.mainGantt.stylingOptions?.preStepsCount ?? 1,
+      props.preStepsCount ?? 1,
       mainGanttDoubleView
     );
+    if (props.secondaryGantt?.items) {
+      const dates2: Date[] = ganttDateRangeFromDetail(
+        props.secondaryGantt.items,
+        toViewMode(timeUnit),
+        props.preStepsCount ?? 1,
+        mainGanttDoubleView
+      );
+      if (dates2[0] < dates[0]) {
+        dates[0] = dates2[0];
+      }
+      if (dates2[1] > dates[1]) {
+        dates[1] = dates2[1];
+      }
+    }
     return {
-      mainGanttStartDate: formatToIsoDate(dates[0]),
-      mainGanttEndDate: formatToIsoDate(dates[1]),
+      displayedStartDate: formatToIsoDate(dates[0]),
+      displayedEndDate: formatToIsoDate(dates[1]),
     };
   });
 
@@ -109,7 +128,6 @@ export const Planner: React.FC<PlannerProps> = props => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: 50,
         }}
       >
         <GanttByTask
@@ -119,7 +137,9 @@ export const Planner: React.FC<PlannerProps> = props => {
           showSecondaryDates={mainGanttDoubleView}
           hideDependencies={props.mainGantt.hideDependencies}
           ganttHeight={props.mainGantt.ganttHeight}
-          projects={props.mainGantt.items}
+          displayedStartDate={displayedStartDate}
+          displayedEndDate={displayedEndDate}
+          items={props.mainGantt.items}
           timeUnit={timeUnit}
           stylingOptions={props.mainGantt.stylingOptions}
           TaskListHeader={
@@ -155,11 +175,9 @@ export const Planner: React.FC<PlannerProps> = props => {
             showSecondaryDates={mainGanttDoubleView}
             hideDependencies={props.secondaryGantt.hideDependencies}
             ganttHeight={props.secondaryGantt.ganttHeight}
-            mainGanttStartDate={mainGanttStartDate}
-            mainGanttEndDate={mainGanttEndDate}
-            projects={
-              props.secondaryGantt.items ? props.secondaryGantt.items : []
-            }
+            displayedStartDate={displayedStartDate}
+            displayedEndDate={displayedEndDate}
+            items={props.secondaryGantt.items}
             timeUnit={timeUnit}
             stylingOptions={props.secondaryGantt.stylingOptions}
             TaskListHeader={

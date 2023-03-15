@@ -5,7 +5,12 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { CurrentDateIndicator, GanttProps, Task, ViewMode } from "../../types/public-types";
+import {
+  CurrentDateIndicator,
+  GanttProps,
+  Task,
+  ViewMode,
+} from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import { ganttDateRangeFromTask, seedDates } from "../../helpers/date-helper";
 import { CalendarProps } from "../calendar/calendar";
@@ -70,6 +75,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   showSecondaryDates = false,
   hideDependencies = false,
   projection,
+  displayedStartDate,
+  displayedEndDate,
   onDateChange,
   onProgressChange,
   onDoubleClick,
@@ -85,7 +92,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       tasks,
       viewMode,
       preStepsCount,
-      showSecondaryDates
+      showSecondaryDates,
+      displayedStartDate,
+      displayedEndDate
     );
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
@@ -155,7 +164,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       filteredTasks,
       viewMode,
       preStepsCount,
-      showSecondaryDates
+      showSecondaryDates,
+      displayedStartDate,
+      displayedEndDate
     );
     let newDates = seedDates(startDate, endDate, viewMode);
     if (rtl) {
@@ -211,6 +222,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     showSecondaryDates,
     projectHeight,
     timelineHeight,
+    displayedStartDate,
+    displayedEndDate,
   ]);
 
   useEffect(() => {
@@ -229,6 +242,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       if (index === -1) {
         return;
       }
+      console.log("gantt.tsx useEffect forse cambio view");
       setCurrentViewDate(viewDate);
       setScrollX(columnWidth * index);
     }
@@ -435,10 +449,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   useEffect(() => {
     const x = calculateCurrentDateCalculator(dateSetup.dates, columnWidth);
     console.log("CURRENT DATE X", x);
-    setCurrentDateIndicatorContent({
-      color: todayColor,
-      x,
-    });
+    if (x !== 0) {
+      setCurrentDateIndicatorContent({
+        color: todayColor,
+        x,
+      });
+    }
   }, [columnWidth, dateSetup.dates, todayColor]);
 
   /**
