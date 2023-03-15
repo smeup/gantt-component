@@ -19,16 +19,11 @@ export const formatToLocaleSimple = (date: Date) =>
 export const formatToLocaleDate = (date: Date, locale: string = "it-IT") =>
   DateTime.fromJSDate(date).setLocale(locale).toLocaleString();
 
-export function validDates(startDate: string, endDate: string, name: string) {
+export function validDates(startDate: string, endDate: string, _name: string) {
   let start = parseToDayStart(startDate);
   const end = parseToDayEnd(endDate);
   if (start?.getTime() > end?.getTime()) {
     start = parseToDayStart(endDate);
-    console.log("time-converters.ts validDates() Error date", {
-      name,
-      start: startDate,
-      end: endDate,
-    });
   }
   return { start, end };
 }
