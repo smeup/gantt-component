@@ -58,7 +58,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   rtl,
   hideLabel = false,
   showSecondaryDates = false,
-  ganttHeight,
   currentDateIndicator,
   projection,
   setGanttEvent,
@@ -299,7 +298,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           x={projection.x0}
           y="0"
           width={projection.xf - projection.x0}
-          height={ganttHeight}
+          height="100%"
           fillOpacity="35%"
         />
       )}
