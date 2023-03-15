@@ -41,7 +41,7 @@ const AppPlanner = () => {
     secondaryGantt: {
       ...ganttPlannerDetailsProps,
       onClick: secondaryGanttClickHandler,
-    },
+    }
   };
 
   return (
@@ -769,7 +769,6 @@ const ganttPlannerProps: GanttPlannerProps = {
   ganttHeight: 350,
   hideDependencies: true,
   title: "",
-
 };
 
 const mockDataTasksSelected: GanttTask[] = [

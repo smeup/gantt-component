@@ -17,6 +17,7 @@ import {
   GanttPhaseProjection,
   Phase,
 } from "../../types/domain";
+import { StylingOption } from "../../types/public-types";
 import { TimeUnit } from "../../types/time-unit";
 import { CustomTaskListHeaderHOC } from "./custom-task-list-header";
 import {
@@ -34,7 +35,7 @@ export interface GanttPlannerProps {
   taskListHeaderProject?: TaskListHeaderComponent;
   taskListTableProject?: TaskListTableComponent;
   tooltipContent?: TooltipContentComponent;
-  stylingOptions?: any;
+  stylingOptions?: StylingOption;
   hideLabel?: boolean;
   showSecondaryDates?: boolean;
   ganttHeight?: number;
@@ -50,7 +51,7 @@ export interface GanttPlannerDetailsProps {
   taskListHeaderProject?: TaskListHeaderComponent;
   taskListTableProject?: TaskListTableComponent;
   tooltipContent?: TooltipContentComponent;
-  stylingOptions?: any;
+  stylingOptions?: StylingOption;
   hideLabel?: boolean;
   ganttHeight?: number;
   hideDependencies?: boolean;
@@ -64,6 +65,7 @@ export interface GanttPlannerDetailsProps {
 export interface PlannerProps {
   mainGantt: GanttPlannerProps;
   secondaryGantt?: GanttPlannerDetailsProps;
+  preStepsCount?: number;
 }
 
 export const Planner: React.FC<PlannerProps> = props => {
@@ -96,14 +98,14 @@ export const Planner: React.FC<PlannerProps> = props => {
     const dates: Date[] = ganttDateRangeFromGanttTask(
       props.mainGantt.items as GanttTask[],
       toViewMode(timeUnit),
-      props.mainGantt.stylingOptions?.preStepsCount ?? 1,
+      props.preStepsCount ?? 1,
       mainGanttDoubleView
     );
     if (props.secondaryGantt?.items) {
       const dates2: Date[] = ganttDateRangeFromDetail(
         props.secondaryGantt.items,
         toViewMode(timeUnit),
-        props.mainGantt.stylingOptions?.preStepsCount ?? 1,
+        props.preStepsCount ?? 1,
         mainGanttDoubleView
       );
       if (dates2[0] < dates[0]) {
