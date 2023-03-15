@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Detail,
   GanttPlannerDetailsProps,
   GanttPlannerProps,
   GanttRow,
@@ -11,53 +10,50 @@ import {
 import "@sme.up/gantt-component/dist/index.css";
 
 const AppPlanner = () => {
-  const [jsonData, setJsonData] = useState<GanttTask[] | Detail[]>(
-    ganttPlannerProps.items
-  );
+  const [plannerProps, setPlannerProps] =
+    useState<PlannerProps>(plannerPropsMock);
   const [clicked, setClicked] = useState(false);
 
   const mainGanttClickHandler = (row: GanttRow) => {
-    console.log("appplanner.tsx " + row.name);
+    console.log("Main Gantt click event", row);
     if (clicked) {
-      setJsonData(ganttPlannerProps.items);
+      setPlannerProps(plannerPropsMock);
     } else {
-      setJsonData(mockDataTasksSelected);
+      setPlannerProps(plannerAfterClickPropsMock);
     }
     setClicked(!clicked);
   };
 
   const secondaryGanttClickHandler = (row: GanttRow) => {
-    console.log("Clicked", row.id);
+    console.log("Secondary Gantt click event", row);
   };
 
-  const plannerProps: PlannerProps = {
+  const props: PlannerProps = {
+    ...plannerProps,
     mainGantt: {
-      ...ganttPlannerProps,
-      items: jsonData,
-      title: "Main Gantt",
-
+      ...plannerProps.mainGantt,
       onClick: mainGanttClickHandler,
     },
     secondaryGantt: {
-      ...ganttPlannerDetailsProps,
+      ...(plannerProps.secondaryGantt as GanttPlannerDetailsProps),
       onClick: secondaryGanttClickHandler,
-    }
+    },
   };
 
   return (
     <React.StrictMode>
-      <Planner {...plannerProps} />
+      <Planner {...props} />
     </React.StrictMode>
   );
 };
 
-const ganttPlannerProps: GanttPlannerProps = {
+const mainGanttPlannerPropsMock: GanttPlannerProps = {
   items: [
     {
       id: "1",
       name: "G456",
-      startDate: "2021-10-25",
-      endDate: "2023-07-04",
+      startDate: "2023-10-25",
+      endDate: "2027-07-04",
       secondaryStartDate: "2021-10-25",
       secondaryEndDate: "2023-03-07",
       type: "project",
@@ -771,12 +767,12 @@ const ganttPlannerProps: GanttPlannerProps = {
   title: "",
 };
 
-const mockDataTasksSelected: GanttTask[] = [
+const mainGanttItemAfterClick: GanttTask[] = [
   {
     id: "1",
     name: "G456",
     startDate: "2023-10-25",
-    endDate: "2027-07-04",
+    endDate: "2024-07-04",
     secondaryStartDate: "2021-10-25",
     secondaryEndDate: "2023-03-07",
     type: "project",
@@ -1576,7 +1572,7 @@ const mockDataTasksSelected: GanttTask[] = [
   },
 ];
 
-const ganttPlannerDetailsProps: GanttPlannerDetailsProps = {
+const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
   items: [
     {
       id: "RIS1",
@@ -1686,6 +1682,19 @@ const ganttPlannerDetailsProps: GanttPlannerDetailsProps = {
   ganttHeight: 200,
   hideDependencies: true,
   title: "Detail Gantt",
+};
+
+const plannerPropsMock: PlannerProps = {
+  mainGantt: mainGanttPlannerPropsMock,
+  secondaryGantt: secondaryGanttPlannerPropsMock,
+};
+
+const plannerAfterClickPropsMock: PlannerProps = {
+  mainGantt: {
+    ...mainGanttPlannerPropsMock,
+    items: mainGanttItemAfterClick,
+  },
+  secondaryGantt: secondaryGanttPlannerPropsMock,
 };
 
 export default AppPlanner;
