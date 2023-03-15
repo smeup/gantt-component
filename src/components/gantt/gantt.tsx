@@ -448,7 +448,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
    */
   useEffect(() => {
     const x = calculateCurrentDateCalculator(dateSetup.dates, columnWidth);
-    console.log("CURRENT DATE X", x);
     if (x !== 0) {
       setCurrentDateIndicatorContent({
         color: todayColor,

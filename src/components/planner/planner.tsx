@@ -94,6 +94,22 @@ export const Planner: React.FC<PlannerProps> = props => {
     props.mainGantt.onClick?.(row);
   };
 
+  // handle progress change
+  const handleDateChange = (row: GanttRow) => {
+    // update projections if phase date changed
+    if (row.type === "task" && props.secondaryGantt) {
+      const phase = row as Phase;
+      // update projection state
+      setProjection({
+        start: new Date(phase.startDate),
+        end: new Date(phase.endDate),
+        color: phase.color ? phase.color : "#ED7D31",
+      });
+    }
+    // invoke callback
+    props.mainGantt.onDateChange?.(row);
+  };
+
   const [{ displayedStartDate, displayedEndDate }] = useState(() => {
     const dates: Date[] = ganttDateRangeFromGanttTask(
       props.mainGantt.items as GanttTask[],
@@ -165,7 +181,7 @@ export const Planner: React.FC<PlannerProps> = props => {
           TooltipContent={props.mainGantt.tooltipContent ?? CustomTooltipHOC()}
           // events
           onClick={handleClick}
-          onDateChange={props.mainGantt.onDateChange}
+          onDateChange={handleDateChange}
         />
         {props.secondaryGantt && (
           <GanttByTask
