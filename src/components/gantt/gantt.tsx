@@ -85,7 +85,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onSelect,
   onExpanderClick,
 }) => {
-  // console.log("DATE RANGE", displayedStartDate, displayedEndDate);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
@@ -97,16 +96,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       displayedStartDate,
       displayedEndDate
     );
-    // console.log(
-    //   "gantt.tsx (useState) ganttDateRangeFromTask id: " +
-    //     id +
-    //     " viewMode: " +
-    //     viewMode +
-    //     " preStepsCount: " +
-    //     preStepsCount,
-    //   startDate,
-    //   endDate
-    // );
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
   const [currentViewDate, setCurrentViewDate] = useState<Date | undefined>(
@@ -179,16 +168,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       displayedStartDate,
       displayedEndDate
     );
-    // console.log(
-    //   "gantt.tsx (useEffect) ganttDateRangeFromTask id: " +
-    //     id +
-    //     " viewMode: " +
-    //     viewMode +
-    //     " preStepsCount: " +
-    //     preStepsCount,
-    //   startDate,
-    //   endDate
-    // );
     let newDates = seedDates(startDate, endDate, viewMode);
     if (rtl) {
       newDates = newDates.reverse();

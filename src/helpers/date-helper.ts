@@ -174,6 +174,14 @@ export const ganttDateRangeFromGanttTask = (
       secondaryStart: parseToDayStart(item.secondaryStartDate),
       secondaryEnd: parseToDayEnd(item.secondaryEndDate),
     });
+    item.phases?.forEach(phase => {
+      dates.push({
+        start: parseToDayStart(phase.startDate),
+        end: parseToDayEnd(phase.endDate),
+        secondaryStart: parseToDayStart(phase.secondaryStartDate),
+        secondaryEnd: parseToDayEnd(phase.secondaryEndDate),
+      });
+    });
   });
   return ganttDateRangeGeneric(
     dates,

@@ -127,7 +127,6 @@ export const Planner: React.FC<PlannerProps> = props => {
       props.secondaryGantt?.items,
       props.preStepsCount
     );
-    // console.log("planner.tsx recalculated dates ", dates);
     setDisplayedDates(dates);
   }, [
     mainGanttDoubleView,
