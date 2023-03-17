@@ -2,12 +2,13 @@ import { TimeUnit } from "../../types/time-unit";
 import { useEffect, useMemo, useState } from "react";
 import {
   convertProjectToTasks,
-  isDetail,
+  getPhaseById,
+  getProjectById,
   mergeTaskIntoPhases,
   mergeTaskIntoProjects,
   toViewMode,
 } from "../../helpers/adapter";
-import { Detail, GanttTask, Phase } from "../../types/domain";
+import { GanttTask } from "../../types/domain";
 import { ganttDateTimeFormatters } from "../../helpers/time-formatters";
 import React from "react";
 import { Task } from "../../types/public-types";
@@ -34,12 +35,17 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
   const [currentProjects, setCurrentProjects] = useState(projects);
 
   useEffect(() => {
+    // console.log(
+    //   "gantt-by-task.tsx useEffect projects",
+    //   new Date().toISOString()
+    // );
     if (projects) setCurrentProjects(projects);
   }, [projects]);
 
   const [key, setKey] = useState(1);
 
   const tasks: Task[] = useMemo(() => {
+    // console.log("gantt-by-task.tsx useMemo currentProjects", currentProjects);
     setKey(k => k + 1);
     const tasks: Task[] = [];
     for (let i = 0; i < currentProjects.length; i++) {
@@ -54,45 +60,20 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
     return tasks;
   }, [currentProjects, mainGanttEndDate, mainGanttStartDate]);
 
-  const getProjectById = (id: string): GanttTask | Detail | undefined => {
-    for (let i = 0; i < currentProjects.length; i++) {
-      if (currentProjects[i].id === id) {
-        return currentProjects[i];
-      }
-    }
-    return undefined;
-  };
-
-  const getPhaseById = (id: string): Phase | undefined => {
-    for (let i = 0; i < currentProjects.length; i++) {
-      if (isDetail(currentProjects[i])) {
-        continue;
-      }
-      const currentProject = currentProjects[i] as GanttTask;
-      if (!currentProject.phases) {
-        continue;
-      }
-      for (let j = 0; j < currentProject.phases.length; j++)
-        if (currentProject.phases[j].id === id) {
-          return currentProject.phases[j];
-        }
-    }
-    return undefined;
-  };
-
   const handleClick = (task: Task) => {
     const id = task?.id;
-    const project = getProjectById(id);
+    const project = getProjectById(id, currentProjects);
     if (project) {
       onClick?.(project);
     }
-    const phase = getPhaseById(id);
+    const phase = getPhaseById(id, currentProjects);
     if (phase) {
       onClick?.(phase);
     }
   };
 
   const handleDateChange = (task: Task) => {
+    //console.log("gantt-by-task.tsx handleDateChange", new Date().toISOString());
     const id = task?.id;
     const type = task?.type;
 
@@ -105,7 +86,7 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
       );
       return;
     }
-    const project = getProjectById(id);
+    const project = getProjectById(id, currentProjects);
     if (project) {
       const result = mergeTaskIntoProjects(
         currentProjects as GanttTask[],
@@ -156,6 +137,7 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
     />
   );
   if (returnElement) {
+    // console.log("gantt-by-task.tsx render", new Date().toISOString());
     return returnElement;
   } else {
     return <div></div>;

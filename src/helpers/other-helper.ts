@@ -43,7 +43,7 @@ function getChildren(taskList: Task[], task: Task) {
   var taskChildren: Task[] = [];
   tasks.forEach(t => {
     taskChildren.push(...getChildren(taskList, t));
-  })
+  });
   tasks = tasks.concat(tasks, taskChildren);
   return tasks;
 }

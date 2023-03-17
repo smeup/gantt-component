@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { getPhaseById, getProjectById } from "../../helpers/adapter";
 import { calculateDislayedDateRange } from "../../helpers/date-helper";
 import {
   TaskListHeaderComponent,
@@ -136,6 +137,7 @@ export const Planner: React.FC<PlannerProps> = props => {
     timeUnit,
   ]);
 
+  // console.log("planner.tsx render", new Date().toISOString());
   return (
     <div>
       <Switcher onTimeUnitChange={timeUnit => setTimeUnit(timeUnit)} />
@@ -168,11 +170,12 @@ export const Planner: React.FC<PlannerProps> = props => {
           TaskListTable={
             props.mainGantt.taskListTableProject ??
             CustomTaskListTableHOC(id => {
-              const row = (props.mainGantt.items as GanttRow[]).find(
-                row => row.id === id
-              );
+              let row = getProjectById(id, props.mainGantt.items);
+              if (!row) {
+                row = getPhaseById(id, props.mainGantt.items);
+              }
               if (row) {
-                props.mainGantt.onClick?.(row);
+                handleClick(row);
               }
             }, "main")
           }
@@ -202,7 +205,7 @@ export const Planner: React.FC<PlannerProps> = props => {
             TaskListTable={
               props.secondaryGantt?.taskListTableProject ??
               CustomTaskListTableHOC(id => {
-                console.log("planner.tsx Clicked on " + id);
+                console.log("planner.tsx GanttByTask Clicked on " + id);
               }, "secondary")
             }
             // tooltip
