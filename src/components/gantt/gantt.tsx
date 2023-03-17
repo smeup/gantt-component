@@ -143,6 +143,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   // sync scroll event
   useEffect(() => {
+    // console.log(
+    //   "gantt.tsx useEffect scrollEvent id=" + id,
+    //   new Date().toISOString()
+    // );
     // create event listener
     window.addEventListener("gantt-sync-scroll-event", function (e: any) {
       if (e.detail.id !== id) {
@@ -159,6 +163,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     } else {
       filteredTasks = tasks;
     }
+    // console.log("gantt.tsx useEffect task change", filteredTasks);
+
     filteredTasks = filteredTasks.sort(sortTasks);
     const [startDate, endDate] = ganttDateRangeFromTask(
       filteredTasks,
@@ -227,6 +233,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   ]);
 
   useEffect(() => {
+    // console.log(
+    //   "gantt.tsx useEffect viewMode change viewMode=" +
+    //     viewMode +
+    //     " viewDate=" +
+    //     viewDate
+    // );
     if (
       viewMode === dateSetup.viewMode &&
       ((viewDate && !currentViewDate) ||
@@ -258,6 +270,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   useEffect(() => {
     const { changedTask, action } = ganttEvent;
     if (changedTask) {
+      // console.log(
+      //   "gantt.tsx useEffect move task action=" + action,
+      //   changedTask
+      // );
       if (action === "delete") {
         setGanttEvent({ action: "" });
         setBarTasks(barTasks.filter(t => t.id !== changedTask.id));
@@ -286,12 +302,14 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   useEffect(() => {
     if (failedTask) {
+      // console.log("gantt.tsx useEffect failedTask", failedTask);
       setBarTasks(barTasks.map(t => (t.id !== failedTask.id ? t : failedTask)));
       setFailedTask(null);
     }
   }, [failedTask, barTasks]);
 
   useEffect(() => {
+    // console.log("gantt.tsx useEffect listCellWidth=" + listCellWidth);
     if (!listCellWidth) {
       setTaskListWidth(0);
     }
@@ -302,11 +320,20 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   useEffect(() => {
     if (wrapperRef.current) {
+      // console.log("gantt.tsx useEffect taskListWidth=" + taskListWidth);
       setSvgContainerWidth(wrapperRef.current.offsetWidth - taskListWidth);
     }
   }, [wrapperRef, taskListWidth]);
 
   useEffect(() => {
+    // console.log(
+    //   "gantt.tsx useEffect ganttHeight=" +
+    //     ganttHeight +
+    //     ", headerHeight=" +
+    //     headerHeight +
+    //     ", rowHeight=" +
+    //     rowHeight
+    // );
     if (ganttHeight) {
       setSvgContainerHeight(ganttHeight + headerHeight);
     } else {
@@ -316,6 +343,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   // scroll events
   useEffect(() => {
+    // console.log("gantt.tsx useEffect scroll events");
     const wrapperRefLocal = wrapperRef.current;
     const handleWheel = (event: WheelEvent) => {
       if (event.shiftKey || event.deltaX) {
@@ -448,6 +476,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   useEffect(() => {
     const x = calculateCurrentDateCalculator(dateSetup.dates, columnWidth);
     if (x !== 0) {
+      // console.log("gantt.tsx useEffect currentDate x=" + x);
       setCurrentDateIndicatorContent({
         color: todayColor,
         x,
@@ -467,7 +496,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         dateSetup.dates,
         columnWidth
       );
-
+      // console.log("gantt.tsx useEffect projection x0=" + x0 + ", xf=" + xf);
       setProjectionContent({
         x0,
         xf,
@@ -569,6 +598,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     TaskListHeader,
     TaskListTable,
   };
+  // console.log("gantt.tsx render", new Date().toISOString());
   return (
     <div>
       <div

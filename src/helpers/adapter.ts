@@ -208,3 +208,35 @@ const withNewDates = <P extends Phase | GanttTask>(
   const extra = { startDate, endDate };
   return { ...p, ...extra };
 };
+
+export const getProjectById = (
+  id: string,
+  items: GanttTask[] | Detail[]
+): GanttTask | Detail | undefined => {
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].id === id) {
+      return items[i];
+    }
+  }
+  return undefined;
+};
+
+export const getPhaseById = (
+  id: string,
+  items: GanttTask[] | Detail[]
+): Phase | undefined => {
+  for (let i = 0; i < items.length; i++) {
+    if (isDetail(items[i])) {
+      continue;
+    }
+    const item = items[i] as GanttTask;
+    if (!item.phases) {
+      continue;
+    }
+    for (let j = 0; j < item.phases.length; j++)
+      if (item.phases[j].id === id) {
+        return item.phases[j];
+      }
+  }
+  return undefined;
+};
