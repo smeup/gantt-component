@@ -69,7 +69,7 @@
   border-style: solid;
   border-color: #cbcbcb;
   border-radius: 4px;
-  grid-template-columns: 34% 33% 33%;
+  grid-template-columns: var(--grid-fasi-columns, 1fr 1fr 1fr);
   place-items: center;
   background: #fff;
   color: #595959;

@@ -1,10 +1,10 @@
-import React, {useEffect, useRef, useState} from "react";
-import {BarTask} from "../../types/bar-task";
-import {GanttContentMoveAction} from "../../types/gantt-task-actions";
-import {Bar} from "./bar/bar";
-import {BarSmall} from "./bar/bar-small";
+import React, { useEffect, useRef, useState } from "react";
+import { BarTask } from "../../types/bar-task";
+import { GanttContentMoveAction } from "../../types/gantt-task-actions";
+import { Bar } from "./bar/bar";
+import { BarSmall } from "./bar/bar-small";
 import style from "./task-list.module.css";
-import {Timeline} from './timeline/timeline';
+import { Timeline } from "./timeline/timeline";
 
 export type TaskItemProps = {
   task: BarTask;
@@ -12,7 +12,7 @@ export type TaskItemProps = {
   taskHeight: number;
   isProgressChangeable: boolean;
   isDateMovable: boolean;
-  isDateResizable:boolean;
+  isDateResizable: boolean;
   isDelete: boolean;
   isSelected: boolean;
   rtl: boolean;
@@ -39,7 +39,7 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
     ...props,
   };
   const textRef = useRef<SVGTextElement>(null);
-  const [taskItem, setTaskItem] = useState<JSX.Element>(<div/>);
+  const [taskItem, setTaskItem] = useState<JSX.Element>(<div />);
   const [isTextInside, setIsTextInside] = useState(true);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
         setTaskItem(<Bar {...props} />);
         break;
     }
-  },[task.typeInternal, isSelected, props]);
+  }, [task, isSelected]);
 
   useEffect(() => {
     if (textRef.current) {
@@ -111,7 +111,7 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       }}
     >
       {taskItem}
-      { !hideLabel &&
+      {!hideLabel && (
         <text
           x={getX()}
           y={task.y + taskHeight * 0.5}
@@ -124,7 +124,7 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
         >
           {task.name}
         </text>
-      }
+      )}
     </g>
   );
 };
