@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getPhaseById, getProjectById } from "../../helpers/adapter";
 import { calculateDislayedDateRange } from "../../helpers/date-helper";
+import { parseToDate } from "../../helpers/time-converters";
 import {
   TaskListHeaderComponent,
   TaskListTableComponent,
@@ -86,6 +87,8 @@ export const Planner: React.FC<PlannerProps> = props => {
     )
   );
 
+  const [viewDate, setViewDate] = useState<Date>();
+
   // projections
   const [projection, setProjection] = useState<GanttPhaseProjection>();
 
@@ -116,6 +119,14 @@ export const Planner: React.FC<PlannerProps> = props => {
         color: phase.color ? phase.color : "#ED7D31",
       });
     }
+
+    if (row.type === "project") {
+      setViewDate(parseToDate((row as GanttTask).startDate));
+    }
+    if (row.type === "task") {
+      setViewDate(parseToDate((row as Phase).startDate));
+    }
+
     // invoke callback
     props.mainGantt.onDateChange?.(row);
   };
@@ -129,15 +140,17 @@ export const Planner: React.FC<PlannerProps> = props => {
       props.preStepsCount
     );
     setDisplayedDates(dates);
+    if (!viewDate) {
+      setViewDate(dates.displayedStartDate);
+    }
   }, [
     mainGanttDoubleView,
     props.mainGantt.items,
     props.preStepsCount,
     props.secondaryGantt?.items,
     timeUnit,
+    viewDate,
   ]);
-
-  // console.log("planner.tsx render", new Date().toISOString());
   return (
     <div>
       <Switcher onTimeUnitChange={timeUnit => setTimeUnit(timeUnit)} />
@@ -156,6 +169,7 @@ export const Planner: React.FC<PlannerProps> = props => {
           ganttHeight={props.mainGantt.ganttHeight}
           displayedStartDate={displayedDates.displayedStartDate}
           displayedEndDate={displayedDates.displayedEndDate}
+          viewDate={viewDate}
           items={props.mainGantt.items}
           timeUnit={timeUnit}
           stylingOptions={props.mainGantt.stylingOptions}
@@ -195,6 +209,7 @@ export const Planner: React.FC<PlannerProps> = props => {
             ganttHeight={props.secondaryGantt.ganttHeight}
             displayedStartDate={displayedDates.displayedStartDate}
             displayedEndDate={displayedDates.displayedEndDate}
+            viewDate={viewDate}
             items={props.secondaryGantt.items}
             timeUnit={timeUnit}
             stylingOptions={props.secondaryGantt.stylingOptions}

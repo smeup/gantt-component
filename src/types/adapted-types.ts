@@ -17,6 +17,7 @@ export interface GanttCommonProps {
   showSecondaryDates?: boolean;
   ganttHeight?: number;
   hideDependencies?: boolean;
+  viewDate?: Date;
 }
 
 export interface GanttByTaskProps extends GanttCommonProps {
