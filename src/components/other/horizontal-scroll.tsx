@@ -16,6 +16,7 @@ export const HorizontalScroll: React.FC<{
     }
   }, [scroll]);
 
+  console.log("HORIZONTAL-SCROLL svgWidth: " + svgWidth);
   return (
     <div
       dir="ltr"

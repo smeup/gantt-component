@@ -34,12 +34,14 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
   const [currentProjects, setCurrentProjects] = useState(projects);
 
   useEffect(() => {
+    console.log("GANTT-BY-TASK useEffect projects changed");
     if (projects) setCurrentProjects(projects);
   }, [projects]);
 
   const [key, setKey] = useState(1);
 
   const tasks: Task[] = useMemo(() => {
+    console.log("GANTT-BY-TASK useMemo tasks currentProjects changed");
     setKey(k => k + 1);
     const tasks: Task[] = [];
     for (let i = 0; i < currentProjects.length; i++) {
@@ -67,6 +69,7 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
   };
 
   const handleDateChange = (task: Task) => {
+    console.log("GANTT-BY-TASK handleDateChange");
     const id = task?.id;
     const type = task?.type;
 
@@ -117,7 +120,7 @@ export const GanttByTask: React.FC<GanttByTaskProps> = ({
       if (phase) onDateChange?.(phase);
     }
   };
-
+  console.log("GANTT-BY-TASK render");
   const returnElement = tasks?.length > 0 && (
     <Gantt
       key={key}

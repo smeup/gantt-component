@@ -391,6 +391,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
    * Handles arrow keys events and transform it to new scroll
    */
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if ((event.target as HTMLElement).tagName === "INPUT") {
+      return;
+    }
     event.preventDefault();
     let newScrollY = scrollY;
     let newScrollX = scrollX;
@@ -472,6 +475,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         xf,
         color: projection.color,
       });
+    } else {
+      setProjectionContent(undefined);
     }
   }, [columnWidth, dateSetup.dates, projection]);
 

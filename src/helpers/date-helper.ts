@@ -121,7 +121,7 @@ export const ganttDateRangeFromTask = (
  * @param preStepsCount
  * @returns
  */
-export const calculateDislayedDateRange = (
+export const calculateDisplayedDateRange = (
   mainGanttItems: GanttTask[],
   timeUnit: TimeUnit,
   mainGanttDoubleView: boolean,

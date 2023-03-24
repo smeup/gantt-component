@@ -5,7 +5,8 @@ import { TaskListHeaderComponent } from "../../types/adapted-types";
 export const CustomTaskListHeaderHOC = (
   label: string,
   doubleView?: boolean,
-  setDoubleView?: (checked: boolean) => void
+  setDoubleView?: (checked: boolean) => void,
+  onFilterInput?: (e: React.FormEvent<HTMLInputElement>) => void
 ): TaskListHeaderComponent => {
   const CustomTaskListHeader: TaskListHeaderComponent = ({
     headerHeight,
@@ -40,6 +41,14 @@ export const CustomTaskListHeaderHOC = (
           <span className={classes.label}>Mostra previsioni</span>
         </div>
       )}
+      <div className={classes.filter}>
+        <input
+          type={"text"}
+          name="filter"
+          size={30}
+          onInput={e => onFilterInput?.(e)}
+        />
+      </div>
     </div>
   );
   return CustomTaskListHeader;

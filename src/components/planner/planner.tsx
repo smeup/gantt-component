@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { getPhaseById, getProjectById } from "../../helpers/adapter";
-import { calculateDislayedDateRange } from "../../helpers/date-helper";
-import { parseToDate } from "../../helpers/time-converters";
+import {
+  convertProjectToTasks,
+  getPhaseById,
+  getProjectById,
+  mergeTaskIntoPhases,
+  mergeTaskIntoProjects,
+  toViewMode,
+} from "../../helpers/adapter";
+import { calculateDisplayedDateRange } from "../../helpers/date-helper";
+import { formatToIsoDate } from "../../helpers/time-converters";
+import { ganttDateTimeFormatters } from "../../helpers/time-formatters";
 import {
   TaskListHeaderComponent,
   TaskListTableComponent,
@@ -14,14 +22,14 @@ import {
   GanttPhaseProjection,
   Phase,
 } from "../../types/domain";
-import { StylingOption } from "../../types/public-types";
+import { StylingOption, Task } from "../../types/public-types";
 import { TimeUnit } from "../../types/time-unit";
+import { Gantt } from "../gantt/gantt";
 import { CustomTaskListHeaderHOC } from "./custom-task-list-header";
 import {
   CustomTaskListTableHOC,
   CustomTooltipHOC,
 } from "./custom-task-list-table";
-import { GanttByTask } from "./gantt-by-task";
 import { Switcher } from "./switcher";
 
 /**
@@ -58,7 +66,6 @@ export interface GanttPlannerDetailsProps {
   onDateChange?: (row: GanttRow) => void;
   onClick?: (row: GanttRow) => void;
 }
-
 export interface PlannerProps {
   mainGantt: GanttPlannerProps;
   secondaryGantt?: GanttPlannerDetailsProps;
@@ -67,6 +74,11 @@ export interface PlannerProps {
 
 export const Planner: React.FC<PlannerProps> = props => {
   const [timeUnit, setTimeUnit] = useState(TimeUnit.MONTH);
+
+  const [currentTasks, setCurrentTasks] = useState(props.mainGantt.items);
+  const [currentDetails, setCurrentDetails] = useState(
+    props.secondaryGantt?.items
+  );
 
   // main gantt
   const [mainGanttDoubleView, setMainGanttDoubleView] = useState(
@@ -78,11 +90,11 @@ export const Planner: React.FC<PlannerProps> = props => {
     displayedStartDate: Date;
     displayedEndDate: Date;
   }>(
-    calculateDislayedDateRange(
-      props.mainGantt.items as GanttTask[],
+    calculateDisplayedDateRange(
+      currentTasks as GanttTask[],
       timeUnit,
       mainGanttDoubleView,
-      props.secondaryGantt?.items,
+      currentDetails,
       props.preStepsCount
     )
   );
@@ -92,8 +104,17 @@ export const Planner: React.FC<PlannerProps> = props => {
   // projections
   const [projection, setProjection] = useState<GanttPhaseProjection>();
 
+  const locale = "it-IT";
+
+  const onFilterInput = (e: React.FormEvent<HTMLInputElement>) => {
+    console.log("PLANNER onFilterInput", e);
+  };
+
   // handle click
-  const handleClick = (row: GanttRow) => {
+  const handleClick = (row: GanttRow, onClick: any) => {
+    if (!row) {
+      return;
+    }
     // create projections if phase is clicked
     if (row.type === "task" && props.secondaryGantt) {
       const phase = row as Phase;
@@ -101,56 +122,119 @@ export const Planner: React.FC<PlannerProps> = props => {
       setProjection({
         start: new Date(phase.startDate),
         end: new Date(phase.endDate),
-        color: phase.color ? phase.color : "#ED7D31",
+        color: phase.color ?? "#ED7D31",
       });
+    } else {
+      setProjection(undefined);
     }
-    props.mainGantt.onClick?.(row);
+    onClick?.(row);
   };
 
   // handle progress change
-  const handleDateChange = (row: GanttRow) => {
-    // update projections if phase date changed
-    if (row.type === "task" && props.secondaryGantt) {
-      const phase = row as Phase;
-      // update projection state
-      setProjection({
-        start: new Date(phase.startDate),
-        end: new Date(phase.endDate),
-        color: phase.color ? phase.color : "#ED7D31",
-      });
+  const handleDateChange = (
+    task: Task,
+    currentProjects: GanttTask[] | Detail[],
+    onDateChange: any
+  ) => {
+    const id = task?.id;
+    if (!id) {
+      return;
     }
-
+    let row = getProjectById(id, currentProjects);
+    if (!row) {
+      row = getPhaseById(id, currentProjects);
+    }
+    if (!row) {
+      return;
+    }
+    /** per il timeline, ha senso gestire il dateChange???? per adesso non gestito */
+    if (row.type === "timeline") {
+      console.log(
+        "planner.tsx onDateChange for timeline not managed yet",
+        id,
+        row.type
+      );
+      return;
+    }
     if (row.type === "project") {
-      setViewDate(parseToDate((row as GanttTask).startDate));
+      const result = mergeTaskIntoProjects(
+        currentProjects as GanttTask[],
+        task
+      );
+      row = getProjectById(row.id, result);
+      setViewDate(task.start);
+      setCurrentTasks(result);
+    } else if (row.type === "task") {
+      const parentOfClickedPhase: GanttTask | undefined = (
+        currentProjects as GanttTask[]
+      ).find(p => p.phases?.some(ph => ph?.id === id));
+      if (parentOfClickedPhase) {
+        const phases = mergeTaskIntoPhases(parentOfClickedPhase.phases, task);
+        const updatedProjects = (currentProjects as GanttTask[]).map(p =>
+          p.id === parentOfClickedPhase.id ? { ...p, phases } : p
+        );
+        row = getPhaseById(row.id, updatedProjects);
+        // update projections if phase date changed
+        if (props.secondaryGantt && row) {
+          // update projection state
+          setProjection({
+            start: new Date(row.startDate),
+            end: new Date(row.endDate),
+            color: (row as Phase).color ?? "#ED7D31",
+          });
+        }
+        setViewDate(task.start);
+        setCurrentTasks(updatedProjects);
+      }
     }
-    if (row.type === "task") {
-      setViewDate(parseToDate((row as Phase).startDate));
-    }
-
     // invoke callback
-    props.mainGantt.onDateChange?.(row);
+    onDateChange?.(row);
   };
 
   useEffect(() => {
-    const dates = calculateDislayedDateRange(
-      props.mainGantt.items as GanttTask[],
+    setCurrentTasks(props.mainGantt.items);
+    setCurrentDetails(props.secondaryGantt?.items);
+    setProjection(undefined);
+  }, [props]);
+
+  useEffect(() => {
+    const dates = calculateDisplayedDateRange(
+      currentTasks as GanttTask[],
       timeUnit,
       mainGanttDoubleView,
-      props.secondaryGantt?.items,
+      currentDetails,
       props.preStepsCount
     );
     setDisplayedDates(dates);
     if (!viewDate) {
       setViewDate(dates.displayedStartDate);
     }
-  }, [
-    mainGanttDoubleView,
-    props.mainGantt.items,
-    props.preStepsCount,
-    props.secondaryGantt?.items,
-    timeUnit,
-    viewDate,
-  ]);
+  }, [currentTasks, currentDetails]);
+
+  const tasks: Task[] = [];
+  for (let i = 0; i < currentTasks.length; i++) {
+    tasks.push(
+      ...convertProjectToTasks(
+        currentTasks[i],
+        formatToIsoDate(displayedDates.displayedStartDate),
+        formatToIsoDate(displayedDates.displayedEndDate)
+      )
+    );
+  }
+
+  const details: Task[] = [];
+  if (currentDetails) {
+    for (let i = 0; i < currentDetails.length; i++) {
+      details.push(
+        ...convertProjectToTasks(
+          currentDetails[i],
+          formatToIsoDate(displayedDates.displayedStartDate),
+          formatToIsoDate(displayedDates.displayedEndDate)
+        )
+      );
+    }
+  }
+
   return (
     <div>
       <Switcher onTimeUnitChange={timeUnit => setTimeUnit(timeUnit)} />
@@ -160,7 +244,7 @@ export const Planner: React.FC<PlannerProps> = props => {
           flexDirection: "column",
         }}
       >
-        <GanttByTask
+        <Gantt
           id="main"
           key="main"
           hideLabel={props.mainGantt.hideLabel}
@@ -170,37 +254,55 @@ export const Planner: React.FC<PlannerProps> = props => {
           displayedStartDate={displayedDates.displayedStartDate}
           displayedEndDate={displayedDates.displayedEndDate}
           viewDate={viewDate}
-          items={props.mainGantt.items}
-          timeUnit={timeUnit}
-          stylingOptions={props.mainGantt.stylingOptions}
+          tasks={tasks}
+          viewMode={toViewMode(timeUnit)}
+          {...props.mainGantt.stylingOptions}
           TaskListHeader={
             props.mainGantt.taskListHeaderProject ??
             CustomTaskListHeaderHOC(
               props.mainGantt.title,
               mainGanttDoubleView ?? false,
-              setMainGanttDoubleView
+              setMainGanttDoubleView,
+              onFilterInput
             )
           }
           TaskListTable={
             props.mainGantt.taskListTableProject ??
             CustomTaskListTableHOC(id => {
-              let row = getProjectById(id, props.mainGantt.items);
+              let row = getProjectById(id, currentTasks);
               if (!row) {
-                row = getPhaseById(id, props.mainGantt.items);
+                row = getPhaseById(id, currentTasks);
               }
               if (row) {
-                handleClick(row);
+                handleClick(row, props.mainGantt.onClick);
               }
             }, "main")
           }
           // tooltip
           TooltipContent={props.mainGantt.tooltipContent ?? CustomTooltipHOC()}
           // events
-          onClick={handleClick}
-          onDateChange={handleDateChange}
+          onClick={e => {
+            let row = getProjectById(e.id, currentTasks);
+            if (!row) {
+              row = getPhaseById(e.id, currentTasks);
+            }
+            if (row) {
+              handleClick(row, props.mainGantt.onClick);
+            }
+          }}
+          onDateChange={e =>
+            handleDateChange(
+              e,
+              currentTasks as GanttTask[],
+              props.mainGantt.onDateChange
+            )
+          }
+          locale={locale}
+          dateTimeFormatters={ganttDateTimeFormatters}
         />
+
         {props.secondaryGantt && (
-          <GanttByTask
+          <Gantt
             id="secondary"
             key="secondary"
             hideLabel={props.secondaryGantt.hideLabel}
@@ -210,17 +312,22 @@ export const Planner: React.FC<PlannerProps> = props => {
             displayedStartDate={displayedDates.displayedStartDate}
             displayedEndDate={displayedDates.displayedEndDate}
             viewDate={viewDate}
-            items={props.secondaryGantt.items}
-            timeUnit={timeUnit}
-            stylingOptions={props.secondaryGantt.stylingOptions}
+            tasks={details}
+            viewMode={toViewMode(timeUnit)}
+            {...props.mainGantt.stylingOptions}
             TaskListHeader={
-              props.mainGantt.taskListHeaderProject ??
-              CustomTaskListHeaderHOC(props.secondaryGantt.title)
+              props.secondaryGantt.taskListHeaderProject ??
+              CustomTaskListHeaderHOC(
+                props.secondaryGantt.title,
+                undefined,
+                undefined,
+                onFilterInput
+              )
             }
             TaskListTable={
               props.secondaryGantt?.taskListTableProject ??
               CustomTaskListTableHOC(id => {
-                console.log("planner.tsx GanttByTask Clicked on " + id);
+                console.log("planner.tsx secondaryGantt Clicked on " + id);
               }, "secondary")
             }
             // tooltip
@@ -230,8 +337,23 @@ export const Planner: React.FC<PlannerProps> = props => {
             // projections
             projection={projection}
             // events
-            onClick={props.secondaryGantt.onClick}
-            onDateChange={props.secondaryGantt.onDateChange}
+            onClick={e => {
+              if (props.secondaryGantt) {
+                let row = getProjectById(e.id, currentDetails as Detail[]);
+                if (row) {
+                  handleClick(row, props.secondaryGantt.onClick);
+                }
+              }
+            }}
+            onDateChange={e =>
+              handleDateChange(
+                e,
+                currentDetails as Detail[],
+                props.secondaryGantt?.onDateChange
+              )
+            }
+            locale={locale}
+            dateTimeFormatters={ganttDateTimeFormatters}
           />
         )}
       </div>
