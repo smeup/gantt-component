@@ -8,7 +8,7 @@ export const HorizontalScroll: React.FC<{
   taskListWidth: number;
   rtl: boolean;
   onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
-}> = ({ scroll, svgWidth, taskGanttRef, taskListWidth, rtl, onScroll }) => {
+}> = ({ scroll, svgWidth, taskGanttRef, rtl, onScroll }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -16,15 +16,7 @@ export const HorizontalScroll: React.FC<{
       scrollRef.current.scrollLeft = scroll;
     }
   }, [scroll]);
-
-  console.log(
-    "HORIZONTAL-SCROLL svgWidth: " + svgWidth,
-    rtl,
-    taskListWidth,
-    taskGanttRef
-  );
   const rect = taskGanttRef.current?.getBoundingClientRect();
-  console.log(rect);
   return (
     <div
       dir="ltr"
