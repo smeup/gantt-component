@@ -86,6 +86,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onExpanderClick,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const taskGanttRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
     const [startDate, endDate] = ganttDateRangeFromTask(
@@ -587,6 +588,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           calendarProps={calendarProps}
           barProps={barProps}
           ganttHeight={ganttHeight}
+          taskGanttRef={taskGanttRef}
           scrollY={scrollY}
           scrollX={scrollX}
         />
@@ -619,6 +621,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       </div>
       <HorizontalScroll
         svgWidth={svgWidth}
+        taskGanttRef={taskGanttRef}
         taskListWidth={taskListWidth}
         scroll={scrollX}
         rtl={rtl}

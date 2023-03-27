@@ -4,10 +4,11 @@ import styles from "./horizontal-scroll.module.css";
 export const HorizontalScroll: React.FC<{
   scroll: number;
   svgWidth: number;
+  taskGanttRef: React.RefObject<HTMLDivElement>;
   taskListWidth: number;
   rtl: boolean;
   onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
-}> = ({ scroll, svgWidth, taskListWidth, rtl, onScroll }) => {
+}> = ({ scroll, svgWidth, taskGanttRef, taskListWidth, rtl, onScroll }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -16,15 +17,26 @@ export const HorizontalScroll: React.FC<{
     }
   }, [scroll]);
 
-  console.log("HORIZONTAL-SCROLL svgWidth: " + svgWidth);
+  console.log(
+    "HORIZONTAL-SCROLL svgWidth: " + svgWidth,
+    rtl,
+    taskListWidth,
+    taskGanttRef
+  );
+  const rect = taskGanttRef.current?.getBoundingClientRect();
+  console.log(rect);
   return (
     <div
       dir="ltr"
-      style={{
-        margin: rtl
-          ? `0px ${taskListWidth}px 0px 0px`
-          : `0px 0px 0px ${taskListWidth}px`,
-      }}
+      style={
+        rect
+          ? {
+              margin: rtl
+                ? `0px ${rect.x}px 0px 0px`
+                : `0px 0px 0px ${rect.x}px`,
+            }
+          : undefined
+      }
       className={styles.scrollWrapper}
       onScroll={onScroll}
       ref={scrollRef}
