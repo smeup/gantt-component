@@ -4,9 +4,11 @@ import { TaskListHeaderComponent } from "../../types/adapted-types";
 
 export const CustomTaskListHeaderHOC = (
   label: string,
+  name: string,
+  filter: string,
   doubleView?: boolean,
   setDoubleView?: (checked: boolean) => void,
-  onFilterInput?: (e: React.FormEvent<HTMLInputElement>) => void
+  onFilterInput?: (e: React.FormEvent<HTMLInputElement>, name: string) => void
 ): TaskListHeaderComponent => {
   const CustomTaskListHeader: TaskListHeaderComponent = ({
     headerHeight,
@@ -38,15 +40,26 @@ export const CustomTaskListHeaderHOC = (
             />
             <span className={classes.slider}></span>
           </label>
-          <span className={classes.label}>Mostra previsioni</span>
+          <span className={classes.label}>Previsioni</span>
         </div>
       )}
       <div className={classes.filter}>
         <input
-          type={"text"}
+          type="text"
           name="filter"
-          size={30}
-          onInput={e => onFilterInput?.(e)}
+          size={10}
+          maxLength={30}
+          title="Filter"
+          onKeyUp={e => {
+            if (e.key == "Enter") {
+              console.log(
+                "CUSTOM-TASK-LIST-HEADER onKeyUp filter field for: " + name,
+                e
+              );
+              onFilterInput?.(e, name);
+            }
+          }}
+          defaultValue={filter}
         />
       </div>
     </div>

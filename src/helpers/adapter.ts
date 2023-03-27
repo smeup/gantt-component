@@ -1,9 +1,24 @@
 import { TimeUnit } from "../types/time-unit";
-import { Detail, Phase, GanttTask, ScheduleItem } from "../types/domain";
-import { formatToIsoDate, validDates } from "./time-converters";
+import {
+  Detail,
+  Phase,
+  GanttTask,
+  GanttRow,
+  ScheduleItem,
+} from "../types/domain";
+import {
+  formatToIsoDate,
+  formatToLocaleSimple,
+  validDates,
+  parseToDayStart,
+  parseToDayEnd,
+} from "./time-converters";
 import { Task, Timeframe, ViewMode } from "../types/public-types";
 
 export const DAY_MILLIS = 24 * 60 * 60 * 1000;
+
+export const MAIN_GANTT_ID = "main";
+export const SECONDARY_GANTT_ID = "secondary";
 
 export const toViewMode = (timeUnit: TimeUnit): ViewMode => {
   switch (timeUnit) {
@@ -239,4 +254,36 @@ export const getPhaseById = (
       }
   }
   return undefined;
+};
+
+export const filterItems = (
+  items: GanttRow[] | undefined,
+  filter: string
+): GanttRow[] | undefined => {
+  if (!filter || !items) {
+    return items;
+  }
+  const ris: GanttRow[] = [];
+  items.forEach(element => {
+    if (element.valuesToShow) {
+      for (let i = 0; i < element.valuesToShow.length; i++) {
+        let value = element.valuesToShow[i];
+        value =
+          value === "#START#"
+            ? formatToLocaleSimple(
+                parseToDayStart((element as GanttTask).startDate)
+              )
+            : value === "#END#"
+            ? formatToLocaleSimple(
+                parseToDayEnd((element as GanttTask).endDate)
+              )
+            : value;
+        if (value.toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
+          ris.push(element);
+          break;
+        }
+      }
+    }
+  });
+  return ris;
 };
