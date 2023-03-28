@@ -4,14 +4,10 @@ import { TaskListHeaderComponent } from "../../types/adapted-types";
 
 export const CustomTaskListHeaderHOC = (
   label: string,
-  name: string,
-  filter: string,
   doubleView?: boolean,
-  setDoubleView?: (checked: boolean) => void,
-  onFilterInput?: (e: React.FormEvent<HTMLInputElement>, name: string) => void
+  setDoubleView?: (checked: boolean) => void
 ): TaskListHeaderComponent => {
   const CustomTaskListHeader: TaskListHeaderComponent = ({
-    headerHeight,
     fontFamily,
     fontSize,
   }) => (
@@ -19,7 +15,7 @@ export const CustomTaskListHeaderHOC = (
       style={{
         fontFamily,
         fontSize,
-        height: headerHeight,
+        height: "50px",
       }}
       className={classes.wrapper}
     >
@@ -43,25 +39,6 @@ export const CustomTaskListHeaderHOC = (
           <span className={classes.label}>Previsioni</span>
         </div>
       )}
-      <div className={classes.filter}>
-        <input
-          type="text"
-          name="filter"
-          size={10}
-          maxLength={30}
-          title="Filter"
-          onKeyUp={e => {
-            if (e.key == "Enter") {
-              console.log(
-                "CUSTOM-TASK-LIST-HEADER onKeyUp filter field for: " + name,
-                e
-              );
-              onFilterInput?.(e, name);
-            }
-          }}
-          defaultValue={filter}
-        />
-      </div>
     </div>
   );
   return CustomTaskListHeader;

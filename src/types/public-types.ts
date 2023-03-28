@@ -190,6 +190,7 @@ export interface GanttProps
   id: string;
   tasks: Task[];
   projection?: GanttPhaseProjection;
+  filter: HTMLElement;
 }
 
 /**
