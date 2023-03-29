@@ -35,6 +35,7 @@ export type TaskListProps = {
     setSelectedTask: (taskId: string) => void;
     onExpanderClick: (task: Task) => void;
   }>;
+  filter: HTMLElement;
 };
 
 export const TaskList: React.FC<TaskListProps> = ({
@@ -54,6 +55,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   horizontalContainerClass,
   TaskListHeader,
   TaskListTable,
+  filter,
 }) => {
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -80,6 +82,10 @@ export const TaskList: React.FC<TaskListProps> = ({
     setSelectedTask,
     onExpanderClick,
   };
+
+  useEffect(() => {
+    taskListRef.current?.prepend(filter as Node);
+  }, [taskListRef, filter]);
 
   return (
     <div ref={taskListRef} className={classes.tasks}>

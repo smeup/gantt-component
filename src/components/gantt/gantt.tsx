@@ -37,10 +37,11 @@ import { GanttSyncScrollEvent } from "../../types/domain";
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   id,
   tasks,
-  headerHeight = 50,
+  headerHeight = 114,
   columnWidth = 60,
   listCellWidth = "297px",
   rowHeight = 50,
+  filter,
   ganttHeight = 0,
   viewMode = ViewMode.Day,
   preStepsCount = 1,
@@ -86,6 +87,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onExpanderClick,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const taskGanttRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
   const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
     const [startDate, endDate] = ganttDateRangeFromTask(
@@ -565,6 +567,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     headerHeight,
     scrollY,
     ganttHeight,
+    filter,
     horizontalContainerClass: styles.horizontalContainer,
     selectedTask,
     taskListRef,
@@ -587,6 +590,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           calendarProps={calendarProps}
           barProps={barProps}
           ganttHeight={ganttHeight}
+          taskGanttRef={taskGanttRef}
           scrollY={scrollY}
           scrollX={scrollX}
         />
@@ -619,6 +623,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       </div>
       <HorizontalScroll
         svgWidth={svgWidth}
+        taskGanttRef={taskGanttRef}
         taskListWidth={taskListWidth}
         scroll={scrollX}
         rtl={rtl}

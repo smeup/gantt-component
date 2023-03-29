@@ -42,13 +42,17 @@ const AppPlanner = () => {
 
   return (
     <React.StrictMode>
-      <h1>Test Planner Component with secondary gantt dates greater than primary gantt dates</h1>
+      <h1>
+        Test Planner Component with secondary gantt dates greater than primary
+        gantt dates
+      </h1>
       <Planner {...props} />
     </React.StrictMode>
   );
 };
 
 const mainGanttPlannerPropsMock: GanttPlannerProps = {
+  filter: dummyFilter(),
   items: [
     {
       id: "1",
@@ -150,6 +154,7 @@ const mainGanttItemAfterClick: GanttTask[] = [
 ];
 
 const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
+  filter: dummyFilter(),
   items: [
     {
       id: "RIS1",
@@ -203,5 +208,11 @@ const plannerAfterClickPropsMock: PlannerProps = {
   },
   secondaryGantt: secondaryGanttPlannerPropsMock,
 };
+
+function dummyFilter() {
+  const filter = document.createElement("div");
+  filter.innerText = "Filter placeholder";
+  return filter;
+}
 
 export default AppPlanner;

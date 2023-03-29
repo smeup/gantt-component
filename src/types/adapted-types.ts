@@ -20,22 +20,6 @@ export interface GanttCommonProps {
   viewDate?: Date;
 }
 
-export interface GanttByTaskProps extends GanttCommonProps {
-  /** Id */
-  id: string;
-  /** Rows to display in chart */
-  items: GanttTask[] | Detail[];
-  /** Current date indicator */
-  currentDateIndicator?: CurrentDateIndicator;
-  displayedStartDate: Date;
-  displayedEndDate: Date;
-  /** Projections */
-  projection?: GanttPhaseProjection;
-  /** Invoked on bar click. */
-  onClick?: (row: GanttRow) => void;
-  onDateChange?: (row: GanttRow) => void;
-}
-
 export type TooltipContentComponent = FC<{
   task: Task;
   fontSize: string;

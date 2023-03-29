@@ -9,6 +9,7 @@ export type TaskGanttProps = {
   calendarProps: CalendarProps;
   barProps: TaskGanttContentProps;
   ganttHeight: number;
+  taskGanttRef: React.RefObject<HTMLDivElement>;
   scrollY: number;
   scrollX: number;
 };
@@ -17,6 +18,7 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   calendarProps,
   barProps,
   ganttHeight,
+  taskGanttRef,
   scrollY,
   scrollX,
 }) => {
@@ -38,7 +40,7 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   }, [scrollX]);
 
   return (
-    <div className={styles.ganttContainer}>
+    <div className={styles.ganttContainer} ref={taskGanttRef}>
       <div
         className={styles.ganttVerticalContainer}
         ref={verticalGanttContainerRef}

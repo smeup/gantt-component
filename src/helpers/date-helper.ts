@@ -239,8 +239,8 @@ export const ganttDateRangeGeneric = (
   showSecondaryDates: boolean,
   realDates?: boolean
 ) => {
-  let newStartDate: Date = dates[0].start;
-  let newEndDate: Date = dates[0].end;
+  let newStartDate: Date = dates.length > 0 ? dates[0].start : new Date();
+  let newEndDate: Date = dates.length > 0 ? dates[0].end : new Date();
   for (const d of dates) {
     if (d.start < newStartDate) {
       newStartDate = d.start;

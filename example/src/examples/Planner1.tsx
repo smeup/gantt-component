@@ -51,6 +51,7 @@ const AppPlanner = () => {
 };
 
 const mainGanttPlannerPropsMock: GanttPlannerProps = {
+  filter: dummyFilter(),
   items: [
     {
       id: "1",
@@ -1720,6 +1721,7 @@ const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
   hideLabel: true,
   ganttHeight: 200,
   hideDependencies: true,
+  filter: dummyFilter(),
   title: "Detail",
 };
 
@@ -1735,5 +1737,11 @@ const plannerAfterClickPropsMock: PlannerProps = {
   },
   secondaryGantt: secondaryGanttPlannerPropsMock,
 };
+
+function dummyFilter() {
+  const filter = document.createElement("div");
+  filter.innerText = "Filter placeholder";
+  return filter;
+}
 
 export default AppPlanner;

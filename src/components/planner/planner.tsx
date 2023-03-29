@@ -3,8 +3,10 @@ import {
   convertProjectToTasks,
   getPhaseById,
   getProjectById,
+  MAIN_GANTT_ID,
   mergeTaskIntoPhases,
   mergeTaskIntoProjects,
+  SECONDARY_GANTT_ID,
   toViewMode,
 } from "../../helpers/adapter";
 import { calculateDisplayedDateRange } from "../../helpers/date-helper";
@@ -46,6 +48,7 @@ export interface GanttPlannerProps {
   ganttHeight?: number;
   hideDependencies?: boolean;
   title: string;
+  filter: HTMLElement;
 
   /** Events */
   onDateChange?: (row: GanttRow) => void;
@@ -61,6 +64,7 @@ export interface GanttPlannerDetailsProps {
   ganttHeight?: number;
   hideDependencies?: boolean;
   title: string;
+  filter: HTMLElement;
 
   /** Events */
   onDateChange?: (row: GanttRow) => void;
@@ -105,10 +109,6 @@ export const Planner: React.FC<PlannerProps> = props => {
   const [projection, setProjection] = useState<GanttPhaseProjection>();
 
   const locale = "it-IT";
-
-  const onFilterInput = (e: React.FormEvent<HTMLInputElement>) => {
-    console.log("PLANNER onFilterInput", e);
-  };
 
   // handle click
   const handleClick = (row: GanttRow, onClick: any) => {
@@ -234,6 +234,7 @@ export const Planner: React.FC<PlannerProps> = props => {
       );
     }
   }
+  console.log("PLANNER render");
 
   return (
     <div>
@@ -245,8 +246,9 @@ export const Planner: React.FC<PlannerProps> = props => {
         }}
       >
         <Gantt
-          id="main"
-          key="main"
+          id={MAIN_GANTT_ID}
+          key={MAIN_GANTT_ID}
+          filter={props.mainGantt.filter}
           hideLabel={props.mainGantt.hideLabel}
           showSecondaryDates={mainGanttDoubleView}
           hideDependencies={props.mainGantt.hideDependencies}
@@ -262,8 +264,7 @@ export const Planner: React.FC<PlannerProps> = props => {
             CustomTaskListHeaderHOC(
               props.mainGantt.title,
               mainGanttDoubleView ?? false,
-              setMainGanttDoubleView,
-              onFilterInput
+              setMainGanttDoubleView
             )
           }
           TaskListTable={
@@ -276,7 +277,7 @@ export const Planner: React.FC<PlannerProps> = props => {
               if (row) {
                 handleClick(row, props.mainGantt.onClick);
               }
-            }, "main")
+            }, MAIN_GANTT_ID)
           }
           // tooltip
           TooltipContent={props.mainGantt.tooltipContent ?? CustomTooltipHOC()}
@@ -303,9 +304,10 @@ export const Planner: React.FC<PlannerProps> = props => {
 
         {props.secondaryGantt && (
           <Gantt
-            id="secondary"
-            key="secondary"
+            id={SECONDARY_GANTT_ID}
+            key={SECONDARY_GANTT_ID}
             hideLabel={props.secondaryGantt.hideLabel}
+            filter={props.secondaryGantt.filter}
             showSecondaryDates={mainGanttDoubleView}
             hideDependencies={props.secondaryGantt.hideDependencies}
             ganttHeight={props.secondaryGantt.ganttHeight}
@@ -317,18 +319,13 @@ export const Planner: React.FC<PlannerProps> = props => {
             {...props.mainGantt.stylingOptions}
             TaskListHeader={
               props.secondaryGantt.taskListHeaderProject ??
-              CustomTaskListHeaderHOC(
-                props.secondaryGantt.title,
-                undefined,
-                undefined,
-                onFilterInput
-              )
+              CustomTaskListHeaderHOC(props.secondaryGantt.title)
             }
             TaskListTable={
               props.secondaryGantt?.taskListTableProject ??
               CustomTaskListTableHOC(id => {
                 console.log("planner.tsx secondaryGantt Clicked on " + id);
-              }, "secondary")
+              }, SECONDARY_GANTT_ID)
             }
             // tooltip
             TooltipContent={
