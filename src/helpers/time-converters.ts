@@ -10,8 +10,9 @@ export const parseToDayEnd = (endDate: string) =>
     .plus({ seconds: 86400 - 1 })
     .toJSDate();
 
-export const formatToIsoDate = (date: Date) =>
-  DateTime.fromJSDate(date).toISODate();
+export const formatToIsoDate = (date: Date) => {
+  return DateTime.fromJSDate(date).toISODate() ?? undefined;
+};
 
 export const formatToLocaleSimple = (date: Date) =>
   DateTime.fromJSDate(date).toFormat("dd/MM/yyyy");
