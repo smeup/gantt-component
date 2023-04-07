@@ -1628,8 +1628,8 @@ const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
       id: "RIS2",
       name: "Risorsa 2",
       schedule: [
-        { startDate: "2023-01-10", endDate: "2023-02-10", color: "#ff0000" },
-        { startDate: "2023-03-10", endDate: "2023-04-10", color: "#ff0000" },
+        { startDate: "2023-01-10", endDate: "2023-02-10", color: "#00ff00" },
+        { startDate: "2023-03-10", endDate: "2023-04-10", color: "#0000ff" },
       ],
       type: "timeline",
       valuesToShow: ["Risorsa 2"],
@@ -1638,8 +1638,8 @@ const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
       id: "RIS3",
       name: "Risorsa 3",
       schedule: [
-        { startDate: "2023-01-15", endDate: "2023-02-15", color: "#ff0000" },
-        { startDate: "2023-03-15", endDate: "2023-04-15", color: "#ff0000" },
+        { startDate: "2023-01-15", endDate: "2023-02-15" /*color: "#ff0000"*/ },
+        { startDate: "2023-03-15", endDate: "2023-04-15" /*color: "#ff0000"*/ },
       ],
       type: "timeline",
       valuesToShow: ["Risorsa 3"],
