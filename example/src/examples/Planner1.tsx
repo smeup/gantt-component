@@ -64,6 +64,8 @@ const mainGanttPlannerPropsMock: GanttPlannerProps = {
       phases: [],
       details: [],
       valuesToShow: ["G456", "#START#", "#END#"],
+      iconUrl:
+        "https://ketchup.smeup.com/ketchup-showcase/assets/svg/airplane.svg",
     },
     {
       id: "2",
@@ -1619,7 +1621,13 @@ const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
       name: "Risorsa 1",
       schedule: [
         { startDate: "2023-01-01", endDate: "2023-02-01", color: "#ff0000" },
-        { startDate: "2023-03-01", endDate: "2023-04-01", color: "#ff0000" },
+        {
+          startDate: "2023-03-01",
+          endDate: "2023-04-01",
+          color: "#ff0000",
+          iconUrl:
+            "https://ketchup.smeup.com/ketchup-showcase/assets/svg/delete.svg",
+        },
       ],
       type: "timeline",
       valuesToShow: ["Risorsa 1"],

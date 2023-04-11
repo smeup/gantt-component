@@ -1,6 +1,5 @@
 import { FC } from "react";
-import { GanttRow, GanttTask, Detail, GanttPhaseProjection } from "./domain";
-import { CurrentDateIndicator, Task } from "./public-types";
+import { Task } from "./public-types";
 import { TimeUnit } from "./time-unit";
 
 export interface GanttCommonProps {

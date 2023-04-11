@@ -44,6 +44,7 @@ export const convertPhaseToTask = (item: Phase): Task => {
     color,
     selectedColor,
     dependencies,
+    iconUrl,
   }: Phase): Task => {
     const { start, end } = validDates(phaseStart, phaseEnd, phaseName);
     const { start: phaseStart2, end: phaseEnd2 } = validDates(
@@ -73,6 +74,7 @@ export const convertPhaseToTask = (item: Phase): Task => {
             progressSelectedColor: selectedColor,
           }
         : {},
+      iconUrl: iconUrl ?? undefined,
     };
   };
 
@@ -107,13 +109,14 @@ const convertDetailToTimeline = (
   const { start, end } = getDatesForTask(item);
 
   const convertToFrame = (x: ScheduleItem): Timeframe => {
-    const { startDate, endDate, color, selectedColor } = x;
+    const { startDate, endDate, color, selectedColor, iconUrl } = x;
     const { start, end } = validDates(startDate, endDate, "time frame");
     return {
       start,
       end,
       backgroundColor: color ?? "0xffffff",
       backgroundSelectedColor: selectedColor ?? color,
+      iconUrl: iconUrl ?? undefined,
     };
   };
 
@@ -181,6 +184,7 @@ export const convertProjectToTasks = (
       /** Non disabilita clic nè select, ma solo il resize/move */
       isDisabled: false,
       hideChildren: false,
+      iconUrl: row.iconUrl,
     };
     const children1 = (row.phases ?? []).map(convertPhaseToTask);
     return [mainTask, ...children1];

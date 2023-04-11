@@ -15,6 +15,7 @@ export interface GanttTask extends GanttRow {
   secondaryEndDate: string;
   phases?: Phase[];
   details?: Detail[];
+  iconUrl?: string;
 }
 
 /** Fase */
@@ -26,6 +27,7 @@ export interface Phase extends GanttRow {
   color?: string;
   selectedColor?: string;
   dependencies?: string[];
+  iconUrl?: string;
 }
 
 /** Risorsa */
@@ -38,7 +40,7 @@ export interface ScheduleItem {
   endDate: string;
   color?: string;
   selectedColor?: string;
-  valueToShow?: [];
+  iconUrl?: string;
 }
 
 /**
@@ -48,7 +50,6 @@ export interface GanttSyncScrollEvent {
   componentId: string;
   scrollX: number;
 }
-
 /**
  * Interface for phase projection
  */

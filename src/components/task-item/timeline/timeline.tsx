@@ -22,19 +22,36 @@ export const Timeline: FC<TaskItemProps> = ({
         rx={0}
         ry={0}
       />
-      {task.barChildren.map(bar => (
-        <rect
-          style={{ cursor: "pointer" }}
-          key={bar.id}
-          fill={bar.styles.backgroundColor}
-          x={bar.x1}
-          width={bar.x2 - bar.x1}
-          y={bar.y}
-          height={bar.height}
-          rx={bar.barCornerRadius}
-          ry={bar.barCornerRadius}
-        />
-      ))}
+      {task.barChildren.map(bar => {
+        let iconElem = undefined;
+        if (bar.iconUrl) {
+          console.log("timeline.tsx bar.iconUrl", bar.iconUrl);
+          // let svg: string = `url('${bar.iconUrl}') no-repeat center`;
+          // const iconStyle: {
+          //   [key: string]: string;
+          // } = {
+          //   mask: svg,
+          //   WebkitMask: svg,
+          // };
+          // iconElem = <span key={bar.id + ".icon"} style={iconStyle}></span>;
+        }
+        return (
+          <React.Fragment key={bar.id + ".rf"}>
+            <rect
+              style={{ cursor: "pointer" }}
+              key={bar.id}
+              fill={bar.styles.backgroundColor}
+              x={bar.x1}
+              width={bar.x2 - bar.x1}
+              y={bar.y}
+              height={bar.height}
+              rx={bar.barCornerRadius}
+              ry={bar.barCornerRadius}
+            />
+            {iconElem}
+          </React.Fragment>
+        );
+      })}
     </g>
   );
 };

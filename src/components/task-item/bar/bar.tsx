@@ -22,6 +22,7 @@ export const Bar: React.FC<TaskItemProps> = ({
     task.height
   );
   const handleHeight = task.height - 2;
+  console.log("bar.tsx task.iconUrl", task.iconUrl);
   return (
     <g className={styles.barWrapper} tabIndex={0}>
       <BarDisplay

@@ -1,6 +1,4 @@
-// Probably dead code not used
-
-const cachedFormats = {};
+const cachedFormats: { [key: string]: Intl.DateTimeFormat } = {};
 
 const getOrBuildCachedFormat = (locale: string, options: any) => {
   const key = locale + "#" + JSON.stringify(options);
@@ -15,6 +13,7 @@ const format = (date: Date, locale: string, options: object) => {
   } catch (e) {
     console.error("time-formatters.ts format", date, locale, options);
     console.error(e);
+    return "FORMAT-ERR";
   }
 };
 

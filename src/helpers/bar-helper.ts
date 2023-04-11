@@ -298,6 +298,7 @@ const convertToTimeline = (
       x1,
       x2,
       y,
+      iconUrl: frame.iconUrl ?? undefined,
     };
   }
 

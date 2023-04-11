@@ -36,6 +36,7 @@ export interface Task {
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
+  iconUrl?: string;
 }
 
 export interface Timeframe {
@@ -43,6 +44,7 @@ export interface Timeframe {
   end: Date;
   backgroundColor: string;
   backgroundSelectedColor?: string;
+  iconUrl?: string;
 }
 
 export interface EventOption {
