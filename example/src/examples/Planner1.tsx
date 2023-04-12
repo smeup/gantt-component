@@ -783,6 +783,8 @@ const mainGanttItemAfterClick: GanttTask[] = [
     secondaryEndDate: "2023-03-07",
     type: "project",
     valuesToShow: ["G456", "#START#", "#END#"],
+    iconUrl:
+      "https://ketchup.smeup.com/ketchup-showcase/assets/svg/airplane.svg",
     phases: [
       {
         id: "P410           ",
@@ -796,6 +798,8 @@ const mainGanttItemAfterClick: GanttTask[] = [
         valuesToShow: ["P410", "#START#", "#END#"],
         dependencies: [],
         type: "task",
+        iconUrl:
+          "https://ketchup.smeup.com/ketchup-showcase/assets/svg/azure.svg",
       },
       {
         id: "P420           ",

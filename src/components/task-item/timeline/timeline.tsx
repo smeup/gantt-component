@@ -26,14 +26,15 @@ export const Timeline: FC<TaskItemProps> = ({
         let iconElem = undefined;
         if (bar.iconUrl) {
           console.log("timeline.tsx bar.iconUrl", bar.iconUrl);
-          // let svg: string = `url('${bar.iconUrl}') no-repeat center`;
-          // const iconStyle: {
-          //   [key: string]: string;
-          // } = {
-          //   mask: svg,
-          //   WebkitMask: svg,
-          // };
-          // iconElem = <span key={bar.id + ".icon"} style={iconStyle}></span>;
+          iconElem = (
+            <image
+              href={bar.iconUrl}
+              y={bar.y / 2}
+              x={bar.x1 + (bar.x2 - bar.x1) - bar.height}
+              width={bar.height + "px"}
+              height={bar.height + "px"}
+            />
+          );
         }
         return (
           <React.Fragment key={bar.id + ".rf"}>

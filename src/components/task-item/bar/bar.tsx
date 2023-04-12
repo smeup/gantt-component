@@ -22,7 +22,41 @@ export const Bar: React.FC<TaskItemProps> = ({
     task.height
   );
   const handleHeight = task.height - 2;
-  console.log("bar.tsx task.iconUrl", task.iconUrl);
+
+  let iconElem = undefined;
+  if (task.iconUrl) {
+    console.log("bar.tsx task.iconUrl", task.iconUrl);
+    iconElem = (
+      <svg
+        className={styles.pippo}
+        width={task.height / 2 + "px"}
+        height={task.height / 2 + "px"}
+        y={task.y}
+        x={task.x1 + (task.x2 - task.x1) - task.height / 2}
+      >
+        {/* <use xlinkHref={task.iconUrl} /> */}
+        <image
+          href={task.iconUrl}
+          height={task.height / 2 + "px"}
+          width={task.height / 2 + "px"}
+          fill="blue"
+        />
+      </svg>
+    );
+    // iconElem = (
+    //   <React.Fragment>
+    //     <image
+    //       href={task.iconUrl}
+    //       y={task.y}
+    //       x={task.x1 + (task.x2 - task.x1) - task.height / 2}
+    //       width={task.height / 2 + "px"}
+    //       height={task.height / 2 + "px"}
+    //       className={styles.pippo}
+    //     />
+    //   </React.Fragment>
+    // );
+  }
+
   return (
     <g className={styles.barWrapper} tabIndex={0}>
       <BarDisplay
@@ -78,6 +112,7 @@ export const Bar: React.FC<TaskItemProps> = ({
           />
         )}
       </g>
+      {iconElem}
     </g>
   );
 };
