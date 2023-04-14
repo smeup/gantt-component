@@ -1,4 +1,4 @@
-import { TaskType } from "./public-types";
+import { TaskIcon, TaskType } from "./public-types";
 
 export interface GanttRow {
   id: string;
@@ -15,7 +15,7 @@ export interface GanttTask extends GanttRow {
   secondaryEndDate: string;
   phases?: Phase[];
   details?: Detail[];
-  iconUrl?: string;
+  icon?: TaskIcon;
 }
 
 /** Fase */
@@ -27,7 +27,7 @@ export interface Phase extends GanttRow {
   color?: string;
   selectedColor?: string;
   dependencies?: string[];
-  iconUrl?: string;
+  icon?: TaskIcon;
 }
 
 /** Risorsa */
@@ -40,9 +40,8 @@ export interface ScheduleItem {
   endDate: string;
   color?: string;
   selectedColor?: string;
-  iconUrl?: string;
+  icon?: TaskIcon;
 }
-
 /**
  * Event payload for gantt-sync-scroll-event
  */

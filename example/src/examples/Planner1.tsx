@@ -64,8 +64,10 @@ const mainGanttPlannerPropsMock: GanttPlannerProps = {
       phases: [],
       details: [],
       valuesToShow: ["G456", "#START#", "#END#"],
-      iconUrl:
-        "https://ketchup.smeup.com/ketchup-showcase/assets/svg/airplane.svg",
+      icon: {
+        color: "#FF0000",
+        url: "http://localhost:3000/assets/svg/accessibility.svg",
+      },
     },
     {
       id: "2",
@@ -783,8 +785,10 @@ const mainGanttItemAfterClick: GanttTask[] = [
     secondaryEndDate: "2023-03-07",
     type: "project",
     valuesToShow: ["G456", "#START#", "#END#"],
-    iconUrl:
-      "https://ketchup.smeup.com/ketchup-showcase/assets/svg/airplane.svg",
+    icon: {
+      color: "#FF0000",
+      url: "http://localhost:3000/assets/svg/accessibility.svg",
+    },
     phases: [
       {
         id: "P410           ",
@@ -798,8 +802,10 @@ const mainGanttItemAfterClick: GanttTask[] = [
         valuesToShow: ["P410", "#START#", "#END#"],
         dependencies: [],
         type: "task",
-        iconUrl:
-          "https://ketchup.smeup.com/ketchup-showcase/assets/svg/azure.svg",
+        icon: {
+          color: "#FF0000",
+          url: "http://localhost:3000/assets/svg/accessibility.svg",
+        },
       },
       {
         id: "P420           ",
@@ -1629,8 +1635,10 @@ const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
           startDate: "2023-03-01",
           endDate: "2023-04-01",
           color: "#ff0000",
-          iconUrl:
-            "https://ketchup.smeup.com/ketchup-showcase/assets/svg/delete.svg",
+          icon: {
+            color: "#00ff00",
+            url: "http://localhost:3000/assets/svg/accessibility.svg",
+          },
         },
       ],
       type: "timeline",

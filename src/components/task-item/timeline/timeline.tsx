@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { TaskItemProps } from "../task-item";
+import { TaskIcon } from "../task-icon";
 
 export const Timeline: FC<TaskItemProps> = ({
   task,
@@ -10,6 +11,8 @@ export const Timeline: FC<TaskItemProps> = ({
   const col = isSelected
     ? styles.backgroundSelectedColor
     : styles.backgroundColor;
+
+  console.log("task icon timeline", task.icon);
 
   return (
     <g tabIndex={0} onMouseDown={e => onEventStart("move", task, e)}>
@@ -23,19 +26,6 @@ export const Timeline: FC<TaskItemProps> = ({
         ry={0}
       />
       {task.barChildren.map(bar => {
-        let iconElem = undefined;
-        if (bar.iconUrl) {
-          console.log("timeline.tsx bar.iconUrl", bar.iconUrl);
-          iconElem = (
-            <image
-              href={bar.iconUrl}
-              y={bar.y / 2}
-              x={bar.x1 + (bar.x2 - bar.x1) - bar.height}
-              width={bar.height + "px"}
-              height={bar.height + "px"}
-            />
-          );
-        }
         return (
           <React.Fragment key={bar.id + ".rf"}>
             <rect
@@ -49,7 +39,16 @@ export const Timeline: FC<TaskItemProps> = ({
               rx={bar.barCornerRadius}
               ry={bar.barCornerRadius}
             />
-            {iconElem}
+            {task.icon && (
+              <TaskIcon
+                color={task.icon.color}
+                url={task.icon.url as string}
+                width={bar.height + "px"}
+                height={bar.height + "px"}
+                x={bar.x1 + (bar.x2 - bar.x1) - bar.height}
+                y={bar.y / 2}
+              ></TaskIcon>
+            )}
           </React.Fragment>
         );
       })}

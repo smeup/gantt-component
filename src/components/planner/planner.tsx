@@ -209,7 +209,14 @@ export const Planner: React.FC<PlannerProps> = props => {
     if (!viewDate) {
       setViewDate(dates.displayedStartDate);
     }
-  }, [currentTasks, currentDetails]);
+  }, [
+    currentTasks,
+    currentDetails,
+    timeUnit,
+    mainGanttDoubleView,
+    props.preStepsCount,
+    viewDate,
+  ]);
 
   const tasks: Task[] = [];
   for (let i = 0; i < currentTasks.length; i++) {

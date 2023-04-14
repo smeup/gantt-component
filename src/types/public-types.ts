@@ -36,7 +36,7 @@ export interface Task {
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
-  iconUrl?: string;
+  icon?: TaskIcon;
 }
 
 export interface Timeframe {
@@ -44,7 +44,7 @@ export interface Timeframe {
   end: Date;
   backgroundColor: string;
   backgroundSelectedColor?: string;
-  iconUrl?: string;
+  icon?: TaskIcon;
 }
 
 export interface EventOption {
@@ -201,4 +201,12 @@ export interface GanttProps
 export interface CurrentDateIndicator {
   color: string;
   x: number;
+}
+
+/**
+ * Define the inteface of icon located into bar and timeline task
+ */
+export interface TaskIcon {
+  color: string;
+  url: string;
 }

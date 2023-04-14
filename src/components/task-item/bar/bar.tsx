@@ -4,6 +4,7 @@ import { BarDisplay } from "./bar-display";
 import { BarDateHandle } from "./bar-date-handle";
 import { BarProgressHandle } from "./bar-progress-handle";
 import { TaskItemProps } from "../task-item";
+import { TaskIcon } from "../task-icon";
 import styles from "./bar.module.css";
 
 export const Bar: React.FC<TaskItemProps> = ({
@@ -22,40 +23,6 @@ export const Bar: React.FC<TaskItemProps> = ({
     task.height
   );
   const handleHeight = task.height - 2;
-
-  let iconElem = undefined;
-  if (task.iconUrl) {
-    console.log("bar.tsx task.iconUrl", task.iconUrl);
-    iconElem = (
-      <svg
-        className={styles.pippo}
-        width={task.height / 2 + "px"}
-        height={task.height / 2 + "px"}
-        y={task.y}
-        x={task.x1 + (task.x2 - task.x1) - task.height / 2}
-      >
-        {/* <use xlinkHref={task.iconUrl} /> */}
-        <image
-          href={task.iconUrl}
-          height={task.height / 2 + "px"}
-          width={task.height / 2 + "px"}
-          fill="blue"
-        />
-      </svg>
-    );
-    // iconElem = (
-    //   <React.Fragment>
-    //     <image
-    //       href={task.iconUrl}
-    //       y={task.y}
-    //       x={task.x1 + (task.x2 - task.x1) - task.height / 2}
-    //       width={task.height / 2 + "px"}
-    //       height={task.height / 2 + "px"}
-    //       className={styles.pippo}
-    //     />
-    //   </React.Fragment>
-    // );
-  }
 
   return (
     <g className={styles.barWrapper} tabIndex={0}>
@@ -112,7 +79,16 @@ export const Bar: React.FC<TaskItemProps> = ({
           />
         )}
       </g>
-      {iconElem}
+      {task.icon && (
+        <TaskIcon
+          color={task.icon.color}
+          url={task.icon.url as string}
+          width={task.height / 2 + "px"}
+          height={task.height / 2 + "px"}
+          x={task.x1 + (task.x2 - task.x1) - task.height / 2}
+          y={task.y}
+        ></TaskIcon>
+      )}
     </g>
   );
 };
