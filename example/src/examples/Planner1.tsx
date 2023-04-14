@@ -66,7 +66,7 @@ const mainGanttPlannerPropsMock: GanttPlannerProps = {
       valuesToShow: ["G456", "#START#", "#END#"],
       icon: {
         color: "#FF0000",
-        url: "http://localhost:3000/assets/svg/accessibility.svg",
+        url: "http://localhost:3000/assets/svg/alert-circle.svg",
       },
     },
     {
@@ -787,7 +787,7 @@ const mainGanttItemAfterClick: GanttTask[] = [
     valuesToShow: ["G456", "#START#", "#END#"],
     icon: {
       color: "#FF0000",
-      url: "http://localhost:3000/assets/svg/accessibility.svg",
+      url: "http://localhost:3000/assets/svg/alert-circle.svg",
     },
     phases: [
       {
@@ -804,7 +804,7 @@ const mainGanttItemAfterClick: GanttTask[] = [
         type: "task",
         icon: {
           color: "#FF0000",
-          url: "http://localhost:3000/assets/svg/accessibility.svg",
+          url: "http://localhost:3000/assets/svg/alert-circle.svg",
         },
       },
       {
@@ -1637,7 +1637,7 @@ const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
           color: "#ff0000",
           icon: {
             color: "#00ff00",
-            url: "http://localhost:3000/assets/svg/accessibility.svg",
+            url: "http://localhost:3000/assets/svg/alert-circle.svg",
           },
         },
       ],
@@ -1649,7 +1649,15 @@ const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
       name: "Risorsa 2",
       schedule: [
         { startDate: "2023-01-10", endDate: "2023-02-10", color: "#00ff00" },
-        { startDate: "2023-03-10", endDate: "2023-04-10", color: "#0000ff" },
+        {
+          startDate: "2023-03-10",
+          endDate: "2023-04-10",
+          color: "#0000ff",
+          icon: {
+            color: "#00ff00",
+            url: "http://localhost:3000/assets/svg/alert-circle.svg",
+          },
+        },
       ],
       type: "timeline",
       valuesToShow: ["Risorsa 2"],

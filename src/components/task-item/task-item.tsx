@@ -39,8 +39,6 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
     ...props,
   };
 
-  console.log("TASK ITEM ICON", task.icon);
-
   const textRef = useRef<SVGTextElement>(null);
   const [taskItem, setTaskItem] = useState<JSX.Element>(<div />);
   const [isTextInside, setIsTextInside] = useState(true);

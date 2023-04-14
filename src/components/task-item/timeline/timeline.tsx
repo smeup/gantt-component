@@ -12,8 +12,6 @@ export const Timeline: FC<TaskItemProps> = ({
     ? styles.backgroundSelectedColor
     : styles.backgroundColor;
 
-  console.log("task icon timeline", task.icon);
-
   return (
     <g tabIndex={0} onMouseDown={e => onEventStart("move", task, e)}>
       <rect
@@ -39,14 +37,14 @@ export const Timeline: FC<TaskItemProps> = ({
               rx={bar.barCornerRadius}
               ry={bar.barCornerRadius}
             />
-            {task.icon && (
+            {bar.icon && (
               <TaskIcon
-                color={task.icon.color}
-                url={task.icon.url as string}
+                color={bar.icon.color}
+                url={bar.icon.url as string}
                 width={bar.height + "px"}
                 height={bar.height + "px"}
-                x={bar.x1 + (bar.x2 - bar.x1) - bar.height}
-                y={bar.y / 2}
+                x={bar.x1 + (bar.x2 - bar.x1) - bar.height / 2}
+                y={bar.y - bar.height / 2 / 2}
               ></TaskIcon>
             )}
           </React.Fragment>

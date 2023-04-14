@@ -85,8 +85,12 @@ export const Bar: React.FC<TaskItemProps> = ({
           url={task.icon.url as string}
           width={task.height / 2 + "px"}
           height={task.height / 2 + "px"}
-          x={task.x1 + (task.x2 - task.x1) - task.height / 2}
-          y={task.y}
+          x={task.x1 + (task.x2 - task.x1) - task.height / 2 / 2}
+          y={
+            task.y -
+            task.height / 2 / 2 / 2 +
+            (showSecondaryDates ? task.height / 2 : 0)
+          }
         ></TaskIcon>
       )}
     </g>
