@@ -53,6 +53,7 @@ export interface GanttPlannerProps {
   /** Events */
   onDateChange?: (row: GanttRow) => void;
   onClick?: (row: GanttRow) => void;
+  onContextMenu?: (row: GanttRow) => void;
 }
 export interface GanttPlannerDetailsProps {
   items: Detail[];
@@ -69,6 +70,7 @@ export interface GanttPlannerDetailsProps {
   /** Events */
   onDateChange?: (row: GanttRow) => void;
   onClick?: (row: GanttRow) => void;
+  onContextMenu?: (row: GanttRow) => void;
 }
 export interface PlannerProps {
   mainGantt: GanttPlannerProps;
@@ -128,6 +130,26 @@ export const Planner: React.FC<PlannerProps> = props => {
       setProjection(undefined);
     }
     onClick?.(row);
+  };
+
+  // handle onContextMenu
+  const handleContextMenu = (row: GanttRow, onContextMenu: any) => {
+    if (!row) {
+      return;
+    }
+    // create projections if phase is clicked
+    if (row.type === "task" && props.secondaryGantt) {
+      const phase = row as Phase;
+      // set projection state
+      setProjection({
+        start: new Date(phase.startDate),
+        end: new Date(phase.endDate),
+        color: phase.color ?? "#ED7D31",
+      });
+    } else {
+      setProjection(undefined);
+    }
+    onContextMenu?.(row);
   };
 
   // handle progress change
@@ -276,15 +298,27 @@ export const Planner: React.FC<PlannerProps> = props => {
           }
           TaskListTable={
             props.mainGantt.taskListTableProject ??
-            CustomTaskListTableHOC(id => {
-              let row = getProjectById(id, currentTasks);
-              if (!row) {
-                row = getPhaseById(id, currentTasks);
-              }
-              if (row) {
-                handleClick(row, props.mainGantt.onClick);
-              }
-            }, MAIN_GANTT_ID)
+            CustomTaskListTableHOC(
+              id => {
+                let row = getProjectById(id, currentTasks);
+                if (!row) {
+                  row = getPhaseById(id, currentTasks);
+                }
+                if (row) {
+                  handleClick(row, props.mainGantt.onClick);
+                }
+              },
+              id => {
+                let row = getProjectById(id, currentTasks);
+                if (!row) {
+                  row = getPhaseById(id, currentTasks);
+                }
+                if (row) {
+                  handleContextMenu(row, props.mainGantt.onContextMenu);
+                }
+              },
+              MAIN_GANTT_ID
+            )
           }
           // tooltip
           TooltipContent={props.mainGantt.tooltipContent ?? CustomTooltipHOC()}
@@ -296,6 +330,15 @@ export const Planner: React.FC<PlannerProps> = props => {
             }
             if (row) {
               handleClick(row, props.mainGantt.onClick);
+            }
+          }}
+          onContextMenu={e => {
+            let row = getProjectById(e.id, currentTasks);
+            if (!row) {
+              row = getPhaseById(e.id, currentTasks);
+            }
+            if (row) {
+              handleContextMenu(row, props.mainGantt.onContextMenu);
             }
           }}
           onDateChange={e =>
@@ -330,9 +373,23 @@ export const Planner: React.FC<PlannerProps> = props => {
             }
             TaskListTable={
               props.secondaryGantt?.taskListTableProject ??
-              CustomTaskListTableHOC(id => {
-                console.log("planner.tsx secondaryGantt Clicked on " + id);
-              }, SECONDARY_GANTT_ID)
+              CustomTaskListTableHOC(
+                id => {
+                  console.log("planner.tsx secondaryGantt Clicked on " + id);
+                },
+                id => {
+                  if (props.secondaryGantt) {
+                    let row = getProjectById(id, currentDetails as Detail[]);
+                    if (row) {
+                      handleContextMenu(
+                        row,
+                        props.secondaryGantt.onContextMenu
+                      );
+                    }
+                  }
+                },
+                SECONDARY_GANTT_ID
+              )
             }
             // tooltip
             TooltipContent={
@@ -346,6 +403,14 @@ export const Planner: React.FC<PlannerProps> = props => {
                 let row = getProjectById(e.id, currentDetails as Detail[]);
                 if (row) {
                   handleClick(row, props.secondaryGantt.onClick);
+                }
+              }
+            }}
+            onContextMenu={e => {
+              if (props.secondaryGantt) {
+                let row = getProjectById(e.id, currentDetails as Detail[]);
+                if (row) {
+                  handleContextMenu(row, props.secondaryGantt.onContextMenu);
                 }
               }
             }}

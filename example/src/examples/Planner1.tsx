@@ -26,8 +26,16 @@ const AppPlanner = () => {
     }
   };
 
+  const mainGanttContextMenuHandler = (row: GanttRow) => {
+    console.log("Main Gantt context menu event", row);
+  };
+
   const secondaryGanttClickHandler = (row: GanttRow) => {
     console.log("Secondary Gantt click event", row);
+  };
+
+  const secondaryGanttContextMenuHandler = (row: GanttRow) => {
+    console.log("Secondary Gantt context menu event", row);
   };
 
   const props: PlannerProps = {
@@ -35,10 +43,12 @@ const AppPlanner = () => {
     mainGantt: {
       ...plannerProps.mainGantt,
       onClick: mainGanttClickHandler,
+      onContextMenu: mainGanttContextMenuHandler,
     },
     secondaryGantt: {
       ...(plannerProps.secondaryGantt as GanttPlannerDetailsProps),
       onClick: secondaryGanttClickHandler,
+      onContextMenu: secondaryGanttContextMenuHandler,
     },
   };
 

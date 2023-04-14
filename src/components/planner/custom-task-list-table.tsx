@@ -16,6 +16,7 @@ type RowProps = {
   fontSize: string;
   setSelectedTask: (taskId: string) => void;
   onclickTaskList: (id: string) => void;
+  oncontextmenuTaskList: (id: string) => void;
 };
 
 const ProjectRow: FC<RowProps> = ({
@@ -26,6 +27,7 @@ const ProjectRow: FC<RowProps> = ({
   fontSize,
   setSelectedTask,
   onclickTaskList,
+  oncontextmenuTaskList,
 }) => {
   let str = "";
   for (let i = 0; i < valuesToShow.length; i++) {
@@ -46,6 +48,11 @@ const ProjectRow: FC<RowProps> = ({
       onClick={() => {
         setSelectedTask(id);
         onclickTaskList(id);
+      }}
+      onContextMenu={e => {
+        e.preventDefault();
+        setSelectedTask(id);
+        oncontextmenuTaskList(id);
       }}
     >
       {valuesToShow?.map((v, index) => (
@@ -73,6 +80,7 @@ const SubRow: FC<RowProps> = ({
   fontSize,
   setSelectedTask,
   onclickTaskList,
+  oncontextmenuTaskList,
 }) => {
   let str = "";
   for (let i = 0; i < valuesToShow.length + 1; i++) {
@@ -93,6 +101,11 @@ const SubRow: FC<RowProps> = ({
       onClick={() => {
         setSelectedTask(id);
         onclickTaskList(id);
+      }}
+      onContextMenu={e => {
+        e.preventDefault();
+        setSelectedTask(id);
+        oncontextmenuTaskList(id);
       }}
     >
       <span
@@ -126,6 +139,8 @@ const TimelineSubRow: FC<RowProps> = ({
   rowWidth,
   fontFamily,
   fontSize,
+  setSelectedTask,
+  oncontextmenuTaskList,
 }) => {
   let str = "";
   for (let i = 0; i < valuesToShow.length; i++) {
@@ -139,7 +154,16 @@ const TimelineSubRow: FC<RowProps> = ({
     "--grid-fasi-columns": str,
   };
   return (
-    <div key={"detail_" + id} className={styles.timeline} style={customStyle}>
+    <div
+      key={"detail_" + id}
+      className={styles.timeline}
+      style={customStyle}
+      onContextMenu={e => {
+        e.preventDefault();
+        setSelectedTask(id);
+        oncontextmenuTaskList(id);
+      }}
+    >
       {valuesToShow?.map((v, index) => (
         <span
           className={index === 0 ? styles.main : undefined}
@@ -155,6 +179,7 @@ const TimelineSubRow: FC<RowProps> = ({
 
 export const CustomTaskListTableHOC = (
   onclickTaskList: (id: string) => void,
+  oncontextmenuTaskList: (id: string) => void,
   id: string
 ): TaskListTableComponent => {
   // noinspection UnnecessaryLocalVariableJS
@@ -179,6 +204,7 @@ export const CustomTaskListTableHOC = (
               fontSize={fontSize}
               setSelectedTask={setSelectedTask}
               onclickTaskList={onclickTaskList}
+              oncontextmenuTaskList={oncontextmenuTaskList}
             />
           )}
           {task.type === "task" && (
@@ -191,6 +217,7 @@ export const CustomTaskListTableHOC = (
               fontSize={fontSize}
               setSelectedTask={setSelectedTask}
               onclickTaskList={onclickTaskList}
+              oncontextmenuTaskList={oncontextmenuTaskList}
             />
           )}
           {task.type === "timeline" && (
@@ -203,6 +230,7 @@ export const CustomTaskListTableHOC = (
               fontSize={fontSize}
               setSelectedTask={setSelectedTask}
               onclickTaskList={onclickTaskList}
+              oncontextmenuTaskList={oncontextmenuTaskList}
             />
           )}
         </React.Fragment>

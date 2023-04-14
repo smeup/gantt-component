@@ -65,6 +65,10 @@ export interface EventOption {
    */
   onClick?: (task: Task) => void;
   /**
+   * Invokes on bar context menu click.
+   */
+  onContextMenu?: (task: Task) => void;
+  /**
    * Invokes on end and start time change. Chart undoes operation if method return false or error.
    */
   onDateChange?: (
