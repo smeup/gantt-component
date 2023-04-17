@@ -4,6 +4,7 @@ import { BarDisplay } from "./bar-display";
 import { BarDateHandle } from "./bar-date-handle";
 import { BarProgressHandle } from "./bar-progress-handle";
 import { TaskItemProps } from "../task-item";
+import { TaskIcon } from "../task-icon";
 import styles from "./bar.module.css";
 
 export const Bar: React.FC<TaskItemProps> = ({
@@ -22,6 +23,7 @@ export const Bar: React.FC<TaskItemProps> = ({
     task.height
   );
   const handleHeight = task.height - 2;
+
   return (
     <g className={styles.barWrapper} tabIndex={0}>
       <BarDisplay
@@ -77,6 +79,20 @@ export const Bar: React.FC<TaskItemProps> = ({
           />
         )}
       </g>
+      {task.icon && task.icon.url && (
+        <TaskIcon
+          color={task.icon.color}
+          url={task.icon.url as string}
+          width={task.height / 2 + "px"}
+          height={task.height / 2 + "px"}
+          x={task.x1 + (task.x2 - task.x1) - task.height / 2 / 2}
+          y={
+            task.y -
+            task.height / 2 / 2 / 2 +
+            (showSecondaryDates ? task.height / 2 : 0)
+          }
+        ></TaskIcon>
+      )}
     </g>
   );
 };

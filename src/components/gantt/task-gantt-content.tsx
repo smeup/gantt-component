@@ -30,7 +30,7 @@ export type TaskGanttContentProps = {
   ganttHeight: number;
   hideLabel?: boolean;
   showSecondaryDates?: boolean;
-  currentDateIndicator?: CurrentDateIndicator
+  currentDateIndicator?: CurrentDateIndicator;
   projection?: {
     x0: number;
     xf: number;
@@ -67,6 +67,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   onProgressChange,
   onDoubleClick,
   onClick,
+  onContextMenu,
   onDelete,
 }) => {
   const point = svg?.current?.createSVGPoint();
@@ -255,6 +256,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     } else if (action === "click") {
       const skipClick = !hasMovedHorizontally(event);
       skipClick && !!onClick && onClick(task);
+    } else if (action === "contextmenu") {
+      event.preventDefault();
+      !!onContextMenu && onContextMenu(event, task);
     }
     // Change task event start
     else if (action === "move") {

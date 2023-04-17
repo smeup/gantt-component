@@ -53,6 +53,10 @@ export interface GanttPlannerProps {
   /** Events */
   onDateChange?: (row: GanttRow) => void;
   onClick?: (row: GanttRow) => void;
+  onContextMenu?: (
+    event: React.MouseEvent<Element, MouseEvent>,
+    row: GanttRow
+  ) => void;
 }
 export interface GanttPlannerDetailsProps {
   items: Detail[];
@@ -69,6 +73,10 @@ export interface GanttPlannerDetailsProps {
   /** Events */
   onDateChange?: (row: GanttRow) => void;
   onClick?: (row: GanttRow) => void;
+  onContextMenu?: (
+    event: React.MouseEvent<Element, MouseEvent>,
+    row: GanttRow
+  ) => void;
 }
 export interface PlannerProps {
   mainGantt: GanttPlannerProps;
@@ -128,6 +136,30 @@ export const Planner: React.FC<PlannerProps> = props => {
       setProjection(undefined);
     }
     onClick?.(row);
+  };
+
+  // handle onContextMenu
+  const handleContextMenu = (
+    event: React.MouseEvent<Element, MouseEvent>,
+    row: GanttRow,
+    onContextMenu: any
+  ) => {
+    if (!row) {
+      return;
+    }
+    // create projections if phase is clicked
+    if (row.type === "task" && props.secondaryGantt) {
+      const phase = row as Phase;
+      // set projection state
+      setProjection({
+        start: new Date(phase.startDate),
+        end: new Date(phase.endDate),
+        color: phase.color ?? "#ED7D31",
+      });
+    } else {
+      setProjection(undefined);
+    }
+    onContextMenu?.(event, row);
   };
 
   // handle progress change
@@ -209,7 +241,14 @@ export const Planner: React.FC<PlannerProps> = props => {
     if (!viewDate) {
       setViewDate(dates.displayedStartDate);
     }
-  }, [currentTasks, currentDetails]);
+  }, [
+    currentTasks,
+    currentDetails,
+    timeUnit,
+    mainGanttDoubleView,
+    props.preStepsCount,
+    viewDate,
+  ]);
 
   const tasks: Task[] = [];
   for (let i = 0; i < currentTasks.length; i++) {
@@ -269,31 +308,52 @@ export const Planner: React.FC<PlannerProps> = props => {
           }
           TaskListTable={
             props.mainGantt.taskListTableProject ??
-            CustomTaskListTableHOC(id => {
-              let row = getProjectById(id, currentTasks);
-              if (!row) {
-                row = getPhaseById(id, currentTasks);
-              }
-              if (row) {
-                handleClick(row, props.mainGantt.onClick);
-              }
-            }, MAIN_GANTT_ID)
+            CustomTaskListTableHOC(
+              id => {
+                let row = getProjectById(id, currentTasks);
+                if (!row) {
+                  row = getPhaseById(id, currentTasks);
+                }
+                if (row) {
+                  handleClick(row, props.mainGantt.onClick);
+                }
+              },
+              (event, id) => {
+                let row = getProjectById(id, currentTasks);
+                if (!row) {
+                  row = getPhaseById(id, currentTasks);
+                }
+                if (row) {
+                  handleContextMenu(event, row, props.mainGantt.onContextMenu);
+                }
+              },
+              MAIN_GANTT_ID
+            )
           }
           // tooltip
           TooltipContent={props.mainGantt.tooltipContent ?? CustomTooltipHOC()}
           // events
-          onClick={e => {
-            let row = getProjectById(e.id, currentTasks);
+          onClick={task => {
+            let row = getProjectById(task.id, currentTasks);
             if (!row) {
-              row = getPhaseById(e.id, currentTasks);
+              row = getPhaseById(task.id, currentTasks);
             }
             if (row) {
               handleClick(row, props.mainGantt.onClick);
             }
           }}
-          onDateChange={e =>
+          onContextMenu={(event, task) => {
+            let row = getProjectById(task.id, currentTasks);
+            if (!row) {
+              row = getPhaseById(task.id, currentTasks);
+            }
+            if (row) {
+              handleContextMenu(event, row, props.mainGantt.onContextMenu);
+            }
+          }}
+          onDateChange={task =>
             handleDateChange(
-              e,
+              task,
               currentTasks as GanttTask[],
               props.mainGantt.onDateChange
             )
@@ -323,9 +383,24 @@ export const Planner: React.FC<PlannerProps> = props => {
             }
             TaskListTable={
               props.secondaryGantt?.taskListTableProject ??
-              CustomTaskListTableHOC(id => {
-                console.log("planner.tsx secondaryGantt Clicked on " + id);
-              }, SECONDARY_GANTT_ID)
+              CustomTaskListTableHOC(
+                id => {
+                  console.log("planner.tsx secondaryGantt Clicked on " + id);
+                },
+                (event, id) => {
+                  if (props.secondaryGantt) {
+                    let row = getProjectById(id, currentDetails as Detail[]);
+                    if (row) {
+                      handleContextMenu(
+                        event,
+                        row,
+                        props.secondaryGantt.onContextMenu
+                      );
+                    }
+                  }
+                },
+                SECONDARY_GANTT_ID
+              )
             }
             // tooltip
             TooltipContent={
@@ -334,17 +409,29 @@ export const Planner: React.FC<PlannerProps> = props => {
             // projections
             projection={projection}
             // events
-            onClick={e => {
+            onClick={task => {
               if (props.secondaryGantt) {
-                let row = getProjectById(e.id, currentDetails as Detail[]);
+                let row = getProjectById(task.id, currentDetails as Detail[]);
                 if (row) {
                   handleClick(row, props.secondaryGantt.onClick);
                 }
               }
             }}
-            onDateChange={e =>
+            onContextMenu={(event, task) => {
+              if (props.secondaryGantt) {
+                let row = getProjectById(task.id, currentDetails as Detail[]);
+                if (row) {
+                  handleContextMenu(
+                    event,
+                    row,
+                    props.secondaryGantt.onContextMenu
+                  );
+                }
+              }
+            }}
+            onDateChange={task =>
               handleDateChange(
-                e,
+                task,
                 currentDetails as Detail[],
                 props.secondaryGantt?.onDateChange
               )

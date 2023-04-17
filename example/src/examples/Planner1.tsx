@@ -26,8 +26,22 @@ const AppPlanner = () => {
     }
   };
 
+  const mainGanttContextMenuHandler = (
+    _event: React.MouseEvent<Element, MouseEvent>,
+    row: GanttRow
+  ) => {
+    console.log("Main Gantt context menu event", row);
+  };
+
   const secondaryGanttClickHandler = (row: GanttRow) => {
     console.log("Secondary Gantt click event", row);
+  };
+
+  const secondaryGanttContextMenuHandler = (
+    _event: React.MouseEvent<Element, MouseEvent>,
+    row: GanttRow
+  ) => {
+    console.log("Secondary Gantt context menu event", row);
   };
 
   const props: PlannerProps = {
@@ -35,10 +49,12 @@ const AppPlanner = () => {
     mainGantt: {
       ...plannerProps.mainGantt,
       onClick: mainGanttClickHandler,
+      onContextMenu: mainGanttContextMenuHandler,
     },
     secondaryGantt: {
       ...(plannerProps.secondaryGantt as GanttPlannerDetailsProps),
       onClick: secondaryGanttClickHandler,
+      onContextMenu: secondaryGanttContextMenuHandler,
     },
   };
 
@@ -64,6 +80,10 @@ const mainGanttPlannerPropsMock: GanttPlannerProps = {
       phases: [],
       details: [],
       valuesToShow: ["G456", "#START#", "#END#"],
+      icon: {
+        color: "#FF0000",
+        url: "http://localhost:3000/assets/svg/alert-circle.svg",
+      },
     },
     {
       id: "2",
@@ -781,6 +801,10 @@ const mainGanttItemAfterClick: GanttTask[] = [
     secondaryEndDate: "2023-03-07",
     type: "project",
     valuesToShow: ["G456", "#START#", "#END#"],
+    icon: {
+      color: "#FF0000",
+      url: "http://localhost:3000/assets/svg/alert-circle.svg",
+    },
     phases: [
       {
         id: "P410           ",
@@ -794,6 +818,10 @@ const mainGanttItemAfterClick: GanttTask[] = [
         valuesToShow: ["P410", "#START#", "#END#"],
         dependencies: [],
         type: "task",
+        icon: {
+          color: "#FF0000",
+          url: "http://localhost:3000/assets/svg/alert-circle.svg",
+        },
       },
       {
         id: "P420           ",
@@ -1619,7 +1647,15 @@ const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
       name: "Risorsa 1",
       schedule: [
         { startDate: "2023-01-01", endDate: "2023-02-01", color: "#ff0000" },
-        { startDate: "2023-03-01", endDate: "2023-04-01", color: "#ff0000" },
+        {
+          startDate: "2023-03-01",
+          endDate: "2023-04-01",
+          color: "#ff0000",
+          icon: {
+            color: "#00ff00",
+            url: "http://localhost:3000/assets/svg/alert-circle.svg",
+          },
+        },
       ],
       type: "timeline",
       valuesToShow: ["Risorsa 1"],
@@ -1629,7 +1665,15 @@ const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
       name: "Risorsa 2",
       schedule: [
         { startDate: "2023-01-10", endDate: "2023-02-10", color: "#00ff00" },
-        { startDate: "2023-03-10", endDate: "2023-04-10", color: "#0000ff" },
+        {
+          startDate: "2023-03-10",
+          endDate: "2023-04-10",
+          color: "#0000ff",
+          icon: {
+            color: "#00ff00",
+            url: "http://localhost:3000/assets/svg/alert-circle.svg",
+          },
+        },
       ],
       type: "timeline",
       valuesToShow: ["Risorsa 2"],

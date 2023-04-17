@@ -36,6 +36,7 @@ export interface Task {
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
+  icon?: TaskIcon;
 }
 
 export interface Timeframe {
@@ -43,6 +44,7 @@ export interface Timeframe {
   end: Date;
   backgroundColor: string;
   backgroundSelectedColor?: string;
+  icon?: TaskIcon;
 }
 
 export interface EventOption {
@@ -62,6 +64,13 @@ export interface EventOption {
    * Invokes on bar click.
    */
   onClick?: (task: Task) => void;
+  /**
+   * Invokes on bar context menu click.
+   */
+  onContextMenu?: (
+    event: React.MouseEvent<Element, MouseEvent>,
+    task: Task
+  ) => void;
   /**
    * Invokes on end and start time change. Chart undoes operation if method return false or error.
    */
@@ -199,4 +208,12 @@ export interface GanttProps
 export interface CurrentDateIndicator {
   color: string;
   x: number;
+}
+
+/**
+ * Define the inteface of icon located into bar and timeline task
+ */
+export interface TaskIcon {
+  color: string;
+  url: string;
 }
