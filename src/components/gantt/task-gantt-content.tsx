@@ -258,7 +258,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       skipClick && !!onClick && onClick(task);
     } else if (action === "contextmenu") {
       event.preventDefault();
-      !!onContextMenu && onContextMenu(task);
+      !!onContextMenu && onContextMenu(event, task);
     }
     // Change task event start
     else if (action === "move") {

@@ -67,7 +67,10 @@ export interface EventOption {
   /**
    * Invokes on bar context menu click.
    */
-  onContextMenu?: (task: Task) => void;
+  onContextMenu?: (
+    event: React.MouseEvent<Element, MouseEvent>,
+    task: Task
+  ) => void;
   /**
    * Invokes on end and start time change. Chart undoes operation if method return false or error.
    */

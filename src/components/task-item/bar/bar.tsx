@@ -79,7 +79,7 @@ export const Bar: React.FC<TaskItemProps> = ({
           />
         )}
       </g>
-      {task.icon && (
+      {task.icon && task.icon.url && (
         <TaskIcon
           color={task.icon.color}
           url={task.icon.url as string}

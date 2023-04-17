@@ -53,7 +53,10 @@ export interface GanttPlannerProps {
   /** Events */
   onDateChange?: (row: GanttRow) => void;
   onClick?: (row: GanttRow) => void;
-  onContextMenu?: (row: GanttRow) => void;
+  onContextMenu?: (
+    event: React.MouseEvent<Element, MouseEvent>,
+    row: GanttRow
+  ) => void;
 }
 export interface GanttPlannerDetailsProps {
   items: Detail[];
@@ -70,7 +73,10 @@ export interface GanttPlannerDetailsProps {
   /** Events */
   onDateChange?: (row: GanttRow) => void;
   onClick?: (row: GanttRow) => void;
-  onContextMenu?: (row: GanttRow) => void;
+  onContextMenu?: (
+    event: React.MouseEvent<Element, MouseEvent>,
+    row: GanttRow
+  ) => void;
 }
 export interface PlannerProps {
   mainGantt: GanttPlannerProps;
@@ -133,7 +139,11 @@ export const Planner: React.FC<PlannerProps> = props => {
   };
 
   // handle onContextMenu
-  const handleContextMenu = (row: GanttRow, onContextMenu: any) => {
+  const handleContextMenu = (
+    event: React.MouseEvent<Element, MouseEvent>,
+    row: GanttRow,
+    onContextMenu: any
+  ) => {
     if (!row) {
       return;
     }
@@ -149,7 +159,7 @@ export const Planner: React.FC<PlannerProps> = props => {
     } else {
       setProjection(undefined);
     }
-    onContextMenu?.(row);
+    onContextMenu?.(event, row);
   };
 
   // handle progress change
@@ -308,13 +318,13 @@ export const Planner: React.FC<PlannerProps> = props => {
                   handleClick(row, props.mainGantt.onClick);
                 }
               },
-              id => {
+              (event, id) => {
                 let row = getProjectById(id, currentTasks);
                 if (!row) {
                   row = getPhaseById(id, currentTasks);
                 }
                 if (row) {
-                  handleContextMenu(row, props.mainGantt.onContextMenu);
+                  handleContextMenu(event, row, props.mainGantt.onContextMenu);
                 }
               },
               MAIN_GANTT_ID
@@ -323,27 +333,27 @@ export const Planner: React.FC<PlannerProps> = props => {
           // tooltip
           TooltipContent={props.mainGantt.tooltipContent ?? CustomTooltipHOC()}
           // events
-          onClick={e => {
-            let row = getProjectById(e.id, currentTasks);
+          onClick={task => {
+            let row = getProjectById(task.id, currentTasks);
             if (!row) {
-              row = getPhaseById(e.id, currentTasks);
+              row = getPhaseById(task.id, currentTasks);
             }
             if (row) {
               handleClick(row, props.mainGantt.onClick);
             }
           }}
-          onContextMenu={e => {
-            let row = getProjectById(e.id, currentTasks);
+          onContextMenu={(event, task) => {
+            let row = getProjectById(task.id, currentTasks);
             if (!row) {
-              row = getPhaseById(e.id, currentTasks);
+              row = getPhaseById(task.id, currentTasks);
             }
             if (row) {
-              handleContextMenu(row, props.mainGantt.onContextMenu);
+              handleContextMenu(event, row, props.mainGantt.onContextMenu);
             }
           }}
-          onDateChange={e =>
+          onDateChange={task =>
             handleDateChange(
-              e,
+              task,
               currentTasks as GanttTask[],
               props.mainGantt.onDateChange
             )
@@ -377,11 +387,12 @@ export const Planner: React.FC<PlannerProps> = props => {
                 id => {
                   console.log("planner.tsx secondaryGantt Clicked on " + id);
                 },
-                id => {
+                (event, id) => {
                   if (props.secondaryGantt) {
                     let row = getProjectById(id, currentDetails as Detail[]);
                     if (row) {
                       handleContextMenu(
+                        event,
                         row,
                         props.secondaryGantt.onContextMenu
                       );
@@ -398,25 +409,29 @@ export const Planner: React.FC<PlannerProps> = props => {
             // projections
             projection={projection}
             // events
-            onClick={e => {
+            onClick={task => {
               if (props.secondaryGantt) {
-                let row = getProjectById(e.id, currentDetails as Detail[]);
+                let row = getProjectById(task.id, currentDetails as Detail[]);
                 if (row) {
                   handleClick(row, props.secondaryGantt.onClick);
                 }
               }
             }}
-            onContextMenu={e => {
+            onContextMenu={(event, task) => {
               if (props.secondaryGantt) {
-                let row = getProjectById(e.id, currentDetails as Detail[]);
+                let row = getProjectById(task.id, currentDetails as Detail[]);
                 if (row) {
-                  handleContextMenu(row, props.secondaryGantt.onContextMenu);
+                  handleContextMenu(
+                    event,
+                    row,
+                    props.secondaryGantt.onContextMenu
+                  );
                 }
               }
             }}
-            onDateChange={e =>
+            onDateChange={task =>
               handleDateChange(
-                e,
+                task,
                 currentDetails as Detail[],
                 props.secondaryGantt?.onDateChange
               )

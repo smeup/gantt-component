@@ -16,7 +16,10 @@ type RowProps = {
   fontSize: string;
   setSelectedTask: (taskId: string) => void;
   onclickTaskList: (id: string) => void;
-  oncontextmenuTaskList: (id: string) => void;
+  oncontextmenuTaskList: (
+    event: React.MouseEvent<Element, MouseEvent>,
+    id: string
+  ) => void;
 };
 
 const ProjectRow: FC<RowProps> = ({
@@ -52,7 +55,7 @@ const ProjectRow: FC<RowProps> = ({
       onContextMenu={e => {
         e.preventDefault();
         setSelectedTask(id);
-        oncontextmenuTaskList(id);
+        oncontextmenuTaskList(e, id);
       }}
     >
       {valuesToShow?.map((v, index) => (
@@ -105,7 +108,7 @@ const SubRow: FC<RowProps> = ({
       onContextMenu={e => {
         e.preventDefault();
         setSelectedTask(id);
-        oncontextmenuTaskList(id);
+        oncontextmenuTaskList(e, id);
       }}
     >
       <span
@@ -161,7 +164,7 @@ const TimelineSubRow: FC<RowProps> = ({
       onContextMenu={e => {
         e.preventDefault();
         setSelectedTask(id);
-        oncontextmenuTaskList(id);
+        oncontextmenuTaskList(e, id);
       }}
     >
       {valuesToShow?.map((v, index) => (
@@ -179,7 +182,10 @@ const TimelineSubRow: FC<RowProps> = ({
 
 export const CustomTaskListTableHOC = (
   onclickTaskList: (id: string) => void,
-  oncontextmenuTaskList: (id: string) => void,
+  oncontextmenuTaskList: (
+    event: React.MouseEvent<Element, MouseEvent>,
+    id: string
+  ) => void,
   id: string
 ): TaskListTableComponent => {
   // noinspection UnnecessaryLocalVariableJS

@@ -26,7 +26,10 @@ const AppPlanner = () => {
     }
   };
 
-  const mainGanttContextMenuHandler = (row: GanttRow) => {
+  const mainGanttContextMenuHandler = (
+    _event: React.MouseEvent<Element, MouseEvent>,
+    row: GanttRow
+  ) => {
     console.log("Main Gantt context menu event", row);
   };
 
@@ -34,7 +37,10 @@ const AppPlanner = () => {
     console.log("Secondary Gantt click event", row);
   };
 
-  const secondaryGanttContextMenuHandler = (row: GanttRow) => {
+  const secondaryGanttContextMenuHandler = (
+    _event: React.MouseEvent<Element, MouseEvent>,
+    row: GanttRow
+  ) => {
     console.log("Secondary Gantt context menu event", row);
   };
 

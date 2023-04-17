@@ -37,7 +37,7 @@ export const Timeline: FC<TaskItemProps> = ({
               rx={bar.barCornerRadius}
               ry={bar.barCornerRadius}
             />
-            {bar.icon && (
+            {bar.icon && bar.icon.url && (
               <TaskIcon
                 color={bar.icon.color}
                 url={bar.icon.url as string}
