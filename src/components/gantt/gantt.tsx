@@ -230,11 +230,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   ]);
 
   useEffect(() => {
-    if (
-      viewMode === dateSetup.viewMode &&
-      ((viewDate && !currentViewDate) ||
-        (viewDate && currentViewDate?.valueOf() !== viewDate.valueOf()))
-    ) {
+    if (viewMode === dateSetup.viewMode && viewDate) {
       const dates = dateSetup.dates;
       const index = dates.findIndex(
         (d, i) =>

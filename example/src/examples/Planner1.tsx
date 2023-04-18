@@ -33,6 +33,10 @@ const AppPlanner = () => {
     console.log("Main Gantt context menu event", row);
   };
 
+  const mainGanttDoubleViewHandler = (checked: boolean) => {
+    console.log("Main Gantt double view slider event", checked);
+  };
+
   const secondaryGanttClickHandler = (row: GanttRow) => {
     console.log("Secondary Gantt click event", row);
   };
@@ -56,6 +60,7 @@ const AppPlanner = () => {
       onClick: secondaryGanttClickHandler,
       onContextMenu: secondaryGanttContextMenuHandler,
     },
+    onSetDoubleView: mainGanttDoubleViewHandler,
   };
 
   return (

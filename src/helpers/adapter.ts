@@ -33,6 +33,15 @@ export const toViewMode = (timeUnit: TimeUnit): ViewMode => {
   }
 };
 
+export const columnWidthForTimeUnit = (timeUnit: TimeUnit): number => {
+  switch (timeUnit) {
+    case TimeUnit.YEAR:
+      return 60 * 2;
+    default:
+      return 60;
+  }
+};
+
 export const convertPhaseToTask = (item: Phase): Task => {
   const mapPhase = ({
     startDate: phaseStart,
@@ -74,7 +83,7 @@ export const convertPhaseToTask = (item: Phase): Task => {
             progressSelectedColor: selectedColor,
           }
         : {},
-      icon
+      icon,
     };
   };
 
@@ -116,7 +125,7 @@ const convertDetailToTimeline = (
       end,
       backgroundColor: color ?? "0xffffff",
       backgroundSelectedColor: selectedColor ?? color,
-      icon
+      icon,
     };
   };
 

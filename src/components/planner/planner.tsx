@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  columnWidthForTimeUnit,
   convertProjectToTasks,
   getPhaseById,
   getProjectById,
@@ -82,6 +83,7 @@ export interface PlannerProps {
   mainGantt: GanttPlannerProps;
   secondaryGantt?: GanttPlannerDetailsProps;
   preStepsCount?: number;
+  onSetDoubleView?: (checked: boolean) => void;
 }
 
 export const Planner: React.FC<PlannerProps> = props => {
@@ -162,6 +164,12 @@ export const Planner: React.FC<PlannerProps> = props => {
     onContextMenu?.(event, row);
   };
 
+  // handle onSetDoubleView
+  const handleSetDoubleView = (checked: boolean) => {
+    setMainGanttDoubleView(checked);
+    props.onSetDoubleView?.(checked);
+  };
+
   // handle progress change
   const handleDateChange = (
     task: Task,
@@ -239,7 +247,7 @@ export const Planner: React.FC<PlannerProps> = props => {
     );
     setDisplayedDates(dates);
     if (!viewDate) {
-      setViewDate(dates.displayedStartDate);
+      setViewDate(new Date());
     }
   }, [
     currentTasks,
@@ -277,7 +285,12 @@ export const Planner: React.FC<PlannerProps> = props => {
 
   return (
     <div>
-      <Switcher onTimeUnitChange={timeUnit => setTimeUnit(timeUnit)} />
+      <Switcher
+        onTimeUnitChange={timeUnit => {
+          setTimeUnit(timeUnit);
+          setViewDate(new Date());
+        }}
+      />
       <div
         style={{
           display: "flex",
@@ -296,6 +309,7 @@ export const Planner: React.FC<PlannerProps> = props => {
           displayedEndDate={displayedDates.displayedEndDate}
           viewDate={viewDate}
           tasks={tasks}
+          columnWidth={columnWidthForTimeUnit(timeUnit)}
           viewMode={toViewMode(timeUnit)}
           {...props.mainGantt.stylingOptions}
           TaskListHeader={
@@ -303,7 +317,7 @@ export const Planner: React.FC<PlannerProps> = props => {
             CustomTaskListHeaderHOC(
               props.mainGantt.title,
               mainGanttDoubleView ?? false,
-              setMainGanttDoubleView
+              handleSetDoubleView
             )
           }
           TaskListTable={
@@ -375,6 +389,7 @@ export const Planner: React.FC<PlannerProps> = props => {
             displayedEndDate={displayedDates.displayedEndDate}
             viewDate={viewDate}
             tasks={details}
+            columnWidth={columnWidthForTimeUnit(timeUnit)}
             viewMode={toViewMode(timeUnit)}
             {...props.mainGantt.stylingOptions}
             TaskListHeader={
