@@ -101,13 +101,19 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     );
     return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
   });
-  const [currentViewDate, setCurrentViewDate] = useState<Date | undefined>(
-    undefined
-  );
 
-  const [taskListWidth, setTaskListWidth] = useState(0);
-  const [svgContainerWidth, setSvgContainerWidth] = useState(0);
-  const [svgContainerHeight, setSvgContainerHeight] = useState(ganttHeight);
+  const taskListWidth = useRef(0);
+  const setTaskListWidth = (width: number) => {
+    taskListWidth.current = width;
+  };
+  const svgContainerWidth = useRef(0);
+  const setSvgContainerWidth = (width: number) => {
+    svgContainerWidth.current = width;
+  };
+  const svgContainerHeight = useRef(ganttHeight);
+  const setSvgContainerHeight = (height: number) => {
+    svgContainerHeight.current = height;
+  };
   const [barTasks, setBarTasks] = useState<BarTask[]>([]);
   const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
     action: "",
@@ -133,7 +139,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(-1);
-  const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
+  const ignoreScrollEvent = useRef(false);
+  const setIgnoreScrollEvent = (value: boolean) => {
+    ignoreScrollEvent.current = value;
+  };
 
   const [currentDateIndicatorContent, setCurrentDateIndicatorContent] =
     useState<CurrentDateIndicator>();
@@ -178,7 +187,23 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         setScrollX(newDates.length * columnWidth);
       }
     }
-    setDateSetup({ dates: newDates, viewMode });
+    let set: boolean = false;
+    if (dateSetup && dateSetup.dates) {
+      const old = dateSetup.dates;
+      if (old.length !== newDates.length) {
+        set = true;
+      } else {
+        for (let i = 0; i < old.length; i++) {
+          if (old[i].valueOf() !== newDates[i].valueOf()) {
+            set = true;
+            break;
+          }
+        }
+      }
+    }
+    if (set) {
+      setDateSetup({ dates: newDates, viewMode });
+    }
     setBarTasks(
       convertToBarTasks(
         filteredTasks,
@@ -241,18 +266,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       if (index === -1) {
         return;
       }
-      setCurrentViewDate(viewDate);
+      setIgnoreScrollEvent(true);
       setScrollX(columnWidth * index);
     }
-  }, [
-    viewDate,
-    columnWidth,
-    dateSetup.dates,
-    dateSetup.viewMode,
-    viewMode,
-    currentViewDate,
-    setCurrentViewDate,
-  ]);
+  }, [viewDate, columnWidth, dateSetup.dates, dateSetup.viewMode, viewMode]);
 
   useEffect(() => {
     const { changedTask, action } = ganttEvent;
@@ -301,9 +318,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   useEffect(() => {
     if (wrapperRef.current) {
-      setSvgContainerWidth(wrapperRef.current.offsetWidth - taskListWidth);
+      setSvgContainerWidth(
+        wrapperRef.current.offsetWidth - taskListWidth.current
+      );
     }
-  }, [wrapperRef, taskListWidth]);
+  }, [wrapperRef]);
 
   useEffect(() => {
     if (ganttHeight) {
@@ -360,7 +379,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   ]);
 
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
-    if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
+    if (
+      scrollY !== event.currentTarget.scrollTop &&
+      !ignoreScrollEvent.current
+    ) {
       setScrollY(event.currentTarget.scrollTop);
       setIgnoreScrollEvent(true);
     } else {
@@ -369,7 +391,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
 
   const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
-    if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {
+    if (
+      scrollX !== event.currentTarget.scrollLeft &&
+      !ignoreScrollEvent.current
+    ) {
       setScrollX(event.currentTarget.scrollLeft);
       setIgnoreScrollEvent(true);
       // emit event to sync scroll
@@ -497,11 +522,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
     setSelectedTask(newSelectedTask);
   };
+
   const handleExpanderClick = (task: Task) => {
     if (onExpanderClick && task.hideChildren !== undefined) {
       onExpanderClick({ ...task, hideChildren: !task.hideChildren });
     }
   };
+
   const gridProps: GridProps = {
     columnWidth,
     svgWidth,
@@ -511,6 +538,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     todayColor,
     rtl,
   };
+
   const calendarProps: CalendarProps = {
     dateSetup,
     locale,
@@ -524,6 +552,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     singleLineHeader,
     currentDateIndicator: currentDateIndicatorContent,
   };
+
   const barProps: TaskGanttContentProps = {
     tasks: barTasks,
     dates: dateSetup.dates,
@@ -596,15 +625,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           <Tooltip
             arrowIndent={arrowIndent}
             rowHeight={rowHeight}
-            svgContainerHeight={svgContainerHeight}
-            svgContainerWidth={svgContainerWidth}
+            svgContainerHeight={svgContainerHeight.current}
+            svgContainerWidth={svgContainerWidth.current}
             fontFamily={fontFamily}
             fontSize={fontSize}
             scrollX={scrollX}
             scrollY={scrollY}
             task={ganttEvent.changedTask}
             headerHeight={headerHeight}
-            taskListWidth={taskListWidth}
+            taskListWidth={taskListWidth.current}
             TooltipContent={TooltipContent}
             rtl={rtl}
             svgWidth={svgWidth}
@@ -622,7 +651,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       <HorizontalScroll
         svgWidth={svgWidth}
         taskGanttRef={taskGanttRef}
-        taskListWidth={taskListWidth}
+        taskListWidth={taskListWidth.current}
         scroll={scrollX}
         rtl={rtl}
         onScroll={handleScrollX}

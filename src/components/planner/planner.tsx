@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   columnWidthForTimeUnit,
   convertProjectToTasks,
@@ -89,10 +89,14 @@ export interface PlannerProps {
 export const Planner: React.FC<PlannerProps> = props => {
   const [timeUnit, setTimeUnit] = useState(TimeUnit.MONTH);
 
-  const [currentTasks, setCurrentTasks] = useState(props.mainGantt.items);
-  const [currentDetails, setCurrentDetails] = useState(
-    props.secondaryGantt?.items
-  );
+  const currentTasks = useRef(props.mainGantt.items);
+  const setCurrentTasks = (tasks: GanttTask[] | Detail[]) => {
+    currentTasks.current = tasks;
+  };
+  const currentDetails = useRef(props.secondaryGantt?.items);
+  const setCurrentDetails = (details: Detail[] | undefined) => {
+    currentDetails.current = details;
+  };
 
   // main gantt
   const [mainGanttDoubleView, setMainGanttDoubleView] = useState(
@@ -100,18 +104,25 @@ export const Planner: React.FC<PlannerProps> = props => {
   );
 
   // date range
-  const [displayedDates, setDisplayedDates] = useState<{
+  const displayedDates = useRef<{
     displayedStartDate: Date;
     displayedEndDate: Date;
   }>(
     calculateDisplayedDateRange(
-      currentTasks as GanttTask[],
+      currentTasks.current as GanttTask[],
       timeUnit,
       mainGanttDoubleView,
-      currentDetails,
+      currentDetails.current,
       props.preStepsCount
     )
   );
+
+  const setDisplayedDates = (dates: {
+    displayedStartDate: Date;
+    displayedEndDate: Date;
+  }) => {
+    displayedDates.current = dates;
+  };
 
   const [viewDate, setViewDate] = useState<Date>();
 
@@ -239,44 +250,42 @@ export const Planner: React.FC<PlannerProps> = props => {
 
   useEffect(() => {
     const dates = calculateDisplayedDateRange(
-      currentTasks as GanttTask[],
+      currentTasks.current as GanttTask[],
       timeUnit,
       mainGanttDoubleView,
-      currentDetails,
+      currentDetails.current,
       props.preStepsCount
     );
     setDisplayedDates(dates);
     if (!viewDate) {
-      setViewDate(new Date());
+      const now = new Date();
+      if (dates.displayedStartDate <= now && dates.displayedEndDate >= now) {
+        setViewDate(now);
+      } else {
+        setViewDate(dates.displayedStartDate);
+      }
     }
-  }, [
-    currentTasks,
-    currentDetails,
-    timeUnit,
-    mainGanttDoubleView,
-    props.preStepsCount,
-    viewDate,
-  ]);
+  }, [timeUnit, mainGanttDoubleView, props.preStepsCount, viewDate]);
 
   const tasks: Task[] = [];
-  for (let i = 0; i < currentTasks.length; i++) {
+  for (let i = 0; i < currentTasks.current.length; i++) {
     tasks.push(
       ...convertProjectToTasks(
-        currentTasks[i],
-        formatToIsoDate(displayedDates.displayedStartDate),
-        formatToIsoDate(displayedDates.displayedEndDate)
+        currentTasks.current[i],
+        formatToIsoDate(displayedDates.current.displayedStartDate),
+        formatToIsoDate(displayedDates.current.displayedEndDate)
       )
     );
   }
 
   const details: Task[] = [];
-  if (currentDetails) {
-    for (let i = 0; i < currentDetails.length; i++) {
+  if (currentDetails.current) {
+    for (let i = 0; i < currentDetails.current.length; i++) {
       details.push(
         ...convertProjectToTasks(
-          currentDetails[i],
-          formatToIsoDate(displayedDates.displayedStartDate),
-          formatToIsoDate(displayedDates.displayedEndDate)
+          currentDetails.current[i],
+          formatToIsoDate(displayedDates.current.displayedStartDate),
+          formatToIsoDate(displayedDates.current.displayedEndDate)
         )
       );
     }
@@ -288,7 +297,7 @@ export const Planner: React.FC<PlannerProps> = props => {
       <Switcher
         onTimeUnitChange={timeUnit => {
           setTimeUnit(timeUnit);
-          setViewDate(new Date());
+          setViewDate(undefined);
         }}
       />
       <div
@@ -305,8 +314,8 @@ export const Planner: React.FC<PlannerProps> = props => {
           showSecondaryDates={mainGanttDoubleView}
           hideDependencies={props.mainGantt.hideDependencies}
           ganttHeight={props.mainGantt.ganttHeight}
-          displayedStartDate={displayedDates.displayedStartDate}
-          displayedEndDate={displayedDates.displayedEndDate}
+          displayedStartDate={displayedDates.current.displayedStartDate}
+          displayedEndDate={displayedDates.current.displayedEndDate}
           viewDate={viewDate}
           tasks={tasks}
           columnWidth={columnWidthForTimeUnit(timeUnit)}
@@ -324,18 +333,18 @@ export const Planner: React.FC<PlannerProps> = props => {
             props.mainGantt.taskListTableProject ??
             CustomTaskListTableHOC(
               id => {
-                let row = getProjectById(id, currentTasks);
+                let row = getProjectById(id, currentTasks.current);
                 if (!row) {
-                  row = getPhaseById(id, currentTasks);
+                  row = getPhaseById(id, currentTasks.current);
                 }
                 if (row) {
                   handleClick(row, props.mainGantt.onClick);
                 }
               },
               (event, id) => {
-                let row = getProjectById(id, currentTasks);
+                let row = getProjectById(id, currentTasks.current);
                 if (!row) {
-                  row = getPhaseById(id, currentTasks);
+                  row = getPhaseById(id, currentTasks.current);
                 }
                 if (row) {
                   handleContextMenu(event, row, props.mainGantt.onContextMenu);
@@ -348,18 +357,18 @@ export const Planner: React.FC<PlannerProps> = props => {
           TooltipContent={props.mainGantt.tooltipContent ?? CustomTooltipHOC()}
           // events
           onClick={task => {
-            let row = getProjectById(task.id, currentTasks);
+            let row = getProjectById(task.id, currentTasks.current);
             if (!row) {
-              row = getPhaseById(task.id, currentTasks);
+              row = getPhaseById(task.id, currentTasks.current);
             }
             if (row) {
               handleClick(row, props.mainGantt.onClick);
             }
           }}
           onContextMenu={(event, task) => {
-            let row = getProjectById(task.id, currentTasks);
+            let row = getProjectById(task.id, currentTasks.current);
             if (!row) {
-              row = getPhaseById(task.id, currentTasks);
+              row = getPhaseById(task.id, currentTasks.current);
             }
             if (row) {
               handleContextMenu(event, row, props.mainGantt.onContextMenu);
@@ -368,7 +377,7 @@ export const Planner: React.FC<PlannerProps> = props => {
           onDateChange={task =>
             handleDateChange(
               task,
-              currentTasks as GanttTask[],
+              currentTasks.current as GanttTask[],
               props.mainGantt.onDateChange
             )
           }
@@ -385,8 +394,8 @@ export const Planner: React.FC<PlannerProps> = props => {
             showSecondaryDates={mainGanttDoubleView}
             hideDependencies={props.secondaryGantt.hideDependencies}
             ganttHeight={props.secondaryGantt.ganttHeight}
-            displayedStartDate={displayedDates.displayedStartDate}
-            displayedEndDate={displayedDates.displayedEndDate}
+            displayedStartDate={displayedDates.current.displayedStartDate}
+            displayedEndDate={displayedDates.current.displayedEndDate}
             viewDate={viewDate}
             tasks={details}
             columnWidth={columnWidthForTimeUnit(timeUnit)}
@@ -404,7 +413,10 @@ export const Planner: React.FC<PlannerProps> = props => {
                 },
                 (event, id) => {
                   if (props.secondaryGantt) {
-                    let row = getProjectById(id, currentDetails as Detail[]);
+                    let row = getProjectById(
+                      id,
+                      currentDetails.current as Detail[]
+                    );
                     if (row) {
                       handleContextMenu(
                         event,
@@ -426,7 +438,10 @@ export const Planner: React.FC<PlannerProps> = props => {
             // events
             onClick={task => {
               if (props.secondaryGantt) {
-                let row = getProjectById(task.id, currentDetails as Detail[]);
+                let row = getProjectById(
+                  task.id,
+                  currentDetails.current as Detail[]
+                );
                 if (row) {
                   handleClick(row, props.secondaryGantt.onClick);
                 }
@@ -434,7 +449,10 @@ export const Planner: React.FC<PlannerProps> = props => {
             }}
             onContextMenu={(event, task) => {
               if (props.secondaryGantt) {
-                let row = getProjectById(task.id, currentDetails as Detail[]);
+                let row = getProjectById(
+                  task.id,
+                  currentDetails.current as Detail[]
+                );
                 if (row) {
                   handleContextMenu(
                     event,
@@ -447,7 +465,7 @@ export const Planner: React.FC<PlannerProps> = props => {
             onDateChange={task =>
               handleDateChange(
                 task,
-                currentDetails as Detail[],
+                currentDetails.current as Detail[],
                 props.secondaryGantt?.onDateChange
               )
             }

@@ -48,6 +48,7 @@ const AppPlanner = () => {
     console.log("Secondary Gantt context menu event", row);
   };
 
+  const secondary: boolean = true;
   const props: PlannerProps = {
     ...plannerProps,
     mainGantt: {
@@ -55,11 +56,13 @@ const AppPlanner = () => {
       onClick: mainGanttClickHandler,
       onContextMenu: mainGanttContextMenuHandler,
     },
-    secondaryGantt: {
-      ...(plannerProps.secondaryGantt as GanttPlannerDetailsProps),
-      onClick: secondaryGanttClickHandler,
-      onContextMenu: secondaryGanttContextMenuHandler,
-    },
+    secondaryGantt: secondary
+      ? {
+          ...(plannerProps.secondaryGantt as GanttPlannerDetailsProps),
+          onClick: secondaryGanttClickHandler,
+          onContextMenu: secondaryGanttContextMenuHandler,
+        }
+      : undefined,
     onSetDoubleView: mainGanttDoubleViewHandler,
   };
 
@@ -791,7 +794,7 @@ const mainGanttPlannerPropsMock: GanttPlannerProps = {
   },
   hideLabel: true,
   showSecondaryDates: false,
-  ganttHeight: 350,
+  ganttHeight: 200,
   hideDependencies: true,
   title: "Main",
 };
