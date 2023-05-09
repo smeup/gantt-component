@@ -78,6 +78,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   projection,
   displayedStartDate,
   displayedEndDate,
+  initialScrollX = -1,
+  initialScrollY = 0,
+  readOnly = false,
   onDateChange,
   onProgressChange,
   onDoubleClick,
@@ -137,8 +140,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const svgWidth = dateSetup.dates.length * columnWidth;
   const ganttFullHeight = barTasks.length * rowHeight;
 
-  const [scrollY, setScrollY] = useState(0);
-  const [scrollX, setScrollX] = useState(-1);
+  const [scrollX, setScrollX] = useState(initialScrollX);
+  const [scrollY, setScrollY] = useState(initialScrollY);
   const ignoreScrollEvent = useRef(false);
   const setIgnoreScrollEvent = (value: boolean) => {
     ignoreScrollEvent.current = value;
@@ -315,6 +318,25 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       setTaskListWidth(taskListRef.current.offsetWidth);
     }
   }, [taskListRef, listCellWidth]);
+
+  useEffect(() => {
+    if (wrapperRef.current) {
+      if (scrollX !== -1) {
+        const wrap = wrapperRef.current;
+        const setScrollLeft = () => {
+          wrap.scrollLeft = scrollX;
+        };
+        setTimeout(setScrollLeft, 125);
+      }
+      if (scrollY !== 0) {
+        const wrap = wrapperRef.current;
+        const setScrollTop = () => {
+          wrap.scrollTop = scrollY;
+        };
+        setTimeout(setScrollTop, 125);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (wrapperRef.current) {
@@ -606,7 +628,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   return (
     <div>
       <div
-        className={styles.wrapper}
+        className={`${styles.wrapper} ${
+          readOnly ? styles.wrapper__readOnly : ""
+        }`}
         onKeyDown={handleKeyDown}
         tabIndex={0}
         ref={wrapperRef}

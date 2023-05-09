@@ -200,6 +200,9 @@ export interface GanttProps
   tasks: Task[];
   projection?: GanttPhaseProjection;
   filter: HTMLElement;
+  initialScrollX?: number;
+  initialScrollY?: number;
+  readOnly?: boolean;
 }
 
 /**

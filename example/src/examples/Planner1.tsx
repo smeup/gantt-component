@@ -75,6 +75,9 @@ const AppPlanner = () => {
 };
 
 const mainGanttPlannerPropsMock: GanttPlannerProps = {
+  readOnly: true,
+  initialScrollX: 11,
+  initialScrollY: 210,
   filter: dummyFilter(),
   items: [
     {
@@ -1649,6 +1652,8 @@ const mainGanttItemAfterClick: GanttTask[] = [
 ];
 
 const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
+  initialScrollX: 12,
+  initialScrollY: 220,
   items: [
     {
       id: "RIS1",

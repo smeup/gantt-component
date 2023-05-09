@@ -27,3 +27,7 @@
   outline: none;
   position: relative;
 }
+
+.wrapper__readOnly {
+  pointer-events: none;
+}

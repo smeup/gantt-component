@@ -50,6 +50,9 @@ export interface GanttPlannerProps {
   hideDependencies?: boolean;
   title: string;
   filter: HTMLElement;
+  initialScrollX?: number;
+  initialScrollY?: number;
+  readOnly?: boolean;
 
   /** Events */
   onDateChange?: (row: GanttRow) => void;
@@ -70,6 +73,9 @@ export interface GanttPlannerDetailsProps {
   hideDependencies?: boolean;
   title: string;
   filter: HTMLElement;
+  initialScrollX?: number;
+  initialScrollY?: number;
+  readOnly?: boolean;
 
   /** Events */
   onDateChange?: (row: GanttRow) => void;
@@ -383,6 +389,9 @@ export const Planner: React.FC<PlannerProps> = props => {
           }
           locale={locale}
           dateTimeFormatters={ganttDateTimeFormatters}
+          initialScrollX={props.mainGantt.initialScrollX}
+          initialScrollY={props.mainGantt.initialScrollY}
+          readOnly={props.mainGantt.readOnly}
         />
 
         {props.secondaryGantt && (
@@ -471,6 +480,9 @@ export const Planner: React.FC<PlannerProps> = props => {
             }
             locale={locale}
             dateTimeFormatters={ganttDateTimeFormatters}
+            initialScrollX={props.secondaryGantt.initialScrollX}
+            initialScrollY={props.secondaryGantt.initialScrollY}
+            readOnly={props.secondaryGantt.readOnly}
           />
         )}
       </div>
