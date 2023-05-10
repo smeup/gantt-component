@@ -36,6 +36,7 @@ export type TaskGanttContentProps = {
     xf: number;
     color: string;
   };
+  readOnly: boolean;
   setGanttEvent: (value: GanttEvent) => void;
   setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
@@ -60,6 +61,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   showSecondaryDates = false,
   currentDateIndicator,
   projection,
+  readOnly,
   setGanttEvent,
   setFailedTask,
   setSelectedTask,
@@ -218,6 +220,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     task: BarTask,
     event?: React.MouseEvent | React.KeyboardEvent
   ) => {
+    if (readOnly && action !== "contextmenu") {
+      return;
+    }
     if (!event) {
       if (action === "select") {
         setSelectedTask(task.id);

@@ -595,6 +595,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     ganttHeight,
     currentDateIndicator: currentDateIndicatorContent,
     projection: projectionContent,
+    readOnly,
     setGanttEvent,
     setFailedTask,
     setSelectedTask: handleSelectedTask,
@@ -628,9 +629,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   return (
     <div>
       <div
-        className={`${styles.wrapper} ${
-          readOnly ? styles.wrapper__readOnly : ""
-        }`}
+        className={`${styles.wrapper}`}
         onKeyDown={handleKeyDown}
         tabIndex={0}
         ref={wrapperRef}
