@@ -220,9 +220,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     task: BarTask,
     event?: React.MouseEvent | React.KeyboardEvent
   ) => {
-    if (readOnly && action !== "contextmenu") {
-      return;
-    }
+    // if (readOnly && action !== "contextmenu") {
+    //   return;
+    // }
     if (!event) {
       if (action === "select") {
         setSelectedTask(task.id);
@@ -339,10 +339,12 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               task={task}
               arrowIndent={arrowIndent}
               taskHeight={taskHeight}
-              isProgressChangeable={!!onProgressChange && !task.isDisabled}
-              isDateMovable={!!onDateChange && !task.isDisabled}
+              isProgressChangeable={
+                !readOnly && !!onProgressChange && !task.isDisabled
+              }
+              isDateMovable={!readOnly && !!onDateChange && !task.isDisabled}
               isDateResizable={
-                !!onDateChange && !task.isDisabled && !forbidResize
+                !readOnly && !!onDateChange && !task.isDisabled && !forbidResize
               }
               isDelete={!task.isDisabled}
               onEventStart={handleBarEventStart}
