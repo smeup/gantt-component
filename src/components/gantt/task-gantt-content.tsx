@@ -209,8 +209,12 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     setGanttEvent,
   ]);
 
-  const hasMovedHorizontally = (event: React.MouseEvent) =>
-    initEventXClick !== event?.clientX;
+  const hasMovedHorizontally = (event: React.MouseEvent) => {
+    if (readOnly) {
+      return false;
+    }
+    return initEventXClick !== event?.clientX;
+  };
 
   /**
    * Method is Start point of task change
@@ -259,8 +263,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     } else if (action === "dblclick") {
       !!onDoubleClick && onDoubleClick(task);
     } else if (action === "click") {
-      const skipClick = !hasMovedHorizontally(event);
-      skipClick && !!onClick && onClick(task);
+      const skipClick = hasMovedHorizontally(event);
+      !skipClick && !!onClick && onClick(task);
     } else if (action === "contextmenu") {
       event.preventDefault();
       !!onContextMenu && onContextMenu(event, task);

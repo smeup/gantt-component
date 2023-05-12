@@ -1652,6 +1652,7 @@ const mainGanttItemAfterClick: GanttTask[] = [
 ];
 
 const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
+  readOnly: true,
   initialScrollX: 12,
   initialScrollY: 220,
   items: [
