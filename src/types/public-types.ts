@@ -1,15 +1,15 @@
 import { GanttPhaseProjection } from "./domain";
-
+/*
 export enum ViewMode {
   Hour = "Hour",
   QuarterDay = "Quarter Day",
   HalfDay = "Half Day",
   Day = "Day",
-  /** ISO-8601 week */
-  Week = "Week",
+  Week = "Week",  // ISO-8601 week 
   Month = "Month",
   Year = "Year",
 }
+*/
 export type TaskType = "task" | "project" | "timeline";
 export interface Task {
   id: string;
@@ -203,6 +203,7 @@ export interface GanttProps
   initialScrollX?: number;
   initialScrollY?: number;
   readOnly?: boolean;
+  viewMode?: ViewMode;
 }
 
 /**
@@ -220,3 +221,5 @@ export interface TaskIcon {
   color: string;
   url: string;
 }
+
+export type ViewMode = "day" | "week" | "month" | "year";

@@ -1,4 +1,3 @@
-import { TimeUnit } from "../types/time-unit";
 import {
   Detail,
   Phase,
@@ -20,22 +19,9 @@ export const DAY_MILLIS = 24 * 60 * 60 * 1000;
 export const MAIN_GANTT_ID = "main";
 export const SECONDARY_GANTT_ID = "secondary";
 
-export const toViewMode = (timeUnit: TimeUnit): ViewMode => {
+export const columnWidthForTimeUnit = (timeUnit: ViewMode): number => {
   switch (timeUnit) {
-    case TimeUnit.DAY:
-      return ViewMode.Day;
-    case TimeUnit.WEEK:
-      return ViewMode.Week;
-    case TimeUnit.MONTH:
-      return ViewMode.Month;
-    case TimeUnit.YEAR:
-      return ViewMode.Year;
-  }
-};
-
-export const columnWidthForTimeUnit = (timeUnit: TimeUnit): number => {
-  switch (timeUnit) {
-    case TimeUnit.YEAR:
+    case "year":
       return 60 * 2;
     default:
       return 60;

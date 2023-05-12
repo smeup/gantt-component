@@ -9,7 +9,6 @@ import {
   CurrentDateIndicator,
   GanttProps,
   Task,
-  ViewMode,
 } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import { ganttDateRangeFromTask, seedDates } from "../../helpers/date-helper";
@@ -43,7 +42,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   rowHeight = 50,
   filter,
   ganttHeight = 0,
-  viewMode = ViewMode.Day,
   preStepsCount = 1,
   locale = "en-GB",
   barFill = 60,
@@ -89,6 +87,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onDelete,
   onSelect,
   onExpanderClick,
+  viewMode = "month",
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskGanttRef = useRef<HTMLDivElement>(null);

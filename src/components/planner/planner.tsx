@@ -8,7 +8,6 @@ import {
   mergeTaskIntoPhases,
   mergeTaskIntoProjects,
   SECONDARY_GANTT_ID,
-  toViewMode,
 } from "../../helpers/adapter";
 import { calculateDisplayedDateRange } from "../../helpers/date-helper";
 import { formatToIsoDate } from "../../helpers/time-converters";
@@ -25,8 +24,7 @@ import {
   GanttPhaseProjection,
   Phase,
 } from "../../types/domain";
-import { StylingOption, Task } from "../../types/public-types";
-import { TimeUnit } from "../../types/time-unit";
+import { StylingOption, Task, ViewMode } from "../../types/public-types";
 import { Gantt } from "../gantt/gantt";
 import { CustomTaskListHeaderHOC } from "./custom-task-list-header";
 import {
@@ -53,6 +51,7 @@ export interface GanttPlannerProps {
   initialScrollX?: number;
   initialScrollY?: number;
   readOnly?: boolean;
+  viewMode?: ViewMode;
 
   /** Events */
   onDateChange?: (row: GanttRow) => void;
@@ -89,11 +88,12 @@ export interface PlannerProps {
   mainGantt: GanttPlannerProps;
   secondaryGantt?: GanttPlannerDetailsProps;
   preStepsCount?: number;
+  viewMode: ViewMode;
   onSetDoubleView?: (checked: boolean) => void;
 }
 
 export const Planner: React.FC<PlannerProps> = props => {
-  const [timeUnit, setTimeUnit] = useState(TimeUnit.MONTH);
+  const [timeUnit, setTimeUnit] = useState(props.viewMode);
 
   const currentTasks = useRef(props.mainGantt.items);
   const setCurrentTasks = (tasks: GanttTask[] | Detail[]) => {
@@ -325,7 +325,7 @@ export const Planner: React.FC<PlannerProps> = props => {
           viewDate={viewDate}
           tasks={tasks}
           columnWidth={columnWidthForTimeUnit(timeUnit)}
-          viewMode={toViewMode(timeUnit)}
+          viewMode={timeUnit}
           {...props.mainGantt.stylingOptions}
           TaskListHeader={
             props.mainGantt.taskListHeaderProject ??
@@ -408,7 +408,7 @@ export const Planner: React.FC<PlannerProps> = props => {
             viewDate={viewDate}
             tasks={details}
             columnWidth={columnWidthForTimeUnit(timeUnit)}
-            viewMode={toViewMode(timeUnit)}
+            viewMode={timeUnit}
             {...props.mainGantt.stylingOptions}
             TaskListHeader={
               props.secondaryGantt.taskListHeaderProject ??
