@@ -90,6 +90,7 @@ export interface PlannerProps {
   preStepsCount?: number;
   viewMode: ViewMode;
   onSetDoubleView?: (checked: boolean) => void;
+  onSetViewMode?: (value: ViewMode) => void;
 }
 
 export const Planner: React.FC<PlannerProps> = props => {
@@ -181,7 +182,6 @@ export const Planner: React.FC<PlannerProps> = props => {
     onContextMenu?.(event, row);
   };
 
-  // handle onSetDoubleView
   const handleSetDoubleView = (checked: boolean) => {
     setMainGanttDoubleView(checked);
     props.onSetDoubleView?.(checked);
@@ -302,6 +302,7 @@ export const Planner: React.FC<PlannerProps> = props => {
     <div>
       <Switcher
         onTimeUnitChange={timeUnit => {
+          props.onSetViewMode?.(timeUnit);
           setTimeUnit(timeUnit);
           setViewDate(undefined);
         }}
