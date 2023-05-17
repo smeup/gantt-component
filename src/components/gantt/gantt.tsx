@@ -88,6 +88,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onSelect,
   onExpanderClick,
   viewMode = "month",
+  onScrollX,
+  onScrollY,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskGanttRef = useRef<HTMLDivElement>(null);
@@ -161,9 +163,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     window.addEventListener("gantt-sync-scroll-event", function (e: any) {
       if (e.detail.id !== id) {
         setScrollX(e.detail.scrollX);
+        // execute scroll x event
+        if (onScrollX) {
+          onScrollX(e.detail.scrollX);
+        }
       }
     });
-  }, [id]);
+  }, [id, onScrollX]);
 
   // task change events
   useEffect(() => {
@@ -400,12 +406,17 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   ]);
 
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
-    if (
-      scrollY !== event.currentTarget.scrollTop &&
-      !ignoreScrollEvent.current
-    ) {
-      setScrollY(event.currentTarget.scrollTop);
-      setIgnoreScrollEvent(true);
+    if (scrollY !== event.currentTarget.scrollTop) {
+      // execute scroll y event
+      if (onScrollY) {
+        onScrollY(event.currentTarget.scrollTop);
+      }
+      if (!ignoreScrollEvent.current) {
+        setScrollY(event.currentTarget.scrollTop);
+        setIgnoreScrollEvent(true);
+      } else {
+        setIgnoreScrollEvent(false);
+      }
     } else {
       setIgnoreScrollEvent(false);
     }
@@ -484,6 +495,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         newScrollY = 0;
       } else if (newScrollY > ganttFullHeight - ganttHeight) {
         newScrollY = ganttFullHeight - ganttHeight;
+      }
+      // execute scroll y event
+      if (onScrollY) {
+        onScrollY(event.currentTarget.scrollTop);
       }
       setScrollY(newScrollY);
     }

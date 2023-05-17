@@ -60,6 +60,7 @@ export interface GanttPlannerProps {
     event: React.MouseEvent<Element, MouseEvent>,
     row: GanttRow
   ) => void;
+  onScrollY?: (y: number) => void;
 }
 export interface GanttPlannerDetailsProps {
   items: Detail[];
@@ -83,6 +84,7 @@ export interface GanttPlannerDetailsProps {
     event: React.MouseEvent<Element, MouseEvent>,
     row: GanttRow
   ) => void;
+  onScrollY?: (y: number) => void;
 }
 export interface PlannerProps {
   mainGantt: GanttPlannerProps;
@@ -91,6 +93,7 @@ export interface PlannerProps {
   viewMode: ViewMode;
   onSetDoubleView?: (checked: boolean) => void;
   onSetViewMode?: (value: ViewMode) => void;
+  onScrollX?: (x: number) => void;
 }
 
 export const Planner: React.FC<PlannerProps> = props => {
@@ -393,6 +396,8 @@ export const Planner: React.FC<PlannerProps> = props => {
           initialScrollX={props.mainGantt.initialScrollX}
           initialScrollY={props.mainGantt.initialScrollY}
           readOnly={props.mainGantt.readOnly}
+          onScrollX={props.onScrollX}
+          onScrollY={props.mainGantt.onScrollY}
         />
 
         {props.secondaryGantt && (
@@ -484,6 +489,7 @@ export const Planner: React.FC<PlannerProps> = props => {
             initialScrollX={props.secondaryGantt.initialScrollX}
             initialScrollY={props.secondaryGantt.initialScrollY}
             readOnly={props.secondaryGantt.readOnly}
+            onScrollY={props.secondaryGantt.onScrollY}
           />
         )}
       </div>

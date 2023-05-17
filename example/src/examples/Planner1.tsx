@@ -48,6 +48,17 @@ const AppPlanner = () => {
     console.log("Secondary Gantt context menu event", row);
   };
 
+  // scroll events
+  const onScrollX = (x: number) => {
+    console.log("Planner scrollX event", x);
+  }
+  const onMainGanttScrollY = (y: number) => {
+    console.log("Planner main gantt scrollY event", y);
+  }
+  const onSecondaryGanttScrollY = (y: number) => {
+    console.log("Planner secondary gantt scrollY event", y);
+  }
+
   const secondary: boolean = true;
   const props: PlannerProps = {
     ...plannerProps,
@@ -55,15 +66,18 @@ const AppPlanner = () => {
       ...plannerProps.mainGantt,
       onClick: mainGanttClickHandler,
       onContextMenu: mainGanttContextMenuHandler,
+      onScrollY: onMainGanttScrollY
     },
     secondaryGantt: secondary
       ? {
           ...(plannerProps.secondaryGantt as GanttPlannerDetailsProps),
           onClick: secondaryGanttClickHandler,
           onContextMenu: secondaryGanttContextMenuHandler,
+          onScrollY: onSecondaryGanttScrollY
         }
       : undefined,
     onSetDoubleView: mainGanttDoubleViewHandler,
+    onScrollX
   };
 
   return (
