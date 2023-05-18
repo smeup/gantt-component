@@ -48,6 +48,17 @@ const AppPlanner = () => {
     console.log("Secondary Gantt context menu event", row);
   };
 
+  // scroll events
+  const onScrollX = (x: number) => {
+    console.log("Planner scrollX event", x);
+  }
+  const onMainGanttScrollY = (y: number) => {
+    console.log("Planner main gantt scrollY event", y);
+  }
+  const onSecondaryGanttScrollY = (y: number) => {
+    console.log("Planner secondary gantt scrollY event", y);
+  }
+
   const secondary: boolean = true;
   const props: PlannerProps = {
     ...plannerProps,
@@ -55,15 +66,18 @@ const AppPlanner = () => {
       ...plannerProps.mainGantt,
       onClick: mainGanttClickHandler,
       onContextMenu: mainGanttContextMenuHandler,
+      onScrollY: onMainGanttScrollY
     },
     secondaryGantt: secondary
       ? {
           ...(plannerProps.secondaryGantt as GanttPlannerDetailsProps),
           onClick: secondaryGanttClickHandler,
           onContextMenu: secondaryGanttContextMenuHandler,
+          onScrollY: onSecondaryGanttScrollY
         }
       : undefined,
     onSetDoubleView: mainGanttDoubleViewHandler,
+    onScrollX
   };
 
   return (
@@ -75,6 +89,9 @@ const AppPlanner = () => {
 };
 
 const mainGanttPlannerPropsMock: GanttPlannerProps = {
+  readOnly: true,
+  initialScrollX: 11,
+  initialScrollY: 210,
   filter: dummyFilter(),
   items: [
     {
@@ -1649,6 +1666,9 @@ const mainGanttItemAfterClick: GanttTask[] = [
 ];
 
 const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
+  readOnly: true,
+  initialScrollX: 12,
+  initialScrollY: 220,
   items: [
     {
       id: "RIS1",
@@ -1780,6 +1800,7 @@ const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
 const plannerPropsMock: PlannerProps = {
   mainGantt: mainGanttPlannerPropsMock,
   secondaryGantt: secondaryGanttPlannerPropsMock,
+  viewMode: "month",
 };
 
 const plannerAfterClickPropsMock: PlannerProps = {
@@ -1788,6 +1809,7 @@ const plannerAfterClickPropsMock: PlannerProps = {
     items: mainGanttItemAfterClick,
   },
   secondaryGantt: secondaryGanttPlannerPropsMock,
+  viewMode: "month",
 };
 
 function dummyFilter() {

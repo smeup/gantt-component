@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from "react";
 import "@sme.up/gantt-component/dist/index.css";
 import { ViewMode } from "@sme.up/gantt-component";
 type ViewSwitcherProps = PropsWithChildren<{
@@ -10,48 +10,21 @@ export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
   onViewModeChange,
   onViewListChange,
   isChecked,
-  children
+  children,
 }) => {
   return (
     <div className="ViewContainer">
       {children}
-      <button
-        className="Button"
-        onClick={() => onViewModeChange(ViewMode.Hour)}
-      >
-        Hour
-      </button>
-      <button
-        className="Button"
-        onClick={() => onViewModeChange(ViewMode.QuarterDay)}
-      >
-        Quarter of Day
-      </button>
-      <button
-        className="Button"
-        onClick={() => onViewModeChange(ViewMode.HalfDay)}
-      >
-        Half of Day
-      </button>
-      <button className="Button" onClick={() => onViewModeChange(ViewMode.Day)}>
+      <button className="Button" onClick={() => onViewModeChange("day")}>
         Day
       </button>
-      <button
-        className="Button"
-        onClick={() => onViewModeChange(ViewMode.Week)}
-      >
+      <button className="Button" onClick={() => onViewModeChange("week")}>
         Week
       </button>
-      <button
-        className="Button"
-        onClick={() => onViewModeChange(ViewMode.Month)}
-      >
+      <button className="Button" onClick={() => onViewModeChange("month")}>
         Month
       </button>
-      <button
-        className="Button"
-        onClick={() => onViewModeChange(ViewMode.Year)}
-      >
+      <button className="Button" onClick={() => onViewModeChange("year")}>
         Year
       </button>
       <div className="Switch">

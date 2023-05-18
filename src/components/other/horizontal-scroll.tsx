@@ -13,6 +13,16 @@ export const HorizontalScroll: React.FC<{
 
   useEffect(() => {
     if (scrollRef.current) {
+      const wrap = scrollRef.current;
+      const setScrollLeft = () => {
+        wrap.scrollLeft = scroll;
+      };
+      setTimeout(setScrollLeft, 250);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (scrollRef.current) {
       scrollRef.current.scrollLeft = scroll;
     }
   }, [scroll]);

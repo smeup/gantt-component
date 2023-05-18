@@ -20,6 +20,16 @@ export const VerticalScroll: React.FC<{
 
   useEffect(() => {
     if (scrollRef.current) {
+      const wrap = scrollRef.current;
+      const setScrollTop = () => {
+        wrap.scrollTop = scroll;
+      };
+      setTimeout(setScrollTop, 250);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (scrollRef.current) {
       scrollRef.current.scrollTop = scroll;
     }
   }, [scroll]);

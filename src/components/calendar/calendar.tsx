@@ -30,7 +30,6 @@ export type CalendarProps = {
 export const Calendar: React.FC<CalendarProps> = ({
   dateSetup,
   locale,
-  viewMode,
   rtl,
   headerHeight,
   columnWidth,
@@ -40,8 +39,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   singleLineHeader = false,
   currentDateIndicator,
 }) => {
-  const simplifiedHeader =
-    singleLineHeader && dateSetup.viewMode !== ViewMode.Year;
+  const simplifiedHeader = singleLineHeader && dateSetup.viewMode !== "year";
   const TopCal = simplifiedHeader ? SinglePartOfCalendar : TopPartOfCalendar;
 
   const formatYear = dateTimeFormatters?.year ?? defaultDateTimeFormatters.year;
@@ -51,9 +49,11 @@ export const Calendar: React.FC<CalendarProps> = ({
     dateTimeFormatters?.monthAndYear ?? defaultDateTimeFormatters.monthAndYear;
   const formatWeek = dateTimeFormatters?.week ?? defaultDateTimeFormatters.week;
   const formatDay = dateTimeFormatters?.day ?? defaultDateTimeFormatters.day;
+  /*
   const formatHour = dateTimeFormatters?.hour ?? defaultDateTimeFormatters.hour;
   const formatDayAndMonth =
     dateTimeFormatters?.dayAndMonth ?? defaultDateTimeFormatters.dayAndMonth;
+    */
   const getCalendarValuesForYear = () => {
     const topValues: ReactElement[] = [];
     const bottomValues: ReactElement[] = [];
@@ -237,11 +237,12 @@ export const Calendar: React.FC<CalendarProps> = ({
     }
     return [topValues, bottomValues];
   };
-
+  /*
   const getCalendarValuesForPartOfDay = () => {
     const topValues: ReactElement[] = [];
     const bottomValues: ReactElement[] = [];
-    const ticks = viewMode === ViewMode.HalfDay ? 2 : 4;
+    // const ticks = viewMode === ViewMode.HalfDay ? 2 : 4;
+    const ticks = 4;
     const topDefaultHeight = headerHeight * 0.5;
     const dates = dateSetup.dates;
     for (let i = 0; i < dates.length; i++) {
@@ -318,15 +319,17 @@ export const Calendar: React.FC<CalendarProps> = ({
 
     return [topValues, bottomValues];
   };
-
+*/
   const getters = {
-    [ViewMode.Year]: getCalendarValuesForYear,
-    [ViewMode.Month]: getCalendarValuesForMonth,
-    [ViewMode.Week]: getCalendarValuesForWeek,
-    [ViewMode.Day]: getCalendarValuesForDay,
+    year: getCalendarValuesForYear,
+    month: getCalendarValuesForMonth,
+    week: getCalendarValuesForWeek,
+    day: getCalendarValuesForDay,
+    /*
     [ViewMode.QuarterDay]: getCalendarValuesForPartOfDay,
     [ViewMode.HalfDay]: getCalendarValuesForPartOfDay,
     [ViewMode.Hour]: getCalendarValuesForHour,
+    */
   };
   const [topValues, bottomValues] = getters[dateSetup.viewMode]();
 

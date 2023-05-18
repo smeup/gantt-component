@@ -1,15 +1,15 @@
 import { GanttPhaseProjection } from "./domain";
-
+/*
 export enum ViewMode {
   Hour = "Hour",
   QuarterDay = "Quarter Day",
   HalfDay = "Half Day",
   Day = "Day",
-  /** ISO-8601 week */
-  Week = "Week",
+  Week = "Week",  // ISO-8601 week 
   Month = "Month",
   Year = "Year",
 }
+*/
 export type TaskType = "task" | "project" | "timeline";
 export interface Task {
   id: string;
@@ -93,6 +93,14 @@ export interface EventOption {
    * Invokes on expander on task list
    */
   onExpanderClick?: (task: Task) => void;
+  /**
+   * Invokes on scroll X
+   */
+  onScrollX?: (x: number) => void;
+  /**
+   * Invokes on scroll Y
+   */
+  onScrollY?: (y: number) => void;
 }
 
 export interface DisplayOption {
@@ -200,6 +208,10 @@ export interface GanttProps
   tasks: Task[];
   projection?: GanttPhaseProjection;
   filter: HTMLElement;
+  initialScrollX?: number;
+  initialScrollY?: number;
+  readOnly?: boolean;
+  viewMode?: ViewMode;
 }
 
 /**
@@ -217,3 +229,5 @@ export interface TaskIcon {
   color: string;
   url: string;
 }
+
+export type ViewMode = "day" | "week" | "month" | "year";

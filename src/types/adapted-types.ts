@@ -1,10 +1,9 @@
 import { FC } from "react";
-import { Task } from "./public-types";
-import { TimeUnit } from "./time-unit";
+import { Task, ViewMode } from "./public-types";
 
 export interface GanttCommonProps {
   /** Resolution of time intervals */
-  timeUnit?: TimeUnit;
+  timeUnit?: ViewMode;
   /** Optional renderer for tooltips */
   TooltipContent?: TooltipContentComponent;
   /** Optional renderer for header in left-side table */

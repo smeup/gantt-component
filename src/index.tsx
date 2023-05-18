@@ -1,7 +1,7 @@
 export { Gantt } from "./components/gantt/gantt";
 export { Planner } from "./components/planner/planner";
 export { Switcher } from "./components/planner/switcher";
-export { ViewMode } from "./types/public-types";
+export type { ViewMode } from "./types/public-types";
 export { CustomTaskListHeaderHOC } from "./components/planner/custom-task-list-header";
 export { CustomTaskListTableHOC } from "./components/planner/custom-task-list-table";
 export {
@@ -39,4 +39,3 @@ export type {
   GanttPlannerDetailsProps,
   GanttPlannerProps,
 } from "./components/planner/planner";
-export { TimeUnit } from "./types/time-unit";

@@ -1,7 +1,5 @@
 import { Detail, GanttTask } from "../types/domain";
 import { Task, ViewMode } from "../types/public-types";
-import { TimeUnit } from "../types/time-unit";
-import { toViewMode } from "./adapter";
 import { parseToDayEnd, parseToDayStart } from "./time-converters";
 import DateTimeFormatOptions = Intl.DateTimeFormatOptions;
 import DateTimeFormat = Intl.DateTimeFormat;
@@ -123,21 +121,21 @@ export const ganttDateRangeFromTask = (
  */
 export const calculateDisplayedDateRange = (
   mainGanttItems: GanttTask[],
-  timeUnit: TimeUnit,
+  timeUnit: ViewMode,
   mainGanttDoubleView: boolean,
   secondaryGanttItems?: Detail[],
   preStepsCount?: number
 ) => {
   const dates: Date[] = ganttDateRangeFromGanttTask(
     mainGanttItems as GanttTask[],
-    toViewMode(timeUnit),
+    timeUnit,
     preStepsCount ?? 1,
     mainGanttDoubleView
   );
   if (secondaryGanttItems) {
     const dates2: Date[] = ganttDateRangeFromDetail(
       secondaryGanttItems,
-      toViewMode(timeUnit),
+      timeUnit,
       preStepsCount ?? 1,
       mainGanttDoubleView
     );
@@ -261,19 +259,19 @@ export const ganttDateRangeGeneric = (
     return [newStartDate, newEndDate];
   }
   switch (viewMode) {
-    case ViewMode.Year:
+    case "year":
       newStartDate = addToDate(newStartDate, -1, "year");
       newStartDate = startOfDate(newStartDate, "year");
       newEndDate = addToDate(newEndDate, 1, "year");
       newEndDate = startOfDate(newEndDate, "year");
       break;
-    case ViewMode.Month:
+    case "month":
       newStartDate = addToDate(newStartDate, -1 * preStepsCount, "month");
       newStartDate = startOfDate(newStartDate, "month");
       newEndDate = addToDate(newEndDate, 1, "year");
       newEndDate = startOfDate(newEndDate, "year");
       break;
-    case ViewMode.Week:
+    case "week":
       newStartDate = startOfDate(newStartDate, "day");
       newStartDate = addToDate(
         getMonday(newStartDate),
@@ -283,12 +281,13 @@ export const ganttDateRangeGeneric = (
       newEndDate = startOfDate(newEndDate, "day");
       newEndDate = addToDate(newEndDate, 1.5, "month");
       break;
-    case ViewMode.Day:
+    case "day":
       newStartDate = startOfDate(newStartDate, "day");
       newStartDate = addToDate(newStartDate, -1 * preStepsCount, "day");
       newEndDate = startOfDate(newEndDate, "day");
       newEndDate = addToDate(newEndDate, 19, "day");
       break;
+    /*
     case ViewMode.QuarterDay:
       newStartDate = startOfDate(newStartDate, "day");
       newStartDate = addToDate(newStartDate, -1 * preStepsCount, "day");
@@ -307,6 +306,7 @@ export const ganttDateRangeGeneric = (
       newEndDate = startOfDate(newEndDate, "day");
       newEndDate = addToDate(newEndDate, 1, "day");
       break;
+      */
   }
   return [newStartDate, newEndDate];
 };
@@ -320,18 +320,19 @@ export const seedDates = (
   const dates: Date[] = [currentDate];
   while (currentDate < endDate) {
     switch (viewMode) {
-      case ViewMode.Year:
+      case "year":
         currentDate = addToDate(currentDate, 1, "year");
         break;
-      case ViewMode.Month:
+      case "month":
         currentDate = addToDate(currentDate, 1, "month");
         break;
-      case ViewMode.Week:
+      case "week":
         currentDate = addToDate(currentDate, 7, "day");
         break;
-      case ViewMode.Day:
+      case "day":
         currentDate = addToDate(currentDate, 1, "day");
         break;
+      /*
       case ViewMode.HalfDay:
         currentDate = addToDate(currentDate, 12, "hour");
         break;
@@ -341,6 +342,7 @@ export const seedDates = (
       case ViewMode.Hour:
         currentDate = addToDate(currentDate, 1, "hour");
         break;
+        */
     }
     dates.push(currentDate);
   }

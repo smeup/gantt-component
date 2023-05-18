@@ -36,6 +36,7 @@ export type TaskGanttContentProps = {
     xf: number;
     color: string;
   };
+  readOnly: boolean;
   setGanttEvent: (value: GanttEvent) => void;
   setFailedTask: (value: BarTask | null) => void;
   setSelectedTask: (taskId: string) => void;
@@ -60,6 +61,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   showSecondaryDates = false,
   currentDateIndicator,
   projection,
+  readOnly,
   setGanttEvent,
   setFailedTask,
   setSelectedTask,
@@ -207,8 +209,12 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     setGanttEvent,
   ]);
 
-  const hasMovedHorizontally = (event: React.MouseEvent) =>
-    initEventXClick !== event?.clientX;
+  const hasMovedHorizontally = (event: React.MouseEvent) => {
+    if (readOnly) {
+      return false;
+    }
+    return initEventXClick !== event?.clientX;
+  };
 
   /**
    * Method is Start point of task change
@@ -218,6 +224,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     task: BarTask,
     event?: React.MouseEvent | React.KeyboardEvent
   ) => {
+    // if (readOnly && action !== "contextmenu") {
+    //   return;
+    // }
     if (!event) {
       if (action === "select") {
         setSelectedTask(task.id);
@@ -254,8 +263,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     } else if (action === "dblclick") {
       !!onDoubleClick && onDoubleClick(task);
     } else if (action === "click") {
-      const skipClick = !hasMovedHorizontally(event);
-      skipClick && !!onClick && onClick(task);
+      const skipClick = hasMovedHorizontally(event);
+      !skipClick && !!onClick && onClick(task);
     } else if (action === "contextmenu") {
       event.preventDefault();
       !!onContextMenu && onContextMenu(event, task);
@@ -334,10 +343,12 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               task={task}
               arrowIndent={arrowIndent}
               taskHeight={taskHeight}
-              isProgressChangeable={!!onProgressChange && !task.isDisabled}
-              isDateMovable={!!onDateChange && !task.isDisabled}
+              isProgressChangeable={
+                !readOnly && !!onProgressChange && !task.isDisabled
+              }
+              isDateMovable={!readOnly && !!onDateChange && !task.isDisabled}
               isDateResizable={
-                !!onDateChange && !task.isDisabled && !forbidResize
+                !readOnly && !!onDateChange && !task.isDisabled && !forbidResize
               }
               isDelete={!task.isDisabled}
               onEventStart={handleBarEventStart}

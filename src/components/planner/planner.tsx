@@ -8,7 +8,6 @@ import {
   mergeTaskIntoPhases,
   mergeTaskIntoProjects,
   SECONDARY_GANTT_ID,
-  toViewMode,
 } from "../../helpers/adapter";
 import { calculateDisplayedDateRange } from "../../helpers/date-helper";
 import { formatToIsoDate } from "../../helpers/time-converters";
@@ -25,8 +24,7 @@ import {
   GanttPhaseProjection,
   Phase,
 } from "../../types/domain";
-import { StylingOption, Task } from "../../types/public-types";
-import { TimeUnit } from "../../types/time-unit";
+import { StylingOption, Task, ViewMode } from "../../types/public-types";
 import { Gantt } from "../gantt/gantt";
 import { CustomTaskListHeaderHOC } from "./custom-task-list-header";
 import {
@@ -50,6 +48,10 @@ export interface GanttPlannerProps {
   hideDependencies?: boolean;
   title: string;
   filter: HTMLElement;
+  initialScrollX?: number;
+  initialScrollY?: number;
+  readOnly?: boolean;
+  viewMode?: ViewMode;
 
   /** Events */
   onDateChange?: (row: GanttRow) => void;
@@ -58,6 +60,7 @@ export interface GanttPlannerProps {
     event: React.MouseEvent<Element, MouseEvent>,
     row: GanttRow
   ) => void;
+  onScrollY?: (y: number) => void;
 }
 export interface GanttPlannerDetailsProps {
   items: Detail[];
@@ -70,6 +73,9 @@ export interface GanttPlannerDetailsProps {
   hideDependencies?: boolean;
   title: string;
   filter: HTMLElement;
+  initialScrollX?: number;
+  initialScrollY?: number;
+  readOnly?: boolean;
 
   /** Events */
   onDateChange?: (row: GanttRow) => void;
@@ -78,16 +84,20 @@ export interface GanttPlannerDetailsProps {
     event: React.MouseEvent<Element, MouseEvent>,
     row: GanttRow
   ) => void;
+  onScrollY?: (y: number) => void;
 }
 export interface PlannerProps {
   mainGantt: GanttPlannerProps;
   secondaryGantt?: GanttPlannerDetailsProps;
   preStepsCount?: number;
+  viewMode: ViewMode;
   onSetDoubleView?: (checked: boolean) => void;
+  onSetViewMode?: (value: ViewMode) => void;
+  onScrollX?: (x: number) => void;
 }
 
 export const Planner: React.FC<PlannerProps> = props => {
-  const [timeUnit, setTimeUnit] = useState(TimeUnit.MONTH);
+  const [timeUnit, setTimeUnit] = useState(props.viewMode);
 
   const currentTasks = useRef(props.mainGantt.items);
   const setCurrentTasks = (tasks: GanttTask[] | Detail[]) => {
@@ -175,7 +185,6 @@ export const Planner: React.FC<PlannerProps> = props => {
     onContextMenu?.(event, row);
   };
 
-  // handle onSetDoubleView
   const handleSetDoubleView = (checked: boolean) => {
     setMainGanttDoubleView(checked);
     props.onSetDoubleView?.(checked);
@@ -296,6 +305,7 @@ export const Planner: React.FC<PlannerProps> = props => {
     <div>
       <Switcher
         onTimeUnitChange={timeUnit => {
+          props.onSetViewMode?.(timeUnit);
           setTimeUnit(timeUnit);
           setViewDate(undefined);
         }}
@@ -319,7 +329,7 @@ export const Planner: React.FC<PlannerProps> = props => {
           viewDate={viewDate}
           tasks={tasks}
           columnWidth={columnWidthForTimeUnit(timeUnit)}
-          viewMode={toViewMode(timeUnit)}
+          viewMode={timeUnit}
           {...props.mainGantt.stylingOptions}
           TaskListHeader={
             props.mainGantt.taskListHeaderProject ??
@@ -383,6 +393,11 @@ export const Planner: React.FC<PlannerProps> = props => {
           }
           locale={locale}
           dateTimeFormatters={ganttDateTimeFormatters}
+          initialScrollX={props.mainGantt.initialScrollX}
+          initialScrollY={props.mainGantt.initialScrollY}
+          readOnly={props.mainGantt.readOnly}
+          onScrollX={props.onScrollX}
+          onScrollY={props.mainGantt.onScrollY}
         />
 
         {props.secondaryGantt && (
@@ -399,7 +414,7 @@ export const Planner: React.FC<PlannerProps> = props => {
             viewDate={viewDate}
             tasks={details}
             columnWidth={columnWidthForTimeUnit(timeUnit)}
-            viewMode={toViewMode(timeUnit)}
+            viewMode={timeUnit}
             {...props.mainGantt.stylingOptions}
             TaskListHeader={
               props.secondaryGantt.taskListHeaderProject ??
@@ -471,6 +486,10 @@ export const Planner: React.FC<PlannerProps> = props => {
             }
             locale={locale}
             dateTimeFormatters={ganttDateTimeFormatters}
+            initialScrollX={props.secondaryGantt.initialScrollX}
+            initialScrollY={props.secondaryGantt.initialScrollY}
+            readOnly={props.secondaryGantt.readOnly}
+            onScrollY={props.secondaryGantt.onScrollY}
           />
         )}
       </div>

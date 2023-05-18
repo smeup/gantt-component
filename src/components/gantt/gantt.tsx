@@ -9,7 +9,6 @@ import {
   CurrentDateIndicator,
   GanttProps,
   Task,
-  ViewMode,
 } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
 import { ganttDateRangeFromTask, seedDates } from "../../helpers/date-helper";
@@ -43,7 +42,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   rowHeight = 50,
   filter,
   ganttHeight = 0,
-  viewMode = ViewMode.Day,
   preStepsCount = 1,
   locale = "en-GB",
   barFill = 60,
@@ -78,6 +76,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   projection,
   displayedStartDate,
   displayedEndDate,
+  initialScrollX = -1,
+  initialScrollY = 0,
+  readOnly = false,
   onDateChange,
   onProgressChange,
   onDoubleClick,
@@ -86,6 +87,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onDelete,
   onSelect,
   onExpanderClick,
+  viewMode = "month",
+  onScrollX,
+  onScrollY,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskGanttRef = useRef<HTMLDivElement>(null);
@@ -137,8 +141,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const svgWidth = dateSetup.dates.length * columnWidth;
   const ganttFullHeight = barTasks.length * rowHeight;
 
-  const [scrollY, setScrollY] = useState(0);
-  const [scrollX, setScrollX] = useState(-1);
+  const [scrollX, setScrollX] = useState(initialScrollX);
+  const [scrollY, setScrollY] = useState(initialScrollY);
   const ignoreScrollEvent = useRef(false);
   const setIgnoreScrollEvent = (value: boolean) => {
     ignoreScrollEvent.current = value;
@@ -159,9 +163,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     window.addEventListener("gantt-sync-scroll-event", function (e: any) {
       if (e.detail.id !== id) {
         setScrollX(e.detail.scrollX);
+        // execute scroll x event
+        if (onScrollX) {
+          onScrollX(e.detail.scrollX);
+        }
       }
     });
-  }, [id]);
+  }, [id, onScrollX]);
 
   // task change events
   useEffect(() => {
@@ -318,6 +326,25 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   useEffect(() => {
     if (wrapperRef.current) {
+      if (scrollX !== -1) {
+        const wrap = wrapperRef.current;
+        const setScrollLeft = () => {
+          wrap.scrollLeft = scrollX;
+        };
+        setTimeout(setScrollLeft, 125);
+      }
+      if (scrollY !== 0) {
+        const wrap = wrapperRef.current;
+        const setScrollTop = () => {
+          wrap.scrollTop = scrollY;
+        };
+        setTimeout(setScrollTop, 125);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (wrapperRef.current) {
       setSvgContainerWidth(
         wrapperRef.current.offsetWidth - taskListWidth.current
       );
@@ -379,12 +406,17 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   ]);
 
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
-    if (
-      scrollY !== event.currentTarget.scrollTop &&
-      !ignoreScrollEvent.current
-    ) {
-      setScrollY(event.currentTarget.scrollTop);
-      setIgnoreScrollEvent(true);
+    if (scrollY !== event.currentTarget.scrollTop) {
+      // execute scroll y event
+      if (onScrollY) {
+        onScrollY(event.currentTarget.scrollTop);
+      }
+      if (!ignoreScrollEvent.current) {
+        setScrollY(event.currentTarget.scrollTop);
+        setIgnoreScrollEvent(true);
+      } else {
+        setIgnoreScrollEvent(false);
+      }
     } else {
       setIgnoreScrollEvent(false);
     }
@@ -463,6 +495,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         newScrollY = 0;
       } else if (newScrollY > ganttFullHeight - ganttHeight) {
         newScrollY = ganttFullHeight - ganttHeight;
+      }
+      // execute scroll y event
+      if (onScrollY) {
+        onScrollY(event.currentTarget.scrollTop);
       }
       setScrollY(newScrollY);
     }
@@ -573,6 +609,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     ganttHeight,
     currentDateIndicator: currentDateIndicatorContent,
     projection: projectionContent,
+    readOnly,
     setGanttEvent,
     setFailedTask,
     setSelectedTask: handleSelectedTask,
@@ -606,7 +643,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   return (
     <div>
       <div
-        className={styles.wrapper}
+        className={`${styles.wrapper}`}
         onKeyDown={handleKeyDown}
         tabIndex={0}
         ref={wrapperRef}

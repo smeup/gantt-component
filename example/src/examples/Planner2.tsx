@@ -199,6 +199,7 @@ const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
 const plannerPropsMock: PlannerProps = {
   mainGantt: mainGanttPlannerPropsMock,
   secondaryGantt: secondaryGanttPlannerPropsMock,
+  viewMode: "month",
 };
 
 const plannerAfterClickPropsMock: PlannerProps = {
@@ -207,6 +208,7 @@ const plannerAfterClickPropsMock: PlannerProps = {
     items: mainGanttItemAfterClick,
   },
   secondaryGantt: secondaryGanttPlannerPropsMock,
+  viewMode: "month",
 };
 
 function dummyFilter() {
