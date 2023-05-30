@@ -249,6 +249,17 @@ export const Planner: React.FC<PlannerProps> = props => {
     }
     // invoke callback
     onDateChange?.(row);
+    const getScrollX = () => {
+      if (wrapperRef.current) {
+        const x = wrapperRef.current.querySelector(
+          '[data-scrollx="true"]'
+        )?.scrollLeft;
+        if (x !== undefined) {
+          props.onScrollX?.(x);
+        }
+      }
+    };
+    setTimeout(getScrollX, 500);
   };
 
   useEffect(() => {
@@ -300,9 +311,10 @@ export const Planner: React.FC<PlannerProps> = props => {
     }
   }
   console.log("PLANNER render");
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div>
+    <div ref={wrapperRef}>
       <Switcher
         onTimeUnitChange={timeUnit => {
           props.onSetViewMode?.(timeUnit);

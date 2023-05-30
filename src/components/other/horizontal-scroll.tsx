@@ -41,6 +41,7 @@ export const HorizontalScroll: React.FC<{
       }
       className={styles.scrollWrapper}
       onScroll={onScroll}
+      data-scrollx="true"
       ref={scrollRef}
     >
       <div style={{ width: svgWidth }} className={styles.scroll} />
