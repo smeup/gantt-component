@@ -12,7 +12,7 @@ import "@sme.up/gantt-component/dist/index.css";
 const AppPlanner = () => {
   const [plannerProps, setPlannerProps] =
     useState<PlannerProps>(plannerPropsMock);
-  const [clicked, setClicked] = useState(false);
+  const [clicked, setClicked] = useState(true);
 
   const mainGanttClickHandler = (row: GanttRow) => {
     console.log("Main Gantt click event", row);

@@ -12,7 +12,7 @@ import "@sme.up/gantt-component/dist/index.css";
 const AppPlanner = () => {
   const [plannerProps, setPlannerProps] =
     useState<PlannerProps>(plannerPropsMock);
-  const [clicked, setClicked] = useState(false);
+  const [clicked, setClicked] = useState(true);
 
   const mainGanttClickHandler = (row: GanttRow) => {
     console.log("Main Gantt click event", row);
@@ -51,13 +51,13 @@ const AppPlanner = () => {
   // scroll events
   const onScrollX = (x: number) => {
     console.log("Planner scrollX event", x);
-  }
+  };
   const onMainGanttScrollY = (y: number) => {
     console.log("Planner main gantt scrollY event", y);
-  }
+  };
   const onSecondaryGanttScrollY = (y: number) => {
     console.log("Planner secondary gantt scrollY event", y);
-  }
+  };
 
   const secondary: boolean = true;
   const props: PlannerProps = {
@@ -66,18 +66,18 @@ const AppPlanner = () => {
       ...plannerProps.mainGantt,
       onClick: mainGanttClickHandler,
       onContextMenu: mainGanttContextMenuHandler,
-      onScrollY: onMainGanttScrollY
+      onScrollY: onMainGanttScrollY,
     },
     secondaryGantt: secondary
       ? {
           ...(plannerProps.secondaryGantt as GanttPlannerDetailsProps),
           onClick: secondaryGanttClickHandler,
           onContextMenu: secondaryGanttContextMenuHandler,
-          onScrollY: onSecondaryGanttScrollY
+          onScrollY: onSecondaryGanttScrollY,
         }
       : undefined,
     onSetDoubleView: mainGanttDoubleViewHandler,
-    onScrollX
+    onScrollX: onScrollX,
   };
 
   return (
@@ -89,9 +89,9 @@ const AppPlanner = () => {
 };
 
 const mainGanttPlannerPropsMock: GanttPlannerProps = {
-  readOnly: true,
-  initialScrollX: 11,
-  initialScrollY: 210,
+  readOnly: false,
+  /*initialScrollX: 11,
+  initialScrollY: 210,*/
   filter: dummyFilter(),
   items: [
     {
