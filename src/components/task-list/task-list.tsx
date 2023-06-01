@@ -1,5 +1,5 @@
 import classes from "./task-list.module.scss";
-import React, { useEffect, useRef } from "react";
+import React, { createRef, useEffect } from "react";
 import { BarTask } from "../../types/bar-task";
 import { Task } from "../../types/public-types";
 
@@ -57,12 +57,12 @@ export const TaskList: React.FC<TaskListProps> = ({
   TaskListTable,
   filter,
 }) => {
-  const horizontalContainerRef = useRef<HTMLDivElement>(null);
+  const horizontalContainerRef = createRef<HTMLDivElement>();
   useEffect(() => {
     if (horizontalContainerRef.current) {
       horizontalContainerRef.current.scrollTop = scrollY;
     }
-  }, [scrollY]);
+  }, [horizontalContainerRef, scrollY]);
 
   const headerProps = {
     headerHeight,
