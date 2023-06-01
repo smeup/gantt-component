@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  GanttPlannerDetailsProps,
   GanttPlannerProps,
   Planner,
   PlannerProps,
@@ -401,10 +402,10 @@ const mainGanttPlannerPropsMock: GanttPlannerProps = {
   hideDependencies: true,
   title: "Secondary",
   initialScrollY: 200,
-  initialScrollX: 50
+  initialScrollX: 200
 };
 
-/*const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
+const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
   filter: dummyFilter(),
   items: [
     {
@@ -445,11 +446,12 @@ const mainGanttPlannerPropsMock: GanttPlannerProps = {
   ganttHeight: 200,
   hideDependencies: true,
   title: "Detail",
-};*/
+  initialScrollX: 200
+};
 
 const plannerPropsMock: PlannerProps = {
   mainGantt: mainGanttPlannerPropsMock,
-  //secondaryGantt: secondaryGanttPlannerPropsMock,
+  secondaryGantt: secondaryGanttPlannerPropsMock,
   viewMode: "month",
 };
 
