@@ -640,6 +640,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     TaskListHeader,
     TaskListTable,
   };
+
+  console.log("SCROLL X", scrollX);
+
   return (
     <div>
       <div
