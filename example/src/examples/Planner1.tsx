@@ -1667,6 +1667,7 @@ const mainGanttItemAfterClick: GanttTask[] = [
 
 const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
   readOnly: true,
+  initialScrollX: 12,
   initialScrollY: 220,
   items: [
     {
@@ -1800,7 +1801,6 @@ const plannerPropsMock: PlannerProps = {
   mainGantt: mainGanttPlannerPropsMock,
   secondaryGantt: secondaryGanttPlannerPropsMock,
   viewMode: "month",
-  initialScrollX: 12
 };
 
 const plannerAfterClickPropsMock: PlannerProps = {
@@ -1810,7 +1810,6 @@ const plannerAfterClickPropsMock: PlannerProps = {
   },
   secondaryGantt: secondaryGanttPlannerPropsMock,
   viewMode: "month",
-  initialScrollX: 12
 };
 
 function dummyFilter() {

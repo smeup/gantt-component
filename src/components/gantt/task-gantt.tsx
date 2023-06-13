@@ -37,7 +37,7 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
     if (verticalGanttContainerRef.current) {
       verticalGanttContainerRef.current.scrollLeft = scrollX;
     }
-  }, [verticalGanttContainerRef, scrollX]);
+  }, [scrollX, verticalGanttContainerRef]);
 
   return (
     <div className={styles.ganttContainer} ref={taskGanttRef}>
