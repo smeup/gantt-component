@@ -544,6 +544,7 @@ const mainGanttPlannerPropsMock: GanttPlannerProps = {
   ganttHeight: 350,
   hideDependencies: true,
   title: "Main Gantt",
+  initialScrollX: -1,
   initialScrollY: 500,
 };
 
@@ -1122,23 +1123,21 @@ const mainGanttPlannerPropsMockAfterClick: GanttPlannerProps = {
   showSecondaryDates: false,
   ganttHeight: 350,
   hideDependencies: true,
-  title: "Secondary",
+  title: "Main Gantt",
+  initialScrollX: -1,
   initialScrollY: 500,
 };
 
 const plannerPropsMock: PlannerProps = {
   mainGantt: mainGanttPlannerPropsMock,
-  //secondaryGantt: secondaryGanttPlannerPropsMock,
-  secondaryGantt: undefined,
+  secondaryGantt: secondaryGanttPlannerPropsMock,
   viewMode: "month",
-  initialScrollX: 0
 };
 
 const plannerPropsMockAfterClick: PlannerProps = {
   mainGantt: mainGanttPlannerPropsMockAfterClick,
   secondaryGantt: secondaryGanttPlannerPropsMock,
   viewMode: "month",
-  initialScrollX: 0
 };
 
 function dummyFilter() {
