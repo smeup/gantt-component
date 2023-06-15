@@ -51,7 +51,6 @@ export interface GanttPlannerProps {
   initialScrollX?: number;
   initialScrollY?: number;
   readOnly?: boolean;
-  viewMode?: ViewMode;
 
   /** Events */
   onDateChange?: (row: GanttRow) => void;
@@ -96,7 +95,7 @@ export interface PlannerProps {
   onScrollX?: (x: number) => void;
 }
 
-export const Planner: React.FC<PlannerProps> = props => {
+export const Planner: React.FC<PlannerProps> = (props) => {
   const [timeUnit, setTimeUnit] = useState(props.viewMode);
 
   const currentTasks = useRef(props.mainGantt.items);
@@ -107,6 +106,8 @@ export const Planner: React.FC<PlannerProps> = props => {
   const setCurrentDetails = (details: Detail[] | undefined) => {
     currentDetails.current = details;
   };
+
+  const [scrollX, setScrollX] = useState<number>(props.mainGantt.initialScrollX ? props.mainGantt.initialScrollX : -1);
 
   // main gantt
   const [mainGanttDoubleView, setMainGanttDoubleView] = useState(
@@ -320,6 +321,7 @@ export const Planner: React.FC<PlannerProps> = props => {
           props.onSetViewMode?.(timeUnit);
           setTimeUnit(timeUnit);
           setViewDate(undefined);
+          setScrollX(-1);
         }}
       />
       <div
@@ -405,7 +407,7 @@ export const Planner: React.FC<PlannerProps> = props => {
           }
           locale={locale}
           dateTimeFormatters={ganttDateTimeFormatters}
-          initialScrollX={props.mainGantt.initialScrollX}
+          initialScrollX={scrollX}
           initialScrollY={props.mainGantt.initialScrollY}
           readOnly={props.mainGantt.readOnly}
           onScrollX={props.onScrollX}
@@ -498,7 +500,7 @@ export const Planner: React.FC<PlannerProps> = props => {
             }
             locale={locale}
             dateTimeFormatters={ganttDateTimeFormatters}
-            initialScrollX={props.secondaryGantt.initialScrollX}
+            initialScrollX={scrollX}
             initialScrollY={props.secondaryGantt.initialScrollY}
             readOnly={props.secondaryGantt.readOnly}
             onScrollY={props.secondaryGantt.onScrollY}

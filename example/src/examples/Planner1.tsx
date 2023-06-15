@@ -814,6 +814,7 @@ const mainGanttPlannerPropsMock: GanttPlannerProps = {
   ganttHeight: 200,
   hideDependencies: true,
   title: "Main",
+  initialScrollX: 12
 };
 
 const mainGanttItemAfterClick: GanttTask[] = [
@@ -1667,7 +1668,6 @@ const mainGanttItemAfterClick: GanttTask[] = [
 
 const secondaryGanttPlannerPropsMock: GanttPlannerDetailsProps = {
   readOnly: true,
-  initialScrollX: 12,
   initialScrollY: 220,
   items: [
     {

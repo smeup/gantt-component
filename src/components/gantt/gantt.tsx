@@ -260,10 +260,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     timelineHeight,
     displayedStartDate,
     displayedEndDate,
+    dateSetup,
   ]);
 
   useEffect(() => {
-    if (viewMode === dateSetup.viewMode && viewDate) {
+    if (viewMode === dateSetup.viewMode && viewDate && initialScrollX < 1) {
       const dates = dateSetup.dates;
       const index = dates.findIndex(
         (d, i) =>
@@ -274,10 +275,18 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       if (index === -1) {
         return;
       }
+
       setIgnoreScrollEvent(true);
       setScrollX(columnWidth * index);
     }
-  }, [viewDate, columnWidth, dateSetup.dates, dateSetup.viewMode, viewMode]);
+  }, [
+    viewDate,
+    columnWidth,
+    dateSetup.dates,
+    dateSetup.viewMode,
+    viewMode,
+    initialScrollX,
+  ]);
 
   useEffect(() => {
     const { changedTask, action } = ganttEvent;
@@ -372,6 +381,14 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           newScrollX = svgWidth;
         }
         setScrollX(newScrollX);
+        window.dispatchEvent(
+          new CustomEvent<GanttSyncScrollEvent>("gantt-sync-scroll-event", {
+            detail: {
+              componentId: id,
+              scrollX: newScrollX,
+            },
+          })
+        );
         event.preventDefault();
       } else if (ganttHeight) {
         let newScrollY = scrollY + event.deltaY;
@@ -640,6 +657,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     TaskListHeader,
     TaskListTable,
   };
+
   return (
     <div>
       <div

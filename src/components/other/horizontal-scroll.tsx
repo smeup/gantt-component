@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useRef, useEffect } from "react";
+import React, { SyntheticEvent, useEffect, createRef } from "react";
 import styles from "./horizontal-scroll.module.css";
 
 export const HorizontalScroll: React.FC<{
@@ -9,24 +9,24 @@ export const HorizontalScroll: React.FC<{
   rtl: boolean;
   onScroll: (event: SyntheticEvent<HTMLDivElement>) => void;
 }> = ({ scroll, svgWidth, taskGanttRef, rtl, onScroll }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = createRef<HTMLDivElement>();
 
   useEffect(() => {
+    let id: any;
     if (scrollRef.current) {
       const wrap = scrollRef.current;
       const setScrollLeft = () => {
         wrap.scrollLeft = scroll;
       };
-      setTimeout(setScrollLeft, 250);
+      id = setTimeout(setScrollLeft, 50);
     }
-  }, []);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollLeft = scroll;
+    return () => {
+      clearTimeout(id);
     }
-  }, [scroll]);
+  }, [scroll, scrollRef]);
+  
   const rect = taskGanttRef.current?.getBoundingClientRect();
+
   return (
     <div
       dir="ltr"
