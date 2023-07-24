@@ -143,6 +143,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const [scrollX, setScrollX] = useState(initialScrollX);
   const [scrollY, setScrollY] = useState(initialScrollY);
+  useEffect(() => { setScrollY(initialScrollY)}, [initialScrollY] )
+
   const ignoreScrollEvent = useRef(false);
   const setIgnoreScrollEvent = (value: boolean) => {
     ignoreScrollEvent.current = value;
