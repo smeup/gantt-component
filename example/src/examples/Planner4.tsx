@@ -17,17 +17,22 @@ const AppPlanner = () => {
       setProps(newProps);
     } else {
       const newProps = { ...plannerPropsMock };
-      newProps.mainGantt.initialScrollY = 1;
+      newProps.mainGantt.initialScrollY = 200;
       setProps(newProps);
     }
     setClicked(!clicked);
   };
+
+  const onScrollX = (value: number) => {
+    console.log("SCROLL X", value);
+  }
 
   const plannerProps: PlannerProps = {
     ...props,
     mainGantt: {
       ...props.mainGantt,
     },
+    onScrollX: onScrollX
   };
 
   console.log("PROPS EXAMPLE", props.mainGantt.initialScrollY);
@@ -43,6 +48,10 @@ const AppPlanner = () => {
     </React.StrictMode>
   );
 };
+
+const onScrollY = (value: number) => {
+  console.log("SCROLL Y", value);
+}
 
 const mainGanttPlannerPropsMock: GanttPlannerProps = {
   filter: dummyFilter(),
@@ -263,7 +272,8 @@ const mainGanttPlannerPropsMock: GanttPlannerProps = {
   hideDependencies: true,
   title: "Main Gantt",
   initialScrollX: -1,
-  initialScrollY: 100
+  initialScrollY: 100,
+  onScrollY: onScrollY
 };
 
 const plannerPropsMock: PlannerProps = {
