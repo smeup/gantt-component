@@ -143,6 +143,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const [scrollX, setScrollX] = useState(initialScrollX);
   const [scrollY, setScrollY] = useState(initialScrollY);
+
   const ignoreScrollEvent = useRef(false);
   const setIgnoreScrollEvent = (value: boolean) => {
     ignoreScrollEvent.current = value;
@@ -156,6 +157,14 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     xf: number;
     color: string;
   }>();
+
+  // initial scroll
+  useEffect(() => {
+    if (onScrollY) {
+      onScrollY(initialScrollY);
+    }
+    setScrollY(initialScrollY);
+  }, [initialScrollY, onScrollY]);
 
   // sync scroll event
   useEffect(() => {
@@ -398,6 +407,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           newScrollY = ganttFullHeight - ganttHeight;
         }
         if (newScrollY !== scrollY) {
+          if (onScrollY) {
+            onScrollY(newScrollY);
+          }
           setScrollY(newScrollY);
           event.preventDefault();
         }
@@ -424,11 +436,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
     if (scrollY !== event.currentTarget.scrollTop) {
-      // execute scroll y event
-      if (onScrollY) {
-        onScrollY(event.currentTarget.scrollTop);
-      }
       if (!ignoreScrollEvent.current) {
+        // execute scroll y event
+        if (onScrollY) {
+          onScrollY(event.currentTarget.scrollTop);
+        }
         setScrollY(event.currentTarget.scrollTop);
         setIgnoreScrollEvent(true);
       } else {
@@ -515,7 +527,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       }
       // execute scroll y event
       if (onScrollY) {
-        onScrollY(event.currentTarget.scrollTop);
+        onScrollY(newScrollY);
       }
       setScrollY(newScrollY);
     }

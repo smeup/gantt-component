@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useRef, useEffect } from "react";
+import React, { SyntheticEvent, useEffect, createRef } from "react";
 import styles from "./vertical-scroll.module.css";
 
 export const VerticalScroll: React.FC<{
@@ -16,23 +16,21 @@ export const VerticalScroll: React.FC<{
   rtl,
   onScroll,
 }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = createRef<HTMLDivElement>();
 
   useEffect(() => {
+    let id: any;
     if (scrollRef.current) {
       const wrap = scrollRef.current;
       const setScrollTop = () => {
         wrap.scrollTop = scroll;
       };
-      setTimeout(setScrollTop, 250);
+      id = setTimeout(setScrollTop, 50);
     }
-  }, []);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scroll;
+    return () => {
+      clearTimeout(id);
     }
-  }, [scroll]);
+  }, [scroll, scrollRef]);
 
   return (
     <div
